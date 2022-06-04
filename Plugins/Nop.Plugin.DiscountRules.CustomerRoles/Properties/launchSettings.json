@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Nop.Plugin.DiscountRules.CustomerRoles": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:53117;http://localhost:53118"
+    }
+  }
+}

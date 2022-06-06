@@ -16,7 +16,7 @@ namespace Nop.Web.Areas.Admin.Models.Customers
 
         public AddCustomerToNatureOfBusinessModel()
         {
-            SelectedUserNames= new List<string>();
+            SelectedUserNames = new List<string>();
         }
         #endregion
 

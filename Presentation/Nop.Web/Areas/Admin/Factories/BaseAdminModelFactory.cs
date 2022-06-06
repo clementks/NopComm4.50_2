@@ -517,6 +517,29 @@ namespace Nop.Web.Areas.Admin.Factories
         }
 
         /// <summary>
+        /// Prepare available nature of business
+        /// </summary>
+        /// <param name="items">nature of business items</param>
+        /// <param name="withSpecialDefaultItem">Whether to insert the first special item for the default value</param>
+        /// <param name="defaultItemText">Default item text; pass null to use default value of the default item text</param>
+        /// <returns>A task that represents the asynchronous operation</returns>
+        public virtual async Task PrepareNatureOfBusinessAsync(IList<SelectListItem> items, bool withSpecialDefaultItem = true, string defaultItemText = null)
+        {
+            if (items == null)
+                throw new ArgumentNullException(nameof(items));
+
+            //prepare available nature of business
+            var availableNatureOfBusinessItems = await GetCategoryListAsync();
+            foreach (var natureOfBusinessItem in availableNatureOfBusinessItems)
+            {
+                items.Add(natureOfBusinessItem);
+            }
+
+            //insert special item for the default value
+            await PrepareDefaultItemAsync(items, withSpecialDefaultItem, defaultItemText);
+        }
+
+        /// <summary>
         /// Prepare available categories
         /// </summary>
         /// <param name="items">Category items</param>

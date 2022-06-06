@@ -206,7 +206,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 throw new ArgumentNullException(nameof(searchModel));
 
             //prepare available categories
-            await _baseAdminModelFactory.PrepareCategoriesAsync(searchModel.SelectedNatureOfBusinessIds);
+            await _baseAdminModelFactory.PrepareNatureOfBusinessAsync(searchModel.AvailableNatureOfBusiness);
 
 
 
@@ -607,7 +607,7 @@ namespace Nop.Web.Areas.Admin.Factories
         /// <summary>
         /// Prepare nature of business search model
         /// </summary>
-        /// <param name="searchModel">nature of business search model</param>
+        /// <param name="searchModel, customer">nature of business search model</param>
         /// <returns>
         /// A task that represents the asynchronous operation
         /// The task result contains the nature of business search model

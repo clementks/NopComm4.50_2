@@ -44,14 +44,32 @@ namespace Nop.Web.Areas.Admin.Factories
 
 
         /// <summary>
+        /// Prepare the reward points model to add to the customer
+        /// </summary>
+        /// <param name="model">Reward points model to add to the customer</param>
+        /// <returns>A task that represents the asynchronous operation</returns>
+        Task PrepareAddRewardPointsToCustomerModelAsync(AddRewardPointsToCustomerModel model);
+
+        /// <summary>
+        /// Prepare nature of business search model to add to the customer
+        /// </summary>
+        /// <param name="searchModel">nature of business search model to add to the customer</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the nature of business model to add to the customer
+        /// </returns>
+        Task<AddCustomerToNatureOfBusinessSearchModel> PrepareAddCustomerToNatureOfBusinessSearchModelAsync(AddCustomerToNatureOfBusinessSearchModel searchModel);
+
+
+        /// <summary>
         /// Prepare nature of business search model
         /// </summary>
-        /// <param name="searchModel, customer">nature of business search model</param>
+        /// <param name="searchModel">nature of business search model</param>
         /// <returns>
         /// A task that represents the asynchronous operation
         /// The task result contains the nature of business search model
         /// </returns>
-        Task<CustomerSearchModel> PrepareNatureOfBusinessCustomerSearchModelAsync(CustomerSearchModel searchModel);
+        Task<NatureOfBusinessSearchModel> PrepareNatureOfBusinessCustomerSearchModelAsync(NatureOfBusinessSearchModel searchModel, Customer customer);
 
         /// <summary>
         /// Prepare nature of business list model

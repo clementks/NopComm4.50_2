@@ -315,6 +315,26 @@ namespace Nop.Services.Customers
         }
 
         /// <summary>
+        /// Gets all nature of business
+        /// </summary>
+        /// <param name="storeId">Store identifier; 0 if you want to get all records</param>
+        /// <param name="showHidden">A value indicating whether to show hidden records</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the categories
+        /// </returns>
+        public virtual async Task<IList<NatureOfBusiness>> GetAllNatureOfBusinessAsync(int natureOfBusinessId)
+        {
+            var key = _staticCacheManager.PrepareKeyForDefaultCache(NopCustomerServicesDefaults.CustomerNatureOfBusinessAllCacheKey, natureOfBusinessId);
+
+            var natureOfBusinesses = await _staticCacheManager
+                .GetAsync(key, async () => (await GetAllNatureOfBusinessAsync(string.Empty, natureOfBusinessId, showHidden: showHidden)).ToList());
+
+            return natureOfBusinesses;
+        }
+
+
+        /// <summary>
         /// Gets online customers
         /// </summary>
         /// <param name="lastActivityFromUtc">Customer last activity date (from)</param>

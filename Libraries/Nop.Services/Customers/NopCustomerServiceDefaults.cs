@@ -48,6 +48,14 @@ namespace Nop.Services.Customers
         /// </remarks>
         public static CacheKey CustomerByGuidCacheKey => new("Nop.customer.byguid.{0}");
 
+        /// <summary>
+        /// Gets a key for caching
+        /// </summary>
+        /// <remarks>
+        /// {0} : nature of business
+        /// </remarks>
+        public static CacheKey CustomerByNatureOfBusiness => new("Nop.customer.natureOfBusiness.{0}");
+
         #endregion
 
         #region Customer attributes
@@ -71,6 +79,15 @@ namespace Nop.Services.Customers
         /// {0} : show hidden records?
         /// </remarks>
         public static CacheKey CustomerRolesAllCacheKey => new("Nop.customerrole.all.{0}", NopEntityCacheDefaults<CustomerRole>.AllPrefix);
+
+
+        /// <summary>
+        /// Gets a key for caching
+        /// </summary>
+        /// <remarks>
+        /// {0} : show hidden records?
+        /// </remarks>
+        public static CacheKey CustomerNatureOfBusinessAllCacheKey => new("Nop.natureOfBusiness.all.{0}", NopEntityCacheDefaults<CustomerNatureOfBusiness>.AllPrefix);
 
         /// <summary>
         /// Gets a key for caching
@@ -156,6 +173,18 @@ namespace Nop.Services.Customers
 
         /// <summary>
         /// Gets a key for caching current customer password lifetime
+        /// </summary>
+        /// <remarks>
+        /// {0} : customer identifier
+        /// </remarks>
+        public static CacheKey CustomerPasswordLifetimeCacheKey => new("Nop.customerpassword.lifetime.{0}");
+
+        #endregion
+
+        #region nature of business
+
+        /// <summary>
+        /// Gets a key for caching current customer nature of business
         /// </summary>
         /// <remarks>
         /// {0} : customer identifier

@@ -208,8 +208,6 @@ namespace Nop.Web.Areas.Admin.Factories
             //prepare available categories
             await _baseAdminModelFactory.PrepareNatureOfBusinessAsync(searchModel.AvailableNatureOfBusiness);
 
-
-
             //prepare page parameters
             searchModel.SetPopupGridPageSize();
 

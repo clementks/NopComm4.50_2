@@ -552,10 +552,10 @@ namespace Nop.Web.Areas.Admin.Factories
             var cacheKey = _staticCacheManager.PrepareKeyForDefaultCache(NopModelCacheDefaults.NatureOfBusinesssListKey, showHidden);
             var listItems = await _staticCacheManager.GetAsync(cacheKey, async () =>
             {
-                var categories = await _categoryService.GetAllCategoriesAsync(showHidden: showHidden);
-                return await categories.SelectAwait(async c => new SelectListItem
+                var natureofBusinesses = await _customerService.GetAllNatureOfBusinessAsync(showHidden: showHidden);
+                return await natureofBusinesses.SelectAwait(async c => new SelectListItem
                 {
-                    Text = await _categoryService.GetFormattedBreadCrumbAsync(c, categories),
+                    Text = await _customerService.GetFormattedBreadCrumbAsync(c, natureofBusinesses),
                     Value = c.Id.ToString()
                 }).ToListAsync();
             });

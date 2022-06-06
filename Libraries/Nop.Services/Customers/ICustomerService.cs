@@ -62,6 +62,18 @@ namespace Nop.Services.Customers
         Task<IPagedList<Customer>> GetOnlineCustomersAsync(DateTime lastActivityFromUtc,
             int[] customerRoleIds, int pageIndex = 0, int pageSize = int.MaxValue);
 
+
+        /// <summary>
+        /// Gets all nature of business
+        /// </summary>
+        /// <param name="storeId">Store identifier; 0 if you want to get all records</param>
+        /// <param name="showHidden">A value indicating whether to show hidden records</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the categories
+        /// </returns>
+        Task<IList<NatureOfBusiness>> GetAllNatureOfBusinessAsync(int natureOfBusinessId);
+
         /// <summary>
         /// Gets customers with shopping carts
         /// </summary>

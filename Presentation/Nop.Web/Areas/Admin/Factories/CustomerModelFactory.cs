@@ -193,6 +193,31 @@ namespace Nop.Web.Areas.Admin.Factories
         }
 
         /// <summary>
+        /// Prepare nature of business search model to add to the customer
+        /// </summary>
+        /// <param name="searchModel">nature of business search model to add to the customer</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the nature of business model to add to the customer
+        /// </returns>
+        public virtual async Task<AddCustomerToNatureOfBusinessSearchModel> PrepareAddCustomerToNatureOfBusinessSearchModelAsync(AddCustomerToNatureOfBusinessSearchModel searchModel)
+        {
+            if (searchModel == null)
+                throw new ArgumentNullException(nameof(searchModel));
+
+            //prepare available categories
+            await _baseAdminModelFactory.PrepareCategoriesAsync(searchModel.SelectedNatureOfBusinessIds);
+
+
+
+            //prepare page parameters
+            searchModel.SetPopupGridPageSize();
+
+            return searchModel;
+        }
+
+
+        /// <summary>
         /// Prepare customer associated external authorization models
         /// </summary>
         /// <param name="models">List of customer associated external authorization models</param>
@@ -716,7 +741,7 @@ namespace Nop.Web.Areas.Admin.Factories
 
                 NatureOfBusinessModel model = new NatureOfBusinessModel
                 {
-                    Id = model.,
+                   
                     NatureOfBusinessName = model.NatureOfBusinessName
 
                 };

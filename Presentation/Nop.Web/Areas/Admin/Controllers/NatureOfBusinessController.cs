@@ -204,20 +204,20 @@ namespace Nop.Web.Areas.Admin.Controllers
             return new NullJsonResult();
         }
 
-        public virtual async Task<IActionResult> NatureOfBusinessAddPopup(int manufacturerId)
+        public virtual async Task<IActionResult> NatureOfBusinessAddPopup(int natureOfBusinessId)
         {
-            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageManufacturers))
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageNatureOfBusiness))
                 return AccessDeniedView();
 
             //prepare model
-            var model = await _customerModelFactory.PrepareAddProductToManufacturerSearchModelAsync(new AddProductToManufacturerSearchModel());
+            var model = await _customerModelFactory.PrepareAddCustomerToNatureOfBusinessSearchModelAsync(new AddCustomerToNatureOfBusinessSearchModel());
 
             return View(model);
         }
 
 
         [HttpPost]
-        public virtual async Task<IActionResult> NatureOfBusinessAddPopupList(AddNatureOfBusinessToCustomerModel searchModel)
+        public virtual async Task<IActionResult> NatureOfBusinessAddPopupList(AddCustomerToNatureOfBusinessSearchModel searchModel)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageNatureOfBusiness))
                 return await AccessDeniedDataTablesJson();

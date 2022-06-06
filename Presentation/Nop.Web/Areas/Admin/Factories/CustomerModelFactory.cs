@@ -988,9 +988,9 @@ namespace Nop.Web.Areas.Admin.Factories
 
 
             //get customers
-            var customerNatureOfBusinesses = await _customerService.GetAllCustomersAsync(customerRoleIds: searchModel.ToArray(),
+            var customerNatureOfBusinesses = await _customerService.GetCustomerByNatureOfBusinessIdAsync(showHidden: true,
 
-                natureOfBusiness: searchModel.SearchNatureOfBusiness,
+                natureOfBusinessId: natureOfBusiness.Id,
                 pageIndex: searchModel.Page - 1, pageSize: searchModel.PageSize);
 
             //var natureOfBusinesses = await _customerService.GetNatureOfBusinessByCustomerIdAsync(customerId: customer.Id);
@@ -1002,35 +1002,17 @@ namespace Nop.Web.Areas.Admin.Factories
                 {
 
                     //fill in model values from the entity
-                    var natureOfBusinessCustomerModel = natureOfBusiness.ToModel<CustomerModel>();
-
-                    //convert dates to the user time
-                    natureOfBusinessCustomerModel.Email = (await _customerService.IsRegisteredAsync(natureOfBusiness))
-                        ? natureOfBusiness.Email
-                        : await _localizationService.GetResourceAsync("Admin.Customers.Guest");
-                    natureOfBusinessCustomerModel.FullName = await _customerService.GetCustomerFullNameAsync(natureOfBusiness);
-                    natureOfBusinessCustomerModel.Company = await _genericAttributeService.GetAttributeAsync<string>(natureOfBusiness, NopCustomerDefaults.CompanyAttribute);
-                    natureOfBusinessCustomerModel.Phone = await _genericAttributeService.GetAttributeAsync<string>(natureOfBusiness, NopCustomerDefaults.PhoneAttribute);
-                    natureOfBusinessCustomerModel.ZipPostalCode = await _genericAttributeService.GetAttributeAsync<string>(natureOfBusiness, NopCustomerDefaults.ZipPostalCodeAttribute);
-                    natureOfBusinessCustomerModel.NatureOfBusiness = await _genericAttributeService.GetAttributeAsync<string>(natureOfBusiness, NopCustomerDefaults.NatureOfBusinessAttribute);
-                    natureOfBusinessCustomerModel.CreatedOn = await _dateTimeHelper.ConvertToUserTimeAsync(natureOfBusiness.CreatedOnUtc, DateTimeKind.Utc);
-                    natureOfBusinessCustomerModel.LastActivityDate = await _dateTimeHelper.ConvertToUserTimeAsync(natureOfBusiness.LastActivityDateUtc, DateTimeKind.Utc);
+                    var natureOfBusinessCustomerModel = natureOfBusiness.ToModel<NatureOfBusinessCustomerModel>();
 
                     //fill in additional values (not existing in the entity)
-                    natureOfBusinessCustomerModel.CustomerRoleNames = string.Join(", ",
-                        (await _customerService.GetCustomerRolesAsync(natureOfBusiness)).Select(role => role.Name));
-                    if (_customerSettings.AllowCustomersToUploadAvatars)
-                    {
-                        var avatarPictureId = await _genericAttributeService.GetAttributeAsync<int>(natureOfBusiness, NopCustomerDefaults.AvatarPictureIdAttribute);
-                        natureOfBusinessCustomerModel.AvatarUrl = await _pictureService
-                            .GetPictureUrlAsync(avatarPictureId, _mediaSettings.AvatarPictureSize, _customerSettings.DefaultAvatarEnabled, defaultPictureType: PictureType.Avatar);
-                    }
+                    natureOfBusinessCustomerModel.NatureOfBusiness = (await _customerService.GetNatureOfBusinessByIdAsync(natureOfBusiness.Id))?.NatureOfBusinessName;
+                       
 
                     return natureOfBusinessCustomerModel;
                 });
             });
 
-            return customerModel;
+            return model;
         }
 
         /// <summary>

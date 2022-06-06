@@ -207,6 +207,16 @@ namespace Nop.Services.Customers
         Task InsertCustomerAsync(Customer customer);
 
         /// <summary>
+        /// Gets a customer & nature of business mapping 
+        /// </summary>
+        /// <param name="customerNatureOfBusinessId">customer & nature of business identifier</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the customer & nature of business mapping
+        /// </returns>
+        Task<CustomerNatureOfBusiness> GetCustomerNatureOfBusinessByIdAsync(int customerNatureOfBusinessId);
+
+        /// <summary>
         /// Insert a customer's Nature Of Business
         /// </summary>
         /// <param name="natureOfBusiness">NatureOfBusiness</param>
@@ -220,13 +230,14 @@ namespace Nop.Services.Customers
         /// <returns>A task that represents the asynchronous operation</returns>
         Task UpdateCustomerAsync(Customer customer);
 
+
+
         /// <summary>
         /// Updates a customer's Nature Of Business
         /// </summary>
-        /// <param name="natureOfBusiness">NatureOfBusiness</param>
+        /// <param name="customernatureOfBusiness">customernatureOfBusiness</param>
         /// <returns>A task that represents the asynchronous operation</returns>
-        Task UpdateCustomerNatureOfBusinessAsync(NatureOfBusiness natureOfBusiness);
-
+        Task UpdateCustomerNatureOfBusinessAsync(CustomerNatureOfBusiness customerNatureOfBusiness);
 
 
         /// <summary>
@@ -247,6 +258,7 @@ namespace Nop.Services.Customers
         Task<IPagedList<CustomerNatureOfBusiness>> GetCustomerByNatureOfBusinessIdAsync(int natureOfBusinessId, int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false);
 
 
+
         /// <summary>
         /// Get customer by nature Of Business
         /// </summary>
@@ -259,14 +271,25 @@ namespace Nop.Services.Customers
 
 
         /// <summary>
-        /// Gets customer & nature of business mapping 
+        /// Gets nature of business mapping 
         /// </summary>
-        /// <param name="user name">customer & nature of business mapping identifier</param>
+        /// <param name="natureOfBusinessId">nature of business mapping identifier</param>
         /// <returns>
         /// A task that represents the asynchronous operation
-        /// The task result contains the customer & Nature Of Business mapping
+        /// The task result contains the  Nature Of Business mapping
         /// </returns>
-        Task<NatureOfBusiness> GetNatureOfBusinessByIdsAsync(int natureOfBusinessId);
+        Task<NatureOfBusiness> GetNatureOfBusinessByIdAsync(int natureOfBusinessId);
+
+
+        /// <summary>
+        /// Get customer & nature of business by identifiers
+        /// </summary>
+        /// <param name="natureOfBusinessIds">nature of business identifiers</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the products
+        /// </returns>
+        Task<IList<NatureOfBusiness>> GetNatureOfBusinessByIdsAsync(int[] natureOfBusinessIds);
 
         /// <summary>
         /// Reset data required for checkout

@@ -708,6 +708,20 @@ namespace Nop.Services.Customers
         }
 
         /// <summary>
+        /// Gets a customer & nature of business mapping 
+        /// </summary>
+        /// <param name="customerNatureOfBusinessId">customer & nature of business identifier</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the customer & nature of business mapping
+        /// </returns>
+        public virtual async Task<CustomerNatureOfBusiness> GetCustomerNatureOfBusinessByIdAsync(int customerNatureOfBusinessId)
+        {
+            return await _customerNatureOfBusinessRepository.GetByIdAsync(customerNatureOfBusinessId, cache => default);
+
+        }
+
+        /// <summary>
         /// Insert a customer's Nature Of Business
         /// </summary>
         /// <param name="customerNatureOfBusiness">customerNatureOfBusiness</param>
@@ -730,11 +744,11 @@ namespace Nop.Services.Customers
         /// <summary>
         /// Updates a customer's Nature Of Business
         /// </summary>
-        /// <param name="natureOfBusiness">natureOfBusiness</param>
+        /// <param name="customernatureOfBusiness">customernatureOfBusiness</param>
         /// <returns>A task that represents the asynchronous operation</returns>
-        public virtual async Task UpdateCustomerNatureOfBusinessAsync(NatureOfBusiness natureOfBusiness)
+        public virtual async Task UpdateCustomerNatureOfBusinessAsync(CustomerNatureOfBusiness customerNatureOfBusiness)
         {
-            await _customerNatureOfBusinessRepository.UpdateAsync(natureOfBusiness);
+            await _customerNatureOfBusinessRepository.UpdateAsync(customerNatureOfBusiness);
         }
 
 
@@ -807,16 +821,29 @@ namespace Nop.Services.Customers
         }
 
         /// <summary>
-        /// Gets customer & nature of business mapping 
+        /// Gets nature of business mapping 
         /// </summary>
         /// <param name="customerId">customer & nature of business mapping identifier</param>
         /// <returns>
         /// A task that represents the asynchronous operation
-        /// The task result contains the customer & Nature Of Business mapping
+        /// The task result contains the  Nature Of Business mapping
         /// </returns>
-        public virtual async Task<NatureOfBusiness> GetNatureOfBusinessByIdsAsync(int natureOfBusinessId)
+        public virtual async Task<NatureOfBusiness> GetNatureOfBusinessByIdAsync(int natureOfBusinessId)
         {
             return await _natureOfBusinessRepository.GetByIdAsync(natureOfBusinessId, cache => default);
+        }
+
+        /// <summary>
+        /// Get customer & nature of business by identifiers
+        /// </summary>
+        /// <param name="natureOfBusinessIds">nature of business identifiers</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the products
+        /// </returns>
+        public virtual async Task<IList<NatureOfBusiness>> GetNatureOfBusinessByIdsAsync(int[] natureOfBusinessIds)
+        {
+            return await _natureOfBusinessRepository.GetByIdsAsync(natureOfBusinessIds, cache => default, false);
         }
 
         /// <summary>

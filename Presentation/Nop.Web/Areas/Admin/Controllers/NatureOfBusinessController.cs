@@ -173,18 +173,18 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> NatureOfBusinessUpdate(NatureOfBusinessCustomerSearchModel model)
+        public virtual async Task<IActionResult> NatureOfBusinessUpdate(NatureOfBusinessCustomerModel model)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageNatureOfBusiness))
                 return AccessDeniedView();
 
-            //try to get a product manufacturer with the specified id
-            var productManufacturer = await _customerService.GetProductManufacturerByIdAsync(model.Id)
-                ?? throw new ArgumentException("No product manufacturer mapping found with the specified id");
+            //try to get a customer & nature of business with the specified id
+            var customerNatureOfBusiness = await _customerService.GetCustomerNatureOfBusinessByIdAsync(model.Id)
+                ?? throw new ArgumentException("No customer & nature of business mapping found with the specified id");
 
             //fill entity from model
-            productManufacturer = model.ToEntity(productManufacturer);
-            await _customerService.UpdateProductManufacturerAsync(productManufacturer);
+            customerNatureOfBusiness = model.ToEntity(customerNatureOfBusiness);
+            await _customerService.UpdateCustomerNatureOfBusinessAsync(customerNatureOfBusiness);
 
             return new NullJsonResult();
         }

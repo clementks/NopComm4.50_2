@@ -12,11 +12,14 @@ namespace Nop.Web.Areas.Admin.Models.Customers
 
         public int NatureOfBusinessId { get; set; }
 
-        public int customerId { get; set; }
+        public int CustomerId { get; set; }
 
-        [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.Name")]
+        [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.NatureOfBusinessName")]
         public string NatureOfBusiness { get; set; }
 
+
+        [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.DisplayOrder")]
+        public int DisplayOrder { get; set; }
 
         #endregion
     }

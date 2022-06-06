@@ -190,16 +190,16 @@ namespace Nop.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> ProductDelete(int id)
+        public virtual async Task<IActionResult> NatureOfBusinessDelete(int id)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageNatureOfBusiness))
                 return AccessDeniedView();
 
             //try to get a product manufacturer with the specified id
-            var productManufacturer = await _customerService.GetProductManufacturerByIdAsync(id)
-                ?? throw new ArgumentException("No product manufacturer mapping found with the specified id");
+            var customerNatureOfBusiness = await _customerService.GetCustomerNatureOfBusinessByIdAsync(id)
+                ?? throw new ArgumentException("No customer & nature of business mapping found with the specified id");
 
-            await _customerService.DeleteProductManufacturerAsync(productManufacturer);
+            await _customerService.DeleteCustomerNatureOfBusinessAsync(customerNatureOfBusiness);
 
             return new NullJsonResult();
         }

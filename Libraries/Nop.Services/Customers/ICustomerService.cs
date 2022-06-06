@@ -245,7 +245,7 @@ namespace Nop.Services.Customers
         /// </summary>
         /// <param name="customerNatureOfBusiness">Customer &  Nature of Business mapping</param>
         /// <returns>A task that represents the asynchronous operation</returns>
-        Task DeleteCustomerNatureOfBusinessAsync(NatureOfBusiness natureOfBusiness);
+        Task DeleteCustomerNatureOfBusinessAsync(CustomerNatureOfBusiness customerNatureOfBusiness);
 
         /// <summary>
         /// Gets a customer - Nature Of Business mapping collection

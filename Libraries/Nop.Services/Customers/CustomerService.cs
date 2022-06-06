@@ -757,9 +757,9 @@ namespace Nop.Services.Customers
         /// </summary>
         /// <param name="customerNatureOfBusiness">Customer &  Nature of Business mapping</param>
         /// <returns>A task that represents the asynchronous operation</returns>
-        public virtual async Task DeleteCustomerNatureOfBusinessAsync(NatureOfBusiness natureOfBusiness)
+        public virtual async Task DeleteCustomerNatureOfBusinessAsync(CustomerNatureOfBusiness customerNatureOfBusiness)
         {
-            await _customerNatureOfBusinessRepository.DeleteAsync(natureOfBusiness);
+            await _customerNatureOfBusinessRepository.DeleteAsync(customerNatureOfBusiness);
         }
 
 

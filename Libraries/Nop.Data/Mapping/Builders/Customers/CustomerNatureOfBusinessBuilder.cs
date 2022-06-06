@@ -18,9 +18,11 @@ namespace Nop.Data.Mapping.Builders.Customers
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
             table
-                .WithColumn(nameof(CustomerNatureOfBusiness.CustomerId)).AsInt32().ForeignKey<Customer>()
+                .WithColumn(nameof(CustomerNatureOfBusiness.Username)).AsString(400).ForeignKey<Customer>()
+                .WithColumn(nameof(CustomerNatureOfBusiness.Email)).AsString(400).ForeignKey<Customer>()
                 .WithColumn(nameof(CustomerNatureOfBusiness.NatureOfBusinessId)).AsInt32().ForeignKey<NatureOfBusiness>()
                 .WithColumn(nameof(NatureOfBusiness.NatureOfBusinessName)).AsString(400).NotNullable()
+                .WithColumn(nameof(NatureOfBusiness.Published)).AsBoolean().Nullable()
                 .WithColumn(nameof(NatureOfBusiness.Deleted)).AsBoolean().Nullable();
 
         }

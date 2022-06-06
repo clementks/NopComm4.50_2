@@ -119,6 +119,7 @@ namespace Nop.Web.Areas.Admin.Factories
         /// <returns>A task that represents the asynchronous operation</returns>
         Task PrepareNatureOfBusinessAsync(IList<SelectListItem> items, bool withSpecialDefaultItem = true, string defaultItemText = null);
 
+
         /// <summary>
         /// Prepare available categories
         /// </summary>

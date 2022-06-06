@@ -35,5 +35,14 @@ namespace Nop.Web.Areas.Admin.Infrastructure.Cache
         /// </remarks>
         public static CacheKey VendorsListKey => new("Nop.pres.admin.vendors.list-{0}", VendorsListPrefixCacheKey);
         public static string VendorsListPrefixCacheKey => "Nop.pres.admin.vendors.list";
+
+        /// <summary>
+        /// Key for nature of business caching
+        /// </summary>
+        /// <remarks>
+        /// {0} : show hidden records?
+        /// </remarks>
+        public static CacheKey NatureOfBusinesssListKey => new("Nop.pres.admin.natureOfBusiness.list-{0}", NatureOfBusinessListPrefixCacheKey);
+        public static string NatureOfBusinessListPrefixCacheKey => "Nop.pres.admin.natureOfBusiness.list";
     }
 }

@@ -529,7 +529,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 throw new ArgumentNullException(nameof(items));
 
             //prepare available nature of business
-            var availableNatureOfBusinessItems = await GetCategoryListAsync();
+            var availableNatureOfBusinessItems = await GetNatureOfBusinessListAsync();
             foreach (var natureOfBusinessItem in availableNatureOfBusinessItems)
             {
                 items.Add(natureOfBusinessItem);
@@ -538,6 +538,42 @@ namespace Nop.Web.Areas.Admin.Factories
             //insert special item for the default value
             await PrepareDefaultItemAsync(items, withSpecialDefaultItem, defaultItemText);
         }
+
+        /// <summary>
+        /// Get nature of business list
+        /// </summary>
+        /// <param name="showHidden">A value indicating whether to show hidden records</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the nature of business list
+        /// </returns>
+        protected virtual async Task<List<SelectListItem>> GetNatureOfBusinessListAsync(bool showHidden = true)
+        {
+            var cacheKey = _staticCacheManager.PrepareKeyForDefaultCache(NopModelCacheDefaults.NatureOfBusinesssListKey, showHidden);
+            var listItems = await _staticCacheManager.GetAsync(cacheKey, async () =>
+            {
+                var categories = await _categoryService.GetAllCategoriesAsync(showHidden: showHidden);
+                return await categories.SelectAwait(async c => new SelectListItem
+                {
+                    Text = await _categoryService.GetFormattedBreadCrumbAsync(c, categories),
+                    Value = c.Id.ToString()
+                }).ToListAsync();
+            });
+
+            var result = new List<SelectListItem>();
+            //clone the list to ensure that "selected" property is not set
+            foreach (var item in listItems)
+            {
+                result.Add(new SelectListItem
+                {
+                    Text = item.Text,
+                    Value = item.Value
+                });
+            }
+
+            return result;
+        }
+
 
         /// <summary>
         /// Prepare available categories

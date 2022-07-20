@@ -1,0 +1,11 @@
+﻿{
+  "Group": "Payment methods",
+  "FriendlyName": "PayNow",
+  "SystemName": "Payments.PayNow",
+  "Version": "1.00",
+  "SupportedVersions": [ "4.50" ],
+  "Author": "ST Engineering Pte Ltd - Development",
+  "DisplayOrder": 1,
+  "FileName": "Nop.Plugin.Payments.PayNow.dll",
+  "Description": "This plugin enables PayNow payment (stored into database)"
+}

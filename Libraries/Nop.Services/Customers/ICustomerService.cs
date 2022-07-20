@@ -63,16 +63,23 @@ namespace Nop.Services.Customers
             int[] customerRoleIds, int pageIndex = 0, int pageSize = int.MaxValue);
 
 
+
         /// <summary>
         /// Gets all nature of business
         /// </summary>
-        /// <param name="storeId">Store identifier; 0 if you want to get all records</param>
+        /// <param name="nature of Business name">nature of business identifier; 0 if you want to get all records</param>
+        /// <param name="store Name">role; 1 if you want to get all records</param>
+        /// <param name="pageIndex">Page index</param>
+        /// <param name="pageSize">Page size</param>
         /// <param name="showHidden">A value indicating whether to show hidden records</param>
         /// <returns>
         /// A task that represents the asynchronous operation
         /// The task result contains the categories
         /// </returns>
-        Task<IList<NatureOfBusiness>> GetAllNatureOfBusinessAsync(int natureOfBusinessId);
+        Task<IPagedList<NatureOfBusiness>> GetAllNatureOfBusinessAsync(string natureOfBusinessName = "", string storeName = "", string customerRole = "",
+            int pageIndex = 0,
+            int pageSize = int.MaxValue,
+            bool showHidden = false);
 
         /// <summary>
         /// Gets customers with shopping carts
@@ -179,6 +186,8 @@ namespace Nop.Services.Customers
         /// </returns>
         Task<Customer> GetCustomerBySystemNameAsync(string systemName);
 
+
+
         /// <summary>
         /// Get customer by username
         /// </summary>
@@ -188,19 +197,6 @@ namespace Nop.Services.Customers
         /// The task result contains the customer
         /// </returns>
         Task<Customer> GetCustomerByUsernameAsync(string username);
-
-
-
-        /// <summary>
-        /// Get customer by nature Of Business
-        /// </summary>
-        /// <param name="customer">natureOfBusiness</param>
-        /// <returns>
-        /// A task that represents the asynchronous operation
-        /// The task result contains the customer
-        /// </returns>
-        Task<string> GetCustomerNatureOfBusinessAsync(Customer customer);
-
 
         /// <summary>
         /// Insert a guest customer
@@ -219,29 +215,67 @@ namespace Nop.Services.Customers
         Task InsertCustomerAsync(Customer customer);
 
         /// <summary>
-        /// Gets a customer & nature of business mapping 
-        /// </summary>
-        /// <param name="customerNatureOfBusinessId">customer & nature of business identifier</param>
-        /// <returns>
-        /// A task that represents the asynchronous operation
-        /// The task result contains the customer & nature of business mapping
-        /// </returns>
-        Task<CustomerNatureOfBusiness> GetCustomerNatureOfBusinessByIdAsync(int customerNatureOfBusinessId);
-
-        /// <summary>
-        /// Insert a customer's Nature Of Business
-        /// </summary>
-        /// <param name="natureOfBusiness">NatureOfBusiness</param>
-        /// <returns>A task that represents the asynchronous operation</returns>
-        Task InsertCustomerNatureOfBusinessAsync(NatureOfBusiness natureOfBusiness);
-
-        /// <summary>
         /// Updates the customer
         /// </summary>
         /// <param name="customer">Customer</param>
         /// <returns>A task that represents the asynchronous operation</returns>
         Task UpdateCustomerAsync(Customer customer);
 
+        /// <summary>
+        /// Insert nature of business
+        /// </summary>
+        /// <param name="nature of business">nature of business</param>
+        /// <returns>A task that represents the asynchronous operation</returns>
+        // Task InsertNatureOfBusinessAsync(NatureOfBusiness natureofBusiness);
+
+        /// <summary>
+        /// Gets a customer & nature of business mapping 
+        /// </summary>
+        /// <param name="natureOfBusinessId">customer & nature of business identifier</param>
+        /// <param name="pageIndex">Page index</param>
+        /// <param name="pageSize">Page size</param>
+        /// <param name="showHidden">A value indicating whether to show hidden records</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the customer & nature of business mapping
+        /// </returns>
+        Task<IPagedList<CustomerNatureOfBusiness>> GetCustomerNatureOfBusinessByNatureofBusinessAsync(int natureOfBusinessId, int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false);
+
+        /// <summary>
+        /// Insert a customer's Nature Of Business
+        /// </summary>
+        /// <param name="natureOfBusiness">NatureOfBusiness</param>
+        /// <returns>A task that represents the asynchronous operation</returns>
+        //Task InsertCustomerNatureOfBusinessAsync(CustomerNatureOfBusiness customerNatureOfBusiness);
+
+        /// <summary>
+        /// Get customer by nature Of Business
+        /// </summary>
+        /// <param name="customer">natureOfBusiness</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the customer
+        /// </returns>
+        //Task<string> GetCustomerNatureOfBusinessAsync(IPagedList<NatureOfBusiness> natureOfBusiness);
+
+        /// <summary>
+        /// Gets a customer - Nature Of Business mapping collection
+        /// </summary>
+        /// <param name = "customerId" > customerId</ param >
+        /// < returns >
+        /// A task that represents the asynchronous operation
+        /// The task result contains the product manufacturer mapping collection
+        /// </returns>
+         Task<CustomerNatureOfBusiness> GetCustomerNatureOfBusinessByCustomerIdAsync(int customerId, bool showHidden = false);
+      
+
+
+        /// <summary>
+        /// Updates a Nature Of Business
+        /// </summary>
+        /// <param name="natureOfBusiness">natureOfBusiness</param>
+        /// <returns>A task that represents the asynchronous operation</returns>
+         Task UpdateNatureOfBusinessAsync(NatureOfBusiness natureOfBusiness);
 
 
         /// <summary>
@@ -259,16 +293,26 @@ namespace Nop.Services.Customers
         /// <returns>A task that represents the asynchronous operation</returns>
         Task DeleteCustomerNatureOfBusinessAsync(CustomerNatureOfBusiness customerNatureOfBusiness);
 
+
         /// <summary>
         /// Gets a customer - Nature Of Business mapping collection
         /// </summary>
-        /// <param name="natureOfBusinessId">nature of business identifier</param>
+        /// <param name="nature Of Business Name">natureOfBusinessName</param>
         /// <returns>
         /// A task that represents the asynchronous operation
         /// The task result contains the product manufacturer mapping collection
         /// </returns>
-        Task<IPagedList<CustomerNatureOfBusiness>> GetCustomerByNatureOfBusinessIdAsync(int natureOfBusinessId, int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false);
+        //Task<IPagedList<CustomerNatureOfBusiness>> GetCustomerNatureOfBusinessByUserNameAsync(string userName, int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false);
 
+        /// <summary>
+        /// Gets a customer Nature Of BusinessId mapping 
+        /// </summary>
+        /// <param name="customerNatureOfBusinessId">Product manufacturer mapping identifier</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the product manufacturer mapping
+        /// </returns>
+        Task<CustomerNatureOfBusiness> GetCustomerNatureOfBusinessByIdAsync(int customerNatureOfBusinessId);
 
 
         /// <summary>
@@ -279,7 +323,7 @@ namespace Nop.Services.Customers
         /// A task that represents the asynchronous operation
         /// The task result contains the customer
         /// </returns>
-        Task<Customer> GetCustomerByNatureOfBusinessAsync(string natureOfBusiness);
+        //Task<Customer> GetCustomerByNatureOfBusinessAsync(string natureOfBusiness);
 
 
         /// <summary>
@@ -301,7 +345,27 @@ namespace Nop.Services.Customers
         /// A task that represents the asynchronous operation
         /// The task result contains the products
         /// </returns>
-        Task<IList<NatureOfBusiness>> GetNatureOfBusinessByIdsAsync(int[] natureOfBusinessIds);
+        //Task<IList<NatureOfBusiness>> GetNatureOfBusinessByIdsAsync(int[] natureOfBusinessIds);
+
+        /// <summary>
+        /// Gets nature of business mapping 
+        /// </summary>
+        /// <param name="natureOfBusinessName">customer & nature of business mapping identifier</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the  Nature Of Business mapping
+        /// </returns>
+        Task<NatureOfBusiness> GetNatureOfBusinessByNameAsync(string natureOfBusinessName);
+
+
+        /// <summary>
+        /// Returns a Customer Nature of Business that has the specified values
+        /// </summary>
+        /// <param name="source">Source</param>
+        /// <param name="user Name">Customer identifier</param>
+        /// <param name="NatureOfBusinessId">Nature Of Business identifier</param>
+        /// <returns>A Nature Of Business that has the specified values; otherwise null</returns>
+        //CustomerNatureOfBusiness FindCustomerNatureOfBusiness(IList<CustomerNatureOfBusiness> source, string userName);
 
         /// <summary>
         /// Reset data required for checkout
@@ -718,6 +782,37 @@ namespace Nop.Services.Customers
         /// <param name="address">Address</param>
         /// <returns>A task that represents the asynchronous operation</returns>
         Task InsertCustomerAddressAsync(Customer customer, Address address);
+
+        #endregion
+
+
+        #region Customer Search
+
+        /// <summary>
+        /// Search customers
+        /// </summary>
+        /// <param name="pageIndex">Page index</param>
+        /// <param name="pageSize">Page size</param>
+        /// <param name="customerIds">Customer identifiers</param>
+        /// <param name="emails">email identifiers</param>
+        /// <param name="user name">user name</param>
+        /// <param name="overridePublished">
+        /// </param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the products
+        /// </returns>
+        Task<IPagedList<Customer>> SearchCustomerAsync(
+            int pageIndex = 0,
+            int pageSize = int.MaxValue,
+            IList<int> customerIds = null,
+            string email = "",
+            string username = "",
+            string keywords = null,
+            bool showHidden = false,
+            int languageId = 0,
+            bool? overridePublished = null);
+
 
         #endregion
     }

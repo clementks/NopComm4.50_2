@@ -119,7 +119,9 @@ namespace Nop.Web.Infrastructure
         /// <param name="application">Builder for configuring an application's request pipeline</param>
         public void Configure(IApplicationBuilder application)
         {
+
         }
+
 
         /// <summary>
         /// Gets order of this startup configuration implementation

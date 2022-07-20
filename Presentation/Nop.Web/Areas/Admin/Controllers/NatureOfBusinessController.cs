@@ -128,7 +128,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         protected virtual async Task SaveNatureOfBusinessAclAsync(NatureOfBusiness natureOfBusiness, NatureOfBusinessModel model)
         {
             natureOfBusiness.SubjectToAcl = model.SelectedCustomerRoleIds.Any();
-            await _customerService.UpdateCustomerNatureOfBusinessAsync(natureOfBusiness);
+            await _customerService.UpdateNatureOfBusinessAsync(natureOfBusiness);
 
             var existingAclRecords = await _aclService.GetAclRecordsAsync(natureOfBusiness);
             var allCustomerRoles = await _customerService.GetAllCustomerRolesAsync(true);
@@ -156,24 +156,27 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region nature of business
 
+      
+
         [HttpPost]
-        public virtual async Task<IActionResult> NatureOfBusinessList(NatureOfBusinessCustomerSearchModel searchModel)
+        public virtual async Task<IActionResult> NatureOfBusinessList(CustomerNatureOfBusinessSearchModel searchModel)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageNatureOfBusiness))
                 return await AccessDeniedDataTablesJson();
 
-            //try to get a customer with the specified user name
-            var natureOfBusiness = await _customerService.GetNatureOfBusinessByIdsAsync(searchModel.NatureOfBusinessId)
-                ?? throw new ArgumentException("No nature of business found with the specified id");
+            //try to get nature of business with the specified nature of business name
+            var natureOfBusiness = await _customerService.GetNatureOfBusinessByNameAsync(searchModel.SearchNatureOfBusinessName)
+                ?? throw new ArgumentException("No nature of business found with the specified name");
 
             //prepare model
-            var model = await _customerModelFactory.PrepareCustomerNatureOfBusinessModelListAsync(searchModel, natureOfBusiness);
+            var model = await _customerModelFactory.PrepareCustomerNatureOfBusinessListModelAsync(searchModel, natureOfBusiness);
+            
 
             return Json(model);
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> NatureOfBusinessUpdate(NatureOfBusinessCustomerModel model)
+        public virtual async Task<IActionResult> NatureOfBusinessUpdate(CustomerNatureOfBusinessModel model)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageNatureOfBusiness))
                 return AccessDeniedView();
@@ -223,45 +226,45 @@ namespace Nop.Web.Areas.Admin.Controllers
                 return await AccessDeniedDataTablesJson();
 
             //prepare model
-            var model = await _customerModelFactory.PrepareAddProductToManufacturerListModelAsync(searchModel);
+            var model = await _customerModelFactory.PrepareAddCustomerToNatureOfBusinessListModelAsync(searchModel);
 
             return Json(model);
         }
 
-        [HttpPost]
-        [FormValueRequired("save")]
-        public virtual async Task<IActionResult> NatureOfBusinessAddPopup(AddNatureOfBusinessToCustomerModel model)
-        {
-            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageNatureOfBusiness))
-                return AccessDeniedView();
+        //[HttpPost]
+        //[FormValueRequired("save")]
+        //public virtual async Task<IActionResult> NatureOfBusinessAddPopup(AddCustomerToNatureOfBusinessModel model)
+        //{
+        //    if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageNatureOfBusiness))
+        //        return AccessDeniedView();
 
-            //get selected products
-            var selectedProducts = await _customerService.GetProductsByIdsAsync(model.SelectedProductIds.ToArray());
-            if (selectedProducts.Any())
-            {
-                var existingProductmanufacturers = await _customerService
-                    .GetProductManufacturersByManufacturerIdAsync(model.ManufacturerId, showHidden: true);
-                foreach (var product in selectedProducts)
-                {
-                    //whether product manufacturer with such parameters already exists
-                    if (_customerService.FindProductManufacturer(existingProductmanufacturers, product.Id, model.ManufacturerId) != null)
-                        continue;
+        //    //get selected nature of business
+        //    var selectedCustomers = await _customerService.GetCustomersByIdsAsync(model.SelectedCustomerIds.ToArray());
+        //    if (selectedCustomers.Any())
+        //    {
+        //        var existingCustomerNatureOfBusiness = await _customerService
+        //            .GetCustomerNatureOfBusinessByUserNameAsync(model.SelectedUserName, showHidden: false);
+        //        foreach (var selCustomer in selectedCustomers)
+        //        {
+        //            //whether Customer & Nature Of Business with such parameters already exists
+        //            if (_customerService.FindCustomerNatureOfBusiness(existingCustomerNatureOfBusiness, selCustomer.Username) != null)
+        //                continue;
 
-                    //insert the new product manufacturer mapping
-                    await _customerService.InsertProductManufacturerAsync(new CustomerNatureOfBusiness
-                    {
-                        ManufacturerId = model.ManufacturerId,
-                        ProductId = product.Id,
-                        IsFeaturedProduct = false,
-                        DisplayOrder = 1
-                    });
-                }
-            }
+        //            //insert Customer Nature Of Business mapping
+        //            await _customerService.InsertCustomerNatureOfBusinessAsync(new CustomerNatureOfBusiness
+        //            {
+        //                NatureOfBusinessName = model.NatureOfBusinessName,
+        //                Username = model.SelectedUserName,
+        //                DisplayOrder = 1,
+        //                Published = true
+        //            });
+        //        }
+        //    }
 
-            ViewBag.RefreshPage = true;
+        //    ViewBag.RefreshPage = true;
 
-            return View(new AddProductToManufacturerSearchModel());
-        }
+        //    return View(new AddCustomerToNatureOfBusinessModel());
+        //}
 
 
         #endregion

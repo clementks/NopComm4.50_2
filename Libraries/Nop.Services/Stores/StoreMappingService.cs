@@ -100,6 +100,31 @@ namespace Nop.Services.Stores
                    select entity;
         }
 
+         /// <summary>
+        /// Apply store mapping to the passed query
+        /// </summary>
+        /// <typeparam name="TEntity">Type of entity that supports store mapping</typeparam>
+        /// <param name="query">Query to filter</param>
+        /// <param name="store Name">Store identifier</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the filtered query
+        /// </returns>
+        public virtual async Task<IQueryable<TEntity>> ApplyStoreNameMapping<TEntity>(IQueryable<TEntity> query, string storeName)
+            where TEntity : BaseEntity, IStoreMappingSupported
+        {
+            if (query is null)
+                throw new ArgumentNullException(nameof(query));
+
+            if (storeName !=null || _catalogSettings.IgnoreStoreLimitations || !await IsEntityMappingExistsAsync<TEntity>())
+                return query;
+
+            return from entity in query
+                   where !entity.LimitedToStores || _storeMappingRepository.Table.Any(sm =>
+                         sm.EntityName == storeName || sm.EntityId == entity.Id)
+                   select entity;
+        }
+
         /// <summary>
         /// Deletes a store mapping record
         /// </summary>

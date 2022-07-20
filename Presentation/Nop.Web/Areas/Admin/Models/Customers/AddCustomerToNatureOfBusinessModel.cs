@@ -17,6 +17,9 @@ namespace Nop.Web.Areas.Admin.Models.Customers
         public AddCustomerToNatureOfBusinessModel()
         {
             SelectedUserNames = new List<string>();
+
+            SelectedCustomerIds = new List<int>();
+
         }
         #endregion
 
@@ -24,7 +27,11 @@ namespace Nop.Web.Areas.Admin.Models.Customers
 
         public IList<string> SelectedUserNames { get; set; }
 
-         public int NatureOfBusinessId { get; set; }
+        public string SelectedUserName { get; set; }
+
+        public string NatureOfBusinessName { get; set; }
+
+        public IList<int> SelectedCustomerIds { get; set; }
 
         #endregion
     }

@@ -23,6 +23,19 @@ namespace Nop.Services.Stores
         /// </returns>
         Task<IQueryable<TEntity>> ApplyStoreMapping<TEntity>(IQueryable<TEntity> query, int storeId) where TEntity : BaseEntity, IStoreMappingSupported;
 
+
+        /// <summary>
+        /// Apply store mapping to the passed query
+        /// </summary>
+        /// <typeparam name="TEntity">Type of entity that supports store mapping</typeparam>
+        /// <param name="query">Query to filter</param>
+        /// <param name="store Name">Store identifier</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the filtered query
+        /// </returns>
+        Task<IQueryable<TEntity>> ApplyStoreNameMapping<TEntity>(IQueryable<TEntity> query, string storeName) where TEntity : BaseEntity, IStoreMappingSupported;
+
         /// <summary>
         /// Deletes a store mapping record
         /// </summary>

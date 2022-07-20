@@ -65,6 +65,8 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
                 pluginService.InstallPluginsAsync().Wait();
                 pluginService.UpdatePluginsAsync().Wait();
 
+                
+
                 //update nopCommerce core and db
                 var migrationManager = engine.Resolve<IMigrationManager>();
                 var assembly = Assembly.GetAssembly(typeof(ApplicationBuilderExtensions));
@@ -72,6 +74,10 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
                 assembly = Assembly.GetAssembly(typeof(IMigrationManager));
                 migrationManager.ApplyUpMigrations(assembly, MigrationProcessType.Update);
 
+                // add nature of business entity/table migration 
+                var natureOfBusinessAssembly = Assembly.GetAssembly(typeof(M20072022_100003_AddNatureOfBusiness));
+                migrationManager.ApplyUpMigrations(natureOfBusinessAssembly, MigrationProcessType.Update);
+                
                 var taskScheduler = engine.Resolve<ITaskScheduler>();
                 taskScheduler.InitializeAsync().Wait();
                 taskScheduler.StartScheduler();

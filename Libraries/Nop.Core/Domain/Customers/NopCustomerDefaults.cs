@@ -290,6 +290,11 @@
         /// </summary>
         public static string CloseConfigurationStepsAttribute => "CloseConfigurationSteps";
 
+        /// <summary>
+        /// Gets a name of generic attribute to store the value of 'RegisteredNatureOfBusiness' for the customer
+        /// </summary>
+        public static string RegisteredNatureOfBusiness => "RegisteredNatureOfBusiness";
+
         #endregion
     }
 }

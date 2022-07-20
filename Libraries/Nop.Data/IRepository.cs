@@ -28,18 +28,17 @@ namespace Nop.Data
         /// </returns>
         Task<TEntity> GetByIdAsync(int? id, Func<IStaticCacheManager, CacheKey> getCacheKey = null, bool includeDeleted = true);
 
-
         /// <summary>
         /// Get the entity entry
         /// </summary>
-        /// <param name="email">Entity entry identifier</param>
+        /// <param name="usernames">Entity entry identifier</param>
         /// <param name="getCacheKey">Function to get a cache key; pass null to don't cache; return null from this function to use the default key</param>
-        /// <param name="includeDeleted">Whether to include deleted items (applies only to <see cref="Nop.Core.Domain.Common.ISoftDeletedEntity"/> entities)</param>
+        /// <param name="includeDeleted">Whether to include deleted items (applies only to <see cref="ISoftDeletedEntity"/> entities)</param>
         /// <returns>
         /// A task that represents the asynchronous operation
         /// The task result contains the entity entry
         /// </returns>
-        Task<TEntity> GetByUsernameAsync(string email, Func<IStaticCacheManager, CacheKey> getCacheKey = null, bool includeDeleted = true);
+        Task<IList<TEntity>> GetByUsernameAsync(IList<string> usernames, Func<IStaticCacheManager, CacheKey> getCacheKey = null, bool includeDeleted = true);
 
         /// <summary>
         /// Get entity entries by identifiers

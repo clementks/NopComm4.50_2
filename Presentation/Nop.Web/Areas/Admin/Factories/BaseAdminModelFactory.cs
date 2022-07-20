@@ -553,9 +553,9 @@ namespace Nop.Web.Areas.Admin.Factories
             var listItems = await _staticCacheManager.GetAsync(cacheKey, async () =>
             {
                 var natureofBusinesses = await _customerService.GetAllNatureOfBusinessAsync(showHidden: showHidden);
-                return await natureofBusinesses.SelectAwait(async c => new SelectListItem
+                return await natureofBusinesses.Select(c => new SelectListItem
                 {
-                    Text = await _customerService.GetFormattedBreadCrumbAsync(c, natureofBusinesses),
+                    Text = c.NatureOfBusinessName,
                     Value = c.Id.ToString()
                 }).ToListAsync();
             });

@@ -189,7 +189,7 @@ namespace Nop.Services.Customers
         /// <remarks>
         /// {0} : customer identifier
         /// </remarks>
-        public static CacheKey CustomerPasswordLifetimeCacheKey => new("Nop.customerpassword.lifetime.{0}");
+        public static CacheKey CustomerNatureOfBusinessCacheKey => new("Nop.customernatureOfBusiness.cacheKey.{0}");
 
         #endregion
 

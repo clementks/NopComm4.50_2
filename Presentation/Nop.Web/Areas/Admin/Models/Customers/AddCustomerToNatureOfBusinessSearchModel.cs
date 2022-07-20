@@ -16,16 +16,25 @@ namespace Nop.Web.Areas.Admin.Models.Customers
 
         public AddCustomerToNatureOfBusinessSearchModel()
         {
-            AvailableNatureOfBusiness = new List<SelectListItem>();
+            AvailableNatureOfBusinessName = new List<SelectListItem>();
         }
         #endregion
 
         #region Properties
 
         [NopResourceDisplayName("Admin.customers.List.SearchUserName")]
-        public string SearchUserName { get; set; }
 
-        public IList<SelectListItem> AvailableNatureOfBusiness { get; set; }
+        public IList<SelectListItem> AvailableNatureOfBusinessName { get; set; }
+
+        public int SearchCustomerId { get; set; }
+
+        public string SearchNatureOfBusinessName { get; set; }
+
+        public string SearchUsername { get; set; }
+
+        public string SearchEmail { get; set; }
+
+       
 
         #endregion
     }

@@ -11,9 +11,14 @@ namespace Nop.Core.Domain.Customers
     /// <summary>
     /// Represents Nature Of Business
     /// </summary>
-    public partial class NatureOfBusiness : BaseEntity, ILocalizedEntity, ISoftDeletedEntity, IAclSupported, ISlugSupported, IStoreMappingSupported
+    public partial class NatureOfBusiness : BaseEntity, ILocalizedEntity, ISoftDeletedEntity, IAclSupported, ISlugSupported
     {
 
+
+        /// <summary>
+        /// Gets or sets the nature of Business identifier
+        /// </summary>
+        public int NatureOfBusinessId { get; set; }
 
         /// <summary>
         /// Gets or sets the names on nature of business
@@ -38,7 +43,7 @@ namespace Nop.Core.Domain.Customers
         /// <summary>
         /// Gets or sets a value indicating whether the entity is limited/restricted to certain stores
         /// </summary>
-        public bool LimitedToStores { get; set; }
+        //public bool LimitedToStores { get; set; }
 
         /// <summary>
         /// Gets or sets the date and time of instance creation

@@ -29,14 +29,13 @@ namespace Nop.Web.Areas.Admin.Models.Customers
             SelectedStoreIds = new List<int>();
             AvailableStores = new List<SelectListItem>();
 
-            NatureOfBusinessCustomerSearchModel = new NatureOfBusinessCustomerSearchModel();
+            customerNatureOfBusinessSearchModel = new CustomerNatureOfBusinessSearchModel();
         }
 
         #endregion
 
         #region Properties
 
-        public int Id { get; set; }
 
         [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.Name")]
         public string NatureOfBusinessName { get; set; }
@@ -62,7 +61,7 @@ namespace Nop.Web.Areas.Admin.Models.Customers
         public IList<int> SelectedStoreIds { get; set; }
         public IList<SelectListItem> AvailableStores { get; set; }
 
-        public NatureOfBusinessCustomerSearchModel NatureOfBusinessCustomerSearchModel  { get; set; }
+        public CustomerNatureOfBusinessSearchModel customerNatureOfBusinessSearchModel { get; set; }
 
 
         #endregion

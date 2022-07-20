@@ -53,6 +53,10 @@ namespace Nop.Data
         /// <param name="application">Builder for configuring an application's request pipeline</param>
         public void Configure(IApplicationBuilder application)
         {
+            //using var scope = application.ApplicationServices.CreateScope();
+            //var migrator = scope.ServiceProvider.GetService<IMigrationRunner>();
+            //migrator.ListMigrations();
+            //migrator.MigrateUp();
         }
 
         /// <summary>

@@ -8,6 +8,7 @@ using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Domain.Common;
 using Nop.Core.Events;
+using Nop.Core.Domain.Customers;
 
 namespace Nop.Data
 {
@@ -152,31 +153,50 @@ namespace Nop.Data
         /// <summary>
         /// Get the entity entry
         /// </summary>
-        /// <param name="id">Entity entry identifier</param>
+        /// <param name="usernames">Entity entry identifier</param>
         /// <param name="getCacheKey">Function to get a cache key; pass null to don't cache; return null from this function to use the default key</param>
         /// <param name="includeDeleted">Whether to include deleted items (applies only to <see cref="ISoftDeletedEntity"/> entities)</param>
         /// <returns>
         /// A task that represents the asynchronous operation
         /// The task result contains the entity entry
         /// </returns>
-        public virtual async Task<TEntity> GetByUsernameAsync(string email, Func<IStaticCacheManager, CacheKey> getCacheKey = null, bool includeDeleted = true)
+        public virtual async Task<IList<TEntity>> GetByUsernameAsync(IList<string> usernames, Func<IStaticCacheManager, CacheKey> getCacheKey = null, bool includeDeleted = true)
         {
-            if (email !=null)
-                return null;
 
-            async Task<TEntity> getEntityAsync()
+
+            if (!usernames?.Any() ?? true)
+                return new List<TEntity>();
+
+            async Task<IList<TEntity>> getByUsernameAsync()
             {
-                return await AddDeletedFilter(Table, includeDeleted).FirstOrDefaultAsync(entity => entity.Equals(email));
+                //return await AddDeletedFilter(Table, includeDeleted).FirstOrDefaultAsync(entity => entity.Equals(email));
+
+                // var query = AddDeletedFilter(Table, includeDeleted);
+
+                //get entries
+                var entries = await _dataProvider.GetTable<Customer>()
+                            .Where(entry => usernames.Contains(entry.Username)).ToListAsync();
+
+                //sort by passed identifiers
+                var sortedEntries = new List<TEntity>();
+                foreach (var username in usernames)
+                {
+                    var sortedEntry = entries.Find(entry => entry.Username == username);
+                    //if (sortedEntry != null)
+                    //    sortedEntries.Add(sortedEntry);
+                }
+
+                return sortedEntries;
             }
 
             if (getCacheKey == null)
-                return await getEntityAsync();
+                return await getByUsernameAsync();
 
             //caching
             var cacheKey = getCacheKey(_staticCacheManager)
-                ?? _staticCacheManager.PrepareKeyForDefaultCache(NopEntityCacheDefaults<TEntity>.ByIdCacheKey, email);
+                ?? _staticCacheManager.PrepareKeyForDefaultCache(NopEntityCacheDefaults<TEntity>.ByIdCacheKey, usernames);
 
-            return await _staticCacheManager.GetAsync(cacheKey, getEntityAsync);
+            return await _staticCacheManager.GetAsync(cacheKey, getByUsernameAsync);
         }
 
         /// <summary>

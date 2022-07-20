@@ -78,6 +78,29 @@ namespace Nop.Web.Framework.Factories
             await PrepareModelCustomerRolesAsync(model);
         }
 
+
+         /// <summary>
+        /// Prepare selected and all available nature of business for the passed model
+        /// </summary>
+        /// <typeparam name="TModel">ACL supported model type</typeparam>
+        /// <param name="model">Model</param>
+        /// <returns>A task that represents the asynchronous operation</returns>
+        //public virtual async Task PrepareModelNatureOfBusinessAsync<TModel>(TModel model) where TModel : IAclSupportedModel
+        //{
+        //    if (model == null)
+        //        throw new ArgumentNullException(nameof(model));
+
+        //    //prepare available nature of business
+        //    var availableNatureOfBusinesses = await _customerService.GetAllNatureOfBusinessAsync(showHidden: true);
+        //    model.AvailableCustomerRoles = availableNatureOfBusinesses.Select(natureOfbusiness => new SelectListItem
+        //    {
+        //        Text = natureOfbusiness.NatureOfBusinessName,
+        //        Value = natureOfbusiness.Id.ToString(),
+        //        Selected = model.SelectedCustomerRoleIds.Contains(natureOfbusiness.Id)
+        //    }).ToList();
+        //}
+
         #endregion
     }
+
 }

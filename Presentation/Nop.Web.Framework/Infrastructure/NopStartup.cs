@@ -55,6 +55,14 @@ using Nop.Web.Framework.Menu;
 using Nop.Web.Framework.Mvc.Routing;
 using Nop.Web.Framework.Themes;
 using Nop.Web.Framework.UI;
+using Nop.Data.Migrations;
+
+// fluent migrator
+using FluentMigrator;
+using FluentMigrator.Runner;
+using FluentMigrator.Runner.Initialization;
+using FluentMigrator.Runner.Processors;
+using FluentMigrator.Runner.Generators;
 
 namespace Nop.Web.Framework.Infrastructure
 {
@@ -84,12 +92,48 @@ namespace Nop.Web.Framework.Infrastructure
             services.AddTransient(serviceProvider =>
                 serviceProvider.GetRequiredService<IDataProviderManager>().DataProvider);
 
+            var dataSettings = DataSettingsManager.LoadSettings();
+            
+            //services.AddFluentMigratorCore().ConfigureRunner(builder =>
+            //{
+            //    builder.AddSqlServer()
+            //       .WithGlobalConnectionString(NopConfigurationDefaults.AppSettingsFilePath)
+            //      // .WithVersionTable(new PluginMigrationVersionTable())
+            //       .ScanIn(typeof(Migration_19072022100000).Assembly)
+            //       .For.Migrations();
+            //}).AddLogging(lb => lb.AddFluentMigratorConsole())
+            
+
+            //services.AddFluentMigratorCore()
+            //                .ConfigureRunner(builder => builder.AddSqlServer2016()
+            //                                    .WithGlobalConnectionString("Persist Security Info = False; Integrated Security = true; Initial Catalog = nopCommerce_4.50.2_Source; server = N2T-J3PQ6H2")
+            //                                    .ScanIn(typeof(Migration_14072022).Assembly).For.Migrations())
+            // Enable logging to console in the FluentMigrator way
+            //.AddLogging(lb => lb.AddFluentMigratorConsole())
+            //.Configure<ProcessorOptions>(x => x.ConnectionString = provider == "SqlServer" ? "Data Source=N2T-J3PQ6H2;Initial Catalog=nopCommerce_4.50.2_Source;Integrated Security=True;Persist Security Info=False;Trust Server Certificate=True" : "Data Source=N2T-J3PQ6H2;Initial Catalog=nopCommerce_4.50.0;Integrated Security=True;Persist Security Info=False;Trust Server Certificate=True")
+            //.Configure<SelectingGeneratorAccessorOptions>(cfg => cfg.GeneratorId = provider == "SqlServer2016" ? "server = N2T-J3PQ6H2; Initial Catalog = nopCommerce_4.50.2_Source; Integrated Security = True; Persist Security Info = False" : "server = N2T-J3PQ6H2;Initial Catalog = nopCommerce_4.50.0;Integrated Security = True;Persist Security Info = False")
+
+            // Build the service provider
+            //.BuildServiceProvider();
+
+            //services.AddTransient(serviceProvider =>
+            //  serviceProvider.GetRequiredService<IMigrationRunner>()); stackoverflow error
+            
+
+            //using var scope = app.ApplicationServices.CreateScope();
+            //var runner = scope.ServiceProvider.GetService<IMigrationRunner>();
+            //runner.ListMigrations();
+            //runner.MigrateUp(14072022);
+
+
             //repositories
             services.AddScoped(typeof(IRepository<>), typeof(EntityRepository<>));
 
             //plugins
             services.AddScoped<IPluginService, PluginService>();
             services.AddScoped<OfficialFeedManager>();
+
+          
 
             //static cache manager
             var appSettings = Singleton<AppSettings>.Instance;

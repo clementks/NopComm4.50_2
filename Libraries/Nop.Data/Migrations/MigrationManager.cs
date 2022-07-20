@@ -49,7 +49,7 @@ namespace Nop.Data.Migrations
         /// <param name="assembly">Assembly to find migrations</param>
         /// <param name="migrationProcessType">Type of migration process; pass MigrationProcessType.NoMatter to load all migrations</param>
         /// <returns>The instances for found types implementing FluentMigrator.IMigration</returns>
-        protected virtual IEnumerable<IMigrationInfo> GetUpMigrations(Assembly assembly, MigrationProcessType migrationProcessType = MigrationProcessType.NoMatter)
+        protected virtual IEnumerable<IMigrationInfo> GetUpMigrations(Assembly assembly, MigrationProcessType migrationProcessType = MigrationProcessType.Update)
         {
             var migrations = _filteringMigrationSource
                 .GetMigrations(t =>
@@ -111,14 +111,16 @@ namespace Nop.Data.Migrations
         /// </summary>
         /// <param name="assembly">Assembly to find migrations</param>
         /// <param name="migrationProcessType">Type of migration process</param>
-        public virtual void ApplyUpMigrations(Assembly assembly, MigrationProcessType migrationProcessType = MigrationProcessType.Installation)
+        public virtual void ApplyUpMigrations(Assembly assembly, MigrationProcessType migrationProcessType = MigrationProcessType.Update)
         {
             if (assembly is null)
                 throw new ArgumentNullException(nameof(assembly));
 
             foreach (var migrationInfo in GetUpMigrations(assembly, migrationProcessType))
             {
+                
                 _migrationRunner.Up(migrationInfo.Migration);
+
 
 #if DEBUG
                 if (!string.IsNullOrEmpty(migrationInfo.Description) &&
@@ -127,6 +129,8 @@ namespace Nop.Data.Migrations
 #endif
                 _versionLoader.Value
                     .UpdateVersionInfo(migrationInfo.Version, migrationInfo.Description ?? migrationInfo.Migration.GetType().Name);
+                
+               
             }
         }
         

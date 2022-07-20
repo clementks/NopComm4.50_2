@@ -15,12 +15,15 @@ using Nop.Core.Domain.News;
 using Nop.Core.Domain.Orders;
 using Nop.Core.Domain.Polls;
 using Nop.Core.Domain.Shipping;
+using Nop.Core.Domain.Localization;
 using Nop.Core.Domain.Tax;
+using Nop.Core.Domain.Seo;
 using Nop.Core.Infrastructure;
 using Nop.Data;
 using Nop.Services.Common;
 using Nop.Services.Security;
 using Nop.Services.Localization;
+using Nop.Services.Stores;
 
 namespace Nop.Services.Customers
 {
@@ -34,7 +37,6 @@ namespace Nop.Services.Customers
         private readonly CustomerSettings _customerSettings;
         private readonly IGenericAttributeService _genericAttributeService;
         private readonly INopDataProvider _dataProvider;
-        private readonly IAclService _aclService;
         private readonly IRepository<Address> _customerAddressRepository;
         private readonly IRepository<BlogComment> _blogCommentRepository;
         private readonly IRepository<Customer> _customerRepository;
@@ -55,8 +57,8 @@ namespace Nop.Services.Customers
         private readonly IRepository<ShoppingCartItem> _shoppingCartRepository;
         private readonly IStaticCacheManager _staticCacheManager;
         private readonly IStoreContext _storeContext;
-        private readonly IWorkContext _workContext;
         private readonly ShoppingCartSettings _shoppingCartSettings;
+
 
         #endregion
 
@@ -65,7 +67,6 @@ namespace Nop.Services.Customers
         public CustomerService(CustomerSettings customerSettings,
             IGenericAttributeService genericAttributeService,
             INopDataProvider dataProvider,
-            IAclService aclService,
             IRepository<Address> customerAddressRepository,
             IRepository<BlogComment> blogCommentRepository,
             IRepository<Customer> customerRepository,
@@ -86,13 +87,11 @@ namespace Nop.Services.Customers
             IRepository<ShoppingCartItem> shoppingCartRepository,
             IStaticCacheManager staticCacheManager,
             IStoreContext storeContext,
-            IWorkContext workContext,
             ShoppingCartSettings shoppingCartSettings)
         {
             _customerSettings = customerSettings;
             _genericAttributeService = genericAttributeService;
             _dataProvider = dataProvider;
-            _aclService = aclService;
             _customerAddressRepository = customerAddressRepository;
             _blogCommentRepository = blogCommentRepository;
             _customerRepository = customerRepository;
@@ -113,7 +112,6 @@ namespace Nop.Services.Customers
             _shoppingCartRepository = shoppingCartRepository;
             _staticCacheManager = staticCacheManager;
             _storeContext = storeContext;
-            _workContext = workContext;
             _shoppingCartSettings = shoppingCartSettings;
         }
 
@@ -314,25 +312,7 @@ namespace Nop.Services.Customers
             return customers;
         }
 
-        /// <summary>
-        /// Gets all nature of business
-        /// </summary>
-        /// <param name="storeId">Store identifier; 0 if you want to get all records</param>
-        /// <param name="showHidden">A value indicating whether to show hidden records</param>
-        /// <returns>
-        /// A task that represents the asynchronous operation
-        /// The task result contains the categories
-        /// </returns>
-        public virtual async Task<IList<NatureOfBusiness>> GetAllNatureOfBusinessAsync(int natureOfBusinessId)
-        {
-            var key = _staticCacheManager.PrepareKeyForDefaultCache(NopCustomerServicesDefaults.CustomerNatureOfBusinessAllCacheKey, natureOfBusinessId);
-
-            var natureOfBusinesses = await _staticCacheManager
-                .GetAsync(key, async () => (await GetAllNatureOfBusinessAsync(string.Empty, natureOfBusinessId, showHidden: showHidden)).ToList());
-
-            return natureOfBusinesses;
-        }
-
+        
 
         /// <summary>
         /// Gets online customers
@@ -650,7 +630,7 @@ namespace Nop.Services.Customers
         /// A task that represents the asynchronous operation
         /// The task result contains the customer
         /// </returns>
-        public virtual async Task<Customer> GetCustomerByUsernameAsync(string username)
+        public virtual async Task<Customer> GetCustomerByUsernameAsync(string username) 
         {
             if (string.IsNullOrWhiteSpace(username))
                 return null;
@@ -660,34 +640,13 @@ namespace Nop.Services.Customers
                         where c.Username == username
                         select c;
             var customer = await query.FirstOrDefaultAsync();
-
+            
             return customer;
         }
 
         
 
-        /// <summary>
-        /// Get customer by nature Of Business
-        /// </summary>
-        /// <param name="customer">customer</param>
-        /// <returns>
-        /// A task that represents the asynchronous operation
-        /// The task result contains the customer
-        /// </returns>
-        public virtual async Task<string> GetCustomerNatureOfBusinessAsync(Customer customer)
-        {
-
-            if (customer == null)
-                throw new ArgumentNullException(nameof(customer));
-
-            var natureofBusiness = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.NatureOfBusinessAttribute);
-
-            return natureofBusiness;
-
-        }
-
-
-
+      
         /// <summary>
         /// Insert a guest customer
         /// </summary>
@@ -727,30 +686,7 @@ namespace Nop.Services.Customers
             await _customerRepository.InsertAsync(customer);
         }
 
-        /// <summary>
-        /// Gets a customer & nature of business mapping 
-        /// </summary>
-        /// <param name="customerNatureOfBusinessId">customer & nature of business identifier</param>
-        /// <returns>
-        /// A task that represents the asynchronous operation
-        /// The task result contains the customer & nature of business mapping
-        /// </returns>
-        public virtual async Task<CustomerNatureOfBusiness> GetCustomerNatureOfBusinessByIdAsync(int customerNatureOfBusinessId)
-        {
-            return await _customerNatureOfBusinessRepository.GetByIdAsync(customerNatureOfBusinessId, cache => default);
-
-        }
-
-        /// <summary>
-        /// Insert a customer's Nature Of Business
-        /// </summary>
-        /// <param name="customerNatureOfBusiness">customerNatureOfBusiness</param>
-        /// <returns>A task that represents the asynchronous operation</returns>
-        public virtual async Task InsertCustomerNatureOfBusinessAsync(NatureOfBusiness natureOfBusiness)
-        {
-            await _customerNatureOfBusinessRepository.InsertAsync(natureOfBusiness);
-        }
-
+       
         /// <summary>
         /// Updates the customer
         /// </summary>
@@ -761,122 +697,21 @@ namespace Nop.Services.Customers
             await _customerRepository.UpdateAsync(customer);
         }
 
-        /// <summary>
-        /// Updates a customer's Nature Of Business
-        /// </summary>
-        /// <param name="customernatureOfBusiness">customernatureOfBusiness</param>
-        /// <returns>A task that represents the asynchronous operation</returns>
-        public virtual async Task UpdateCustomerNatureOfBusinessAsync(CustomerNatureOfBusiness customerNatureOfBusiness)
-        {
-            await _customerNatureOfBusinessRepository.UpdateAsync(customerNatureOfBusiness);
-        }
+       
 
-
-        /// <summary>
-        /// Deletes customer & nature of business mapping
-        /// </summary>
-        /// <param name="customerNatureOfBusiness">Customer &  Nature of Business mapping</param>
-        /// <returns>A task that represents the asynchronous operation</returns>
-        public virtual async Task DeleteCustomerNatureOfBusinessAsync(CustomerNatureOfBusiness customerNatureOfBusiness)
-        {
-            await _customerNatureOfBusinessRepository.DeleteAsync(customerNatureOfBusiness);
-        }
-
-
-        /// <summary>
-        /// Get customer by nature Of Business
-        /// </summary>
-        /// <param name="natureOfBusiness">natureOfBusiness</param>
-        /// <returns>
-        /// A task that represents the asynchronous operation
-        /// The task result contains the customer
-        /// </returns>
-        public virtual async Task<Customer> GetCustomerByNatureOfBusinessAsync(string natureOfBusiness)
-        {
-            if (string.IsNullOrWhiteSpace(natureOfBusiness))
-                return null;
-
-            var query = from nbr in _natureOfBusinessRepository.Table
-                        join cm in _customerNatureOfBusinessRepository.Table on nbr.Id equals cm.NatureOfBusinessId
-                        join custrep in _customerRepository.Table on cm.Username equals custrep.Username
-                        where nbr.NatureOfBusinessName == natureOfBusiness && !nbr.Deleted && !custrep.Deleted
-                        select custrep;
-            var customer = await query.FirstOrDefaultAsync();
-
-            return customer;
-        }
-
-        /// <summary>
-        /// Gets a customer - Nature Of Business mapping collection
-        /// </summary>
-        /// <param name="customerId">Product identifier</param>
-        /// <returns>
-        /// A task that represents the asynchronous operation
-        /// The task result contains the product manufacturer mapping collection
-        /// </returns>
-        public virtual async Task<IPagedList<CustomerNatureOfBusiness>> GetCustomerByNatureOfBusinessIdAsync(int natureOfBusinessId, int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false)
-        {
-            if (natureOfBusinessId == 0)
-                //return new List<CustomerNatureOfBusiness> ();
-                return new PagedList<CustomerNatureOfBusiness>(new List<CustomerNatureOfBusiness>(), pageIndex, pageSize);
-
-
-            var query = from nbr in _natureOfBusinessRepository.Table 
-                        join cm in _customerNatureOfBusinessRepository.Table on nbr.Id  equals cm.NatureOfBusinessId
-                        where cm.NatureOfBusinessId == natureOfBusinessId && !nbr.Deleted 
-                        orderby cm.DisplayOrder, nbr.NatureOfBusinessName
-                        select cm;
-
-            if (!showHidden)
-            {
-                var natureOfBusinessQuery = _natureOfBusinessRepository.Table.Where(m => m.Published);
-
-                query = query.Where(cm => natureOfBusinessQuery.Any(m => m.Id == cm.NatureOfBusinessId));
-
-                //var result = _customerNatureOfBusinessRepository.Table.Where(nbr => nbr.CustomerId == customerId)
-                //    .Select(nbr => nbr.NatureOfBusinessId);
-
-            }
-            return await query.ToPagedListAsync(pageIndex, pageSize);
-        }
-
-        /// <summary>
-        /// Gets nature of business mapping 
-        /// </summary>
-        /// <param name="customerId">customer & nature of business mapping identifier</param>
-        /// <returns>
-        /// A task that represents the asynchronous operation
-        /// The task result contains the  Nature Of Business mapping
-        /// </returns>
-        public virtual async Task<NatureOfBusiness> GetNatureOfBusinessByIdAsync(int natureOfBusinessId)
-        {
-            return await _natureOfBusinessRepository.GetByIdAsync(natureOfBusinessId, cache => default);
-        }
-
-        /// <summary>
-        /// Get customer & nature of business by identifiers
-        /// </summary>
-        /// <param name="natureOfBusinessIds">nature of business identifiers</param>
-        /// <returns>
-        /// A task that represents the asynchronous operation
-        /// The task result contains the products
-        /// </returns>
-        public virtual async Task<IList<NatureOfBusiness>> GetNatureOfBusinessByIdsAsync(int[] natureOfBusinessIds)
-        {
-            return await _natureOfBusinessRepository.GetByIdsAsync(natureOfBusinessIds, cache => default, false);
-        }
+      
 
         /// <summary>
         /// Returns a Customer Nature of Business that has the specified values
         /// </summary>
         /// <param name="source">Source</param>
-        /// <param name="customerId">Customer identifier</param>
+        /// <param name="user Name">Customer identifier</param>
         /// <param name="NatureOfBusinessId">Nature Of Business identifier</param>
         /// <returns>A Nature Of Business that has the specified values; otherwise null</returns>
-        public virtual CustomerNatureOfBusiness FindCustomerNatureOfBusiness(IList<CustomerNatureOfBusiness> source, int customerId, int natureOfBusinessId)
+        public virtual CustomerNatureOfBusiness FindCustomerNatureOfBusiness(IList<CustomerNatureOfBusiness> source, string userName)
         {
             foreach (var customerNatureOfBusiness in source)
-                if (customerNatureOfBusiness.CustomerId == customerId && customerNatureOfBusiness.NatureOfBusinessId == natureOfBusinessId)
+                if (customerNatureOfBusiness.Username == userName)
                     return customerNatureOfBusiness;
 
             return null;
@@ -1921,6 +1756,403 @@ namespace Nop.Services.Customers
                 throw new ArgumentNullException(nameof(customer));
 
             return await GetCustomerAddressAsync(customer.Id, customer.ShippingAddressId ?? 0);
+        }
+
+        #endregion
+
+        #region nature of business
+
+        /// <summary>
+        /// Get customer by nature Of Business
+        /// </summary>
+        /// <param name="natureOfBusiness">natureOfBusiness</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the customer
+        /// </returns>
+        //public virtual async Task<string> GetCustomerNatureOfBusinessAsync(IPagedList<NatureOfBusiness> natureOfBusiness)
+        //{
+
+        //    if (natureOfBusiness == null)
+        //        throw new ArgumentNullException(nameof(natureOfBusiness));
+
+        //    var natureofBusiness = await _genericAttributeService.GetAttributeAsync<string>(natureOfBusiness, NopCustomerDefaults.NatureOfBusinessAttribute);
+
+        //    return natureofBusiness;
+
+        //}
+
+        /// <summary>
+        /// Gets all nature of business
+        /// </summary>
+        /// <param name="nature of Business name">nature of business identifier; 0 if you want to get all records</param>
+        /// <param name="store Name">role; 1 if you want to get all records</param>
+        /// <param name="pageIndex">Page index</param>
+        /// <param name="pageSize">Page size</param>
+        /// <param name="showHidden">A value indicating whether to show hidden records</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the categories
+        /// </returns>
+        public virtual async Task<IPagedList<NatureOfBusiness>> GetAllNatureOfBusinessAsync(string natureOfBusinessName = "", string storeName = "", string customerRole = "",
+            int pageIndex = 0,
+            int pageSize = int.MaxValue,
+            bool showHidden = false)
+        {
+            return await _natureOfBusinessRepository.GetAllPagedAsync(query =>
+            {
+            if (!showHidden)
+                query = query.Where(m => m.NatureOfBusinessName == natureOfBusinessName);
+
+
+                //apply store mapping constraints
+                //query = await _storeMappingService.ApplyStoreNameMapping(query, storeName);
+
+                //apply ACL constraints
+                //if (!showHidden)
+                //{
+                //    var customer = await _workContext.GetCurrentCustomerAsync();
+                //    query = await _aclService.ApplyAcl(query, customer);
+                //}
+
+                //        query = query.Where(m => !m.Deleted);
+
+                if (!string.IsNullOrWhiteSpace(natureOfBusinessName))
+                    query = query.Where(m => m.NatureOfBusinessName.Contains(natureOfBusinessName));
+
+                 return query.OrderBy(m => m.CreatedOnUtc).ThenBy(m => m.Id);
+            }, pageIndex, pageSize);
+        }
+
+        /// <summary>
+        /// Insert nature of business
+        /// </summary>
+        /// <param name="nature of business">Customer</param>
+        /// <returns>A task that represents the asynchronous operation</returns>
+        //public virtual async Task InsertNatureOfBusinessAsync(NatureOfBusiness natureofBusiness)
+        //{
+        //    await _natureOfBusinessRepository.InsertAsync(natureofBusiness);
+        //}
+
+
+        /// <summary>
+        /// Updates a Nature Of Business
+        /// </summary>
+        /// <param name="natureOfBusiness">natureOfBusiness</param>
+        /// <returns>A task that represents the asynchronous operation</returns>
+        public virtual async Task UpdateNatureOfBusinessAsync(NatureOfBusiness natureOfBusiness)
+        {
+            await _natureOfBusinessRepository.UpdateAsync(natureOfBusiness);
+
+        }
+
+        /// <summary>
+        /// Gets nature of business mapping 
+        /// </summary>
+        /// <param name="natureOfBusinessId">customer & nature of business mapping identifier</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the  Nature Of Business mapping
+        /// </returns>
+        public virtual async Task<NatureOfBusiness> GetNatureOfBusinessByIdAsync(int natureOfBusinessId)
+        {
+            return await _natureOfBusinessRepository.GetByIdAsync(natureOfBusinessId, cache => default);
+        }
+
+
+
+        /// <summary>
+        /// Get customer & nature of business by identifiers
+        /// </summary>
+        /// <param name="natureOfBusinessIds">nature of business identifiers</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the products
+        /// </returns>
+        //public virtual async Task<IList<NatureOfBusiness>> GetNatureOfBusinessByIdsAsync(int[] natureOfBusinessIds)
+        //{
+        //    return await _natureOfBusinessRepository.GetByIdsAsync(natureOfBusinessIds, cache => default, false);
+        //}
+
+        /// <summary>
+        /// Gets nature of business mapping 
+        /// </summary>
+        /// <param name="natureOfBusinessName">customer & nature of business mapping identifier</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the  Nature Of Business mapping
+        /// </returns>
+        public virtual async Task<NatureOfBusiness> GetNatureOfBusinessByNameAsync(string natureOfBusinessName)
+        {
+
+
+            var query = from nbr in _natureOfBusinessRepository.Table
+                        join cm in _customerNatureOfBusinessRepository.Table on nbr.Id equals cm.NatureOfBusinessId
+                        where nbr.NatureOfBusinessName == natureOfBusinessName && !nbr.Deleted
+                        select nbr;
+            return await query.FirstOrDefaultAsync();
+
+
+        }
+
+        /// <summary>
+        /// Gets a customer & nature of business mapping 
+        /// </summary>
+        /// <param name="natureOfBusinessId">customer & nature of business identifier</param>
+        /// <param name="pageIndex">Page index</param>
+        /// <param name="pageSize">Page size</param>
+        /// <param name="showHidden">A value indicating whether to show hidden records</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the customer & nature of business mapping
+        /// </returns>
+        public virtual async Task<IPagedList<CustomerNatureOfBusiness>> GetCustomerNatureOfBusinessByNatureofBusinessAsync(int natureOfBusinessId, int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false)
+        {
+
+            if (natureOfBusinessId == 0)
+                return new PagedList<CustomerNatureOfBusiness>(new List<CustomerNatureOfBusiness>(), pageIndex, pageSize);
+
+
+
+            var query = from cNbr in _customerNatureOfBusinessRepository.Table
+                        join nbr in _natureOfBusinessRepository.Table on cNbr.NatureOfBusinessName equals nbr.NatureOfBusinessName
+                        where cNbr.NatureOfBusinessId == natureOfBusinessId && !nbr.Deleted
+                        orderby cNbr.DisplayOrder, nbr.NatureOfBusinessName
+                        select cNbr;
+
+            //    if (!showHidden)
+            //    {
+            //        var natureOfBusinessQuery = _natureOfBusinessRepository.Table.Where(m => m.Published);
+
+
+            //        query = query.Where(pm => natureOfBusinessQuery.Any(m => m.Id == natureOfBusinessId));
+            //    }
+
+            return await query.ToPagedListAsync(pageIndex, pageSize);
+
+        }
+
+    /// <summary>
+    /// Gets a customer Nature Of BusinessId mapping 
+    /// </summary>
+    /// <param name="customerNatureOfBusinessId">Product manufacturer mapping identifier</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation
+    /// The task result contains the product manufacturer mapping
+    /// </returns>
+    public virtual async Task<CustomerNatureOfBusiness> GetCustomerNatureOfBusinessByIdAsync(int customerNatureOfBusinessId)
+        {
+            return await _customerNatureOfBusinessRepository.GetByIdAsync(customerNatureOfBusinessId, cache => default);
+        }
+
+        /// <summary>
+        /// Insert a customer's Nature Of Business
+        /// </summary>
+        /// <param name="customerNatureOfBusiness">customerNatureOfBusiness</param>
+        /// <returns>A task that represents the asynchronous operation</returns>
+        //public virtual async Task InsertCustomerNatureOfBusinessAsync(CustomerNatureOfBusiness customerNatureOfBusiness)
+        //{
+        //    await _customerNatureOfBusinessRepository.InsertAsync(customerNatureOfBusiness);
+        //}
+
+
+        /// <summary>
+        /// Updates a customer's Nature Of Business
+        /// </summary>
+        /// <param name="customernatureOfBusiness">customernatureOfBusiness</param>
+        /// <returns>A task that represents the asynchronous operation</returns>
+        public virtual async Task UpdateCustomerNatureOfBusinessAsync(CustomerNatureOfBusiness customerNatureOfBusiness)
+        {
+            await _customerNatureOfBusinessRepository.UpdateAsync(customerNatureOfBusiness);
+        }
+
+
+
+
+        /// <summary>
+        /// Deletes customer & nature of business mapping
+        /// </summary>
+        /// <param name="customerNatureOfBusiness">Customer &  Nature of Business mapping</param>
+        /// <returns>A task that represents the asynchronous operation</returns>
+        public virtual async Task DeleteCustomerNatureOfBusinessAsync(CustomerNatureOfBusiness customerNatureOfBusiness)
+        {
+            await _customerNatureOfBusinessRepository.DeleteAsync(customerNatureOfBusiness);
+        }
+
+
+        /// <summary>
+        /// Get customer by nature Of Business
+        /// </summary>
+        /// <param name="natureOfBusiness">natureOfBusiness</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the customer
+        /// </returns>
+        //public virtual async Task<Customer> GetCustomerByNatureOfBusinessAsync(string natureOfBusiness)
+        //{
+        //    if (string.IsNullOrWhiteSpace(natureOfBusiness))
+        //        return null;
+
+        //    var query = from nbr in _natureOfBusinessRepository.Table
+        //                join cm in _customerNatureOfBusinessRepository.Table on nbr.Id equals cm.NatureOfBusinessId
+        //                join custrep in _customerRepository.Table on cm.Username equals custrep.Username
+        //                where nbr.NatureOfBusinessName == natureOfBusiness && !nbr.Deleted && !custrep.Deleted
+        //                select custrep;
+        //    var customer = await query.FirstOrDefaultAsync();
+
+        //    return customer;
+        //}
+
+        /// <summary>
+        /// Gets a customer - Nature Of Business mapping collection
+        /// </summary>
+        /// <param name="nature Of Business Name">natureOfBusinessName</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the product manufacturer mapping collection
+        /// </returns>
+        //public virtual async Task<IPagedList<CustomerNatureOfBusiness>> GetCustomerNatureOfBusinessByUserNameAsync(string userName, int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false)
+        //{
+        //    if (userName != null)
+        //        //return new List<CustomerNatureOfBusiness> ();
+        //        return new PagedList<CustomerNatureOfBusiness>(new List<CustomerNatureOfBusiness>(), pageIndex, pageSize);
+
+
+        //    var query = from nbr in _natureOfBusinessRepository.Table
+        //                join cm in _customerNatureOfBusinessRepository.Table on nbr.Id equals cm.NatureOfBusinessId
+        //                where cm.Username == userName && !nbr.Deleted
+        //                orderby cm.DisplayOrder, nbr.NatureOfBusinessName
+        //                select cm;
+
+        //    if (!showHidden)
+        //    {
+        //        var customerNatureOfBusinessQuery = _natureOfBusinessRepository.Table.Where(m => m.Published);
+
+        //        query = query.Where(cm => customerNatureOfBusinessQuery.Any(m => m.Id == cm.NatureOfBusinessId));
+
+        //    }
+        //    return await query.ToPagedListAsync(pageIndex, pageSize);
+        //}
+
+        /// <summary>
+        /// Gets a customer - Nature Of Business mapping collection
+        /// </summary>
+        /// <param name = "customerId" > customerId</ param >
+        /// < returns >
+        /// A task that represents the asynchronous operation
+        /// The task result contains the product manufacturer mapping collection
+        /// </returns>
+        public virtual async Task<CustomerNatureOfBusiness> GetCustomerNatureOfBusinessByCustomerIdAsync(int customerId, bool showHidden = false)
+        {
+            //if (customerId != 0)
+                //return new List<CustomerNatureOfBusiness> ();
+                //return new CustomerNatureOfBusiness>(new CustomerNatureOfBusiness());
+
+
+            var query = from nbr in _natureOfBusinessRepository.Table
+                        join cm in _customerNatureOfBusinessRepository.Table on nbr.Id equals cm.NatureOfBusinessId
+                        where cm.CustomerId == customerId && !nbr.Deleted
+                        orderby cm.DisplayOrder, nbr.NatureOfBusinessName
+                        select cm;
+
+            if (!showHidden)
+            {
+                var natureOfBusinessQuery = _natureOfBusinessRepository.Table.Where(m => m.Published);
+
+                query = query.Where(cm => natureOfBusinessQuery.Any(m => m.Id == cm.NatureOfBusinessId));
+
+            }
+            return await query.FirstOrDefaultAsync();
+        }
+
+
+
+        #endregion
+
+
+
+        #region search customers
+
+        /// <summary>
+        /// Search customers
+        /// </summary>
+        /// <param name="pageIndex">Page index</param>
+        /// <param name="pageSize">Page size</param>
+        /// <param name="customerIds">Customer identifiers</param>
+        /// <param name="emails">email identifiers</param>
+        /// <param name="user name">user name</param>
+        /// <param name="overridePublished">
+        /// </param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the products
+        /// </returns>
+        public virtual async Task<IPagedList<Customer>> SearchCustomerAsync(
+            int pageIndex = 0,
+            int pageSize = int.MaxValue,
+            IList<int> customerIds = null,
+            string email = "",
+            string username = "",
+            string keywords = null,
+            bool showHidden = false,
+            int languageId = 0,
+            bool? overridePublished = null)
+
+        {
+            //some databases don't support int.MaxValue
+            if (pageSize == int.MaxValue)
+                pageSize = int.MaxValue - 1;
+
+            var customerQuery = _customerRepository.Table;
+
+
+            customerQuery =
+                from p in customerQuery
+                where !p.Deleted &&
+                    (p.Username == username) &&
+                    (p.Email == email) &&
+                    (
+                        p.Active ? p.Username == username :
+                            _customerNatureOfBusinessRepository.Table.Any(cNbr => cNbr.Username == p.Username || cNbr.Email == p.Email)
+
+                    )
+
+                select p;
+
+            //if (!string.IsNullOrEmpty(username))
+            //{
+            //var langs = await _languageService.GetAllLanguagesAsync(showHidden: true);
+
+            //Set a flag which will to points need to search in localized properties. If showHidden doesn't set to true should be at least two published languages.
+            //var searchLocalizedValue = languageId > 0  && (showHidden || langs.Count(l => l.Published) >= 2);
+
+            //IQueryable<string> customerByUsername;
+
+            //customerByUsername =
+            //        from p in _customerRepository.Table join q in _customerNatureOfBusinessRepository.Table
+            //        where p.Email.Contains(email) || p.Username.Contains(username) && p.Active
+            //        select p.Username;
+
+            //if (searchLocalizedValue)
+            //{
+            //customerById = customerById.Union(
+            //    from lp in _localizedPropertyRepository.Table
+            //    let checkUserName = lp.LocaleKey == nameof(Customer.Username) &&
+            //                    lp.LocaleValue.Contains(keywords)
+            //    let checkEmail = lp.LocaleKey == nameof(Customer.Email) &&
+            //                    lp.LocaleValue.Contains(keywords)
+            //    where
+            //        lp.LocaleKeyGroup == nameof(Customer) && lp.LanguageId == languageId && (checkUserName || checkEmail)
+
+            //    select lp.EntityId);
+            //}
+
+
+            //}
+
+
+
+            return await customerQuery.ToPagedListAsync(pageIndex, pageSize);
         }
 
         #endregion

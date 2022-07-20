@@ -20,7 +20,7 @@ namespace Nop.Data.Mapping.Builders.Customers
         public override void MapEntity(CreateTableExpressionBuilder table)
         {
             table
-                .WithColumn(nameof(Customer.Username)).AsString(1000).Nullable()
+                .WithColumn(nameof(Customer.Username)).AsString(1000).NotNullable()
                 .WithColumn(nameof(Customer.Email)).AsString(1000).Nullable()
                 .WithColumn(nameof(Customer.EmailToRevalidate)).AsString(1000).Nullable()
                 .WithColumn(nameof(Customer.SystemName)).AsString(400).Nullable()

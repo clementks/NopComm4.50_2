@@ -43,12 +43,6 @@ namespace Nop.Web.Areas.Admin.Factories
         Task<CustomerModel> PrepareCustomerModelAsync(CustomerModel model, Customer customer, bool excludeProperties = false);
 
 
-        /// <summary>
-        /// Prepare the reward points model to add to the customer
-        /// </summary>
-        /// <param name="model">Reward points model to add to the customer</param>
-        /// <returns>A task that represents the asynchronous operation</returns>
-        Task PrepareAddRewardPointsToCustomerModelAsync(AddRewardPointsToCustomerModel model);
 
         /// <summary>
         /// Prepare nature of business search model to add to the customer
@@ -60,6 +54,27 @@ namespace Nop.Web.Areas.Admin.Factories
         /// </returns>
         Task<AddCustomerToNatureOfBusinessSearchModel> PrepareAddCustomerToNatureOfBusinessSearchModelAsync(AddCustomerToNatureOfBusinessSearchModel searchModel);
 
+        /// <summary>
+        /// Prepare nature of business search model to add to the customer
+        /// </summary>
+        /// <param name="searchModel">nature of business search model to add to the customer</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the nature of business model to add to the customer
+        /// </returns>
+
+        Task<AddCustomerToNatureOfBusinessListModel> PrepareAddCustomerToNatureOfBusinessListModelAsync(AddCustomerToNatureOfBusinessSearchModel searchModel);
+
+        /// <summary>
+        /// Prepare Nature Of BusinessSearchModel search model
+        /// </summary>
+        /// <param name="searchModel">Manufacturer search model</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the manufacturer search model
+        /// </returns>
+        Task<NatureOfBusinessSearchModel> PrepareNatureOfBusinessSearchModelAsync(NatureOfBusinessSearchModel searchModel);
+
 
         /// <summary>
         /// Prepare nature of business search model
@@ -69,30 +84,11 @@ namespace Nop.Web.Areas.Admin.Factories
         /// A task that represents the asynchronous operation
         /// The task result contains the nature of business search model
         /// </returns>
-        Task<NatureOfBusinessSearchModel> PrepareNatureOfBusinessCustomerSearchModelAsync(NatureOfBusinessSearchModel searchModel, Customer customer);
+        //Task<NatureOfBusinessSearchModel> PrepareNatureOfBusinessCustomerSearchModelAsync(NatureOfBusinessSearchModel searchModel, Customer customer);
 
-        /// <summary>
-        /// Prepare nature of business list model
-        /// </summary>
-        /// <param name="searchModel">Nature of Business search model</param>
-        /// <param name="customer">customer</param>
-        /// <returns>
-        /// A task that represents the asynchronous operation
-        /// The task result contains the manufacturer product list model
-        /// </returns>
-        Task<CustomerListModel> PrepareCustomerNatureOfBusinessModelListAsync(NatureOfBusinessCustomerSearchModel searchModel, NatureOfBusiness natureOfBusiness);
 
-        /// <summary>
-        /// Prepare creation of Customer model with Nature Of Business
-        /// </summary>
-        /// <param name="model">Nature Of Business model</param>
-        /// <param name="customer">Customer</param>
-        /// <param name="excludeProperties">Whether to exclude populating of some properties of model</param>
-        /// <returns>
-        /// A task that represents the asynchronous operation
-        /// The task result contains the customer model
-        /// </returns>
-        Task<NatureOfBusinessModel> PrepareNatureOfBusinessCustomerModelAsync(NatureOfBusinessModel model, Customer customer, bool excludeProperties = false);
+
+       
 
         /// <summary>
         /// Prepare paged reward points list model
@@ -104,6 +100,8 @@ namespace Nop.Web.Areas.Admin.Factories
         /// The task result contains the reward points list model
         /// </returns>
         Task<CustomerRewardPointsListModel> PrepareRewardPointsListModelAsync(CustomerRewardPointsSearchModel searchModel, Customer customer);
+
+
 
         /// <summary>
         /// Prepare paged customer address list model
@@ -215,5 +213,22 @@ namespace Nop.Web.Areas.Admin.Factories
         /// The task result contains the gDPR request list model
         /// </returns>
         Task<GdprLogListModel> PrepareGdprLogListModelAsync(GdprLogSearchModel searchModel);
+
+
+
+        /// <summary>
+        /// Prepare paged nature of business list model
+        /// </summary>
+        /// <param name="searchModel">nature of business search model</param>
+        /// <param name="nature Of Business">nature of business</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the nature of business list model
+        /// </returns>
+        Task<CustomerNatureOfBusinessListModel> PrepareCustomerNatureOfBusinessListModelAsync(CustomerNatureOfBusinessSearchModel searchModel, NatureOfBusiness natureOfBusiness);
+
+
+
+
     }
 }

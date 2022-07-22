@@ -214,6 +214,15 @@ namespace Nop.Web.Areas.Admin.Factories
         /// </returns>
         Task<GdprLogListModel> PrepareGdprLogListModelAsync(GdprLogSearchModel searchModel);
 
+        /// <summary>
+        /// Prepare paged nature of business list model
+        /// </summary>
+        /// <param name="searchModel">nature of business search model</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the nature of business list model
+        /// </returns>
+        Task<NatureOfBusinessListModel> PrepareNatureOfBusinessListModelAsync(NatureOfBusinessSearchModel searchModel);
 
 
         /// <summary>

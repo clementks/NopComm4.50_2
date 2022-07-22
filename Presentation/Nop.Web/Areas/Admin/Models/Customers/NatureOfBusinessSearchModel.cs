@@ -36,9 +36,9 @@ namespace Nop.Web.Areas.Admin.Models.Customers
         [NopResourceDisplayName("Admin.Customer.NatureOfBusiness.List.SearchNatureOfBusinessName")]
         public string SearchNatureOfBusinessName { get; set; }
 
-        public string SearchStoreName { get; set; }
+        public string SearchUserName { get; set; }
 
-        public string SearchCustomerRole { get; set; }
+        public string SearchEmail { get; set; }
 
 
         #endregion

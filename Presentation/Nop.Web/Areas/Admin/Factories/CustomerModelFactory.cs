@@ -1020,6 +1020,49 @@ namespace Nop.Web.Areas.Admin.Factories
         //    return model;
         //}
 
+
+
+        /// <summary>
+        /// Prepare paged nature of business list model
+        /// </summary>
+        /// <param name="searchModel">nature of business search model</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the nature of business list model
+        /// </returns>
+        public virtual async Task<NatureOfBusinessListModel> PrepareNatureOfBusinessListModelAsync(NatureOfBusinessSearchModel searchModel)
+        {
+            if (searchModel == null)
+                throw new ArgumentNullException(nameof(searchModel));
+
+
+            //get all nature of businesses
+            var natureOfBusinesses = await _customerService.GetAllNatureOfBusinessAsync(natureOfBusinessIds: searchModel.SelectedNatureOfBusinessIds.ToArray(),
+                 email: searchModel.SearchEmail,
+                 natureOfBusinessName: searchModel.SearchNatureOfBusinessName,
+                 userName: searchModel.SearchUserName);
+
+
+            //prepare grid model
+            var model = await new NatureOfBusinessListModel().PrepareToGridAsync(searchModel,natureOfBusinesses, () =>
+            {
+                //fill in model values from the entity
+                return natureOfBusinesses.SelectAwait(async natureOfBusiness =>
+                {
+                    var natureOfBusinessModel = natureOfBusiness.ToModel<NatureOfBusinessModel>();
+
+                    natureOfBusinessModel.NatureOfBusinessName = (await _customerService.GetNatureOfBusinessByNameAsync(natureOfBusiness.NatureOfBusinessName))?.NatureOfBusinessName;
+                    natureOfBusinessModel.NatureOfBusinessId = (await _customerService.GetNatureOfBusinessByIdAsync(natureOfBusiness.NatureOfBusinessId))?.NatureOfBusinessId;
+                    natureOfBusinessModel.CreatedOnUtc = await _dateTimeHelper.ConvertToUserTimeAsync(natureOfBusiness.CreatedOnUtc, DateTimeKind.Utc);
+
+                    return natureOfBusinessModel;
+                });
+            });
+
+            return model;
+        }
+
+
         /// <summary>
         /// Prepare paged nature of business list model
         /// </summary>

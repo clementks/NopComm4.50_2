@@ -74,6 +74,8 @@ namespace Nop.Web.Areas.Admin.Models.Customers
         [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.Name")]
         public string NatureOfBusinessName { get; set; }
 
+        public int NatureOfBusinessId { get; set; }
+
         [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.Description")]
         public string Description { get; set; }
 
@@ -83,11 +85,10 @@ namespace Nop.Web.Areas.Admin.Models.Customers
         [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.MetaDescription")]
         public string MetaDescription { get; set; }
 
-        [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.MetaTitle")]
-        public string MetaTitle { get; set; }
+        [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.CreateOn")]
+        public DateTime CreatedOnUtc { get; set; }
 
-        [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.SeName")]
-        public string SeName { get; set; }
+
 
     }
 }

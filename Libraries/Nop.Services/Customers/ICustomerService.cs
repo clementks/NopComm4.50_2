@@ -334,7 +334,7 @@ namespace Nop.Services.Customers
         /// A task that represents the asynchronous operation
         /// The task result contains the  Nature Of Business mapping
         /// </returns>
-        Task<NatureOfBusiness> GetNatureOfBusinessByIdAsync(int natureOfBusinessId);
+        Task<NatureOfBusiness> GetNatureOfBusinessByIdAsync(int id);
 
 
         /// <summary>
@@ -356,6 +356,21 @@ namespace Nop.Services.Customers
         /// The task result contains the  Nature Of Business mapping
         /// </returns>
         Task<NatureOfBusiness> GetNatureOfBusinessByNameAsync(string natureOfBusinessName);
+
+        /// <summary>
+        /// Gets a customer - Nature Of Business mapping collection
+        /// </summary>
+        /// <param name = "nature Of Business Ids" > natureOfBusiness Id </ param >
+        /// <param name = "email" > email </ param >
+        /// <param name = "username" > username </ param >
+        /// < returns >
+        /// A task that represents the asynchronous operation
+        /// The task result contains the product manufacturer mapping collection
+        /// </returns>
+        Task<IPagedList<NatureOfBusiness>> GetAllNatureOfBusinessAsync(int[] natureOfBusinessIds,
+           string email, string userName, string natureOfBusinessName, int pageIndex = 0, int pageSize = int.MaxValue);
+
+
 
 
         /// <summary>

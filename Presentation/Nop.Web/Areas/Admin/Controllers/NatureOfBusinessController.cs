@@ -156,10 +156,33 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region nature of business
 
-      
+
+        public virtual async Task<IActionResult> List()
+        {
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageNatureOfBusiness))
+                return AccessDeniedView();
+
+            //prepare model
+            var model = await _customerModelFactory.PrepareNatureOfBusinessSearchModelAsync(new NatureOfBusinessSearchModel());
+
+            return View(model);
+        }
+
+        //[HttpPost]
+        //public virtual async Task<IActionResult> CustomerList(CustomerSearchModel searchModel)
+        //{
+        //    if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageCustomers))
+        //        return await AccessDeniedDataTablesJson();
+
+        //    //prepare model
+        //    var model = await _customerModelFactory.PrepareCustomerListModelAsync(searchModel);
+
+        //    return Json(model);
+        //}
+
 
         [HttpPost]
-        public virtual async Task<IActionResult> NatureOfBusinessList(CustomerNatureOfBusinessSearchModel searchModel)
+        public virtual async Task<IActionResult> NatureOfBusinessList(NatureOfBusinessSearchModel searchModel)
         {
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageNatureOfBusiness))
                 return await AccessDeniedDataTablesJson();
@@ -169,7 +192,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 ?? throw new ArgumentException("No nature of business found with the specified name");
 
             //prepare model
-            var model = await _customerModelFactory.PrepareCustomerNatureOfBusinessListModelAsync(searchModel, natureOfBusiness);
+            var model = await _customerModelFactory.PrepareNatureOfBusinessListModelAsync(searchModel);
             
 
             return Json(model);

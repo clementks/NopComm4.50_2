@@ -43,6 +43,7 @@
                 <nop-card asp-name="manufacturer-products" asp-icon="fas fa-th-list" asp-title="@T("Admin.Catalog.Manufacturers.Products")" asp-hide-block-attribute-name="@hideProductsBlockAttributeName" asp-hide="@hideProductsBlock" asp-advanced="true">@await Html.PartialAsync("_CreateOrUpdate.Products", Model)</nop-card>
 
                 @await Component.InvokeAsync("AdminWidget", new { widgetZone = AdminWidgetZones.ManufacturerDetailsBlock, additionalData = Model })
+
             </nop-cards>
         </div>
     </div>

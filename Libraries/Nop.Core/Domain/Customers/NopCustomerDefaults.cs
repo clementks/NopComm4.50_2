@@ -293,7 +293,7 @@
         /// <summary>
         /// Gets a name of generic attribute to store the value of 'RegisteredNatureOfBusiness' for the customer
         /// </summary>
-        public static string RegisteredNatureOfBusiness => "RegisteredNatureOfBusiness";
+        public static string RegisteredNatureOfBusinessAttribute => "RegisteredNatureOfBusiness";
 
         #endregion
     }

@@ -1801,8 +1801,9 @@ namespace Nop.Services.Customers
         {
             return await _natureOfBusinessRepository.GetAllPagedAsync(query =>
             {
-            if (!showHidden)
-                query = query.Where(m => m.NatureOfBusinessName == natureOfBusinessName);
+                if (!showHidden)
+                    query = query.Where(m => m.Published && m.NatureOfBusinessName == natureOfBusinessName);
+                
 
 
                 //apply store mapping constraints
@@ -1869,10 +1870,10 @@ namespace Nop.Services.Customers
         /// A task that represents the asynchronous operation
         /// The task result contains the products
         /// </returns>
-        //public virtual async Task<IList<NatureOfBusiness>> GetNatureOfBusinessByIdsAsync(int[] natureOfBusinessIds)
-        //{
-        //    return await _natureOfBusinessRepository.GetByIdsAsync(natureOfBusinessIds, cache => default, false);
-        //}
+        public virtual async Task<IList<NatureOfBusiness>> GetNatureOfBusinessByIdsAsync(int[] natureOfBusinessIds)
+        {
+            return await _natureOfBusinessRepository.GetByIdsAsync(natureOfBusinessIds, includeDeleted: false);
+        }
 
         /// <summary>
         /// Gets nature of business mapping 
@@ -1893,6 +1894,16 @@ namespace Nop.Services.Customers
             return await query.FirstOrDefaultAsync();
 
 
+        }
+
+        /// <summary>
+        /// Delete nature of business
+        /// </summary>
+        /// <param name="natureOfBusinesses">natureOfBusinesses</param>
+        /// <returns>A task that represents the asynchronous operation</returns>
+        public virtual async Task DeleteNatureOfBusinessesAsync(IList<NatureOfBusiness> natureOfBusinesses)
+        {
+            await _natureOfBusinessRepository.DeleteAsync(natureOfBusinesses);
         }
 
         /// <summary>

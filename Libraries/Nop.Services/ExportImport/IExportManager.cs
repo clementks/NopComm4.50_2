@@ -31,6 +31,23 @@ namespace Nop.Services.ExportImport
         Task<byte[]> ExportManufacturersToXlsxAsync(IEnumerable<Manufacturer> manufacturers);
 
         /// <summary>
+        /// Export nature of businesses to XLSX
+        /// </summary>
+        /// <param name="nature Of Businesses">nature Of Businesses</param>
+        /// <returns>A task that represents the asynchronous operation</returns>
+        Task<byte[]> ExportNatureOfBusinessesToXlsxAsync(IEnumerable<NatureOfBusiness> natureOfBusinesses);
+
+        /// <summary>
+        /// Export nature Of Businesses list to XML
+        /// </summary>
+        /// <param name="nature Of Businesses">nature Of Businesses</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the result in XML format
+        /// </returns>
+        Task<string> ExportNatureOfBusinessToXmlAsync(IList<NatureOfBusiness> natureOfBusinesses);
+
+        /// <summary>
         /// Export category list to XML
         /// </summary>
         /// <returns>

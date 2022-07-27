@@ -345,7 +345,7 @@ namespace Nop.Services.Customers
         /// A task that represents the asynchronous operation
         /// The task result contains the products
         /// </returns>
-        //Task<IList<NatureOfBusiness>> GetNatureOfBusinessByIdsAsync(int[] natureOfBusinessIds);
+        Task<IList<NatureOfBusiness>> GetNatureOfBusinessByIdsAsync(int[] natureOfBusinessIds);
 
         /// <summary>
         /// Gets nature of business mapping 
@@ -371,6 +371,12 @@ namespace Nop.Services.Customers
            string email, string userName, string natureOfBusinessName, int pageIndex = 0, int pageSize = int.MaxValue);
 
 
+        /// <summary>
+        /// Delete nature of business
+        /// </summary>
+        /// <param name="natureOfBusinesses">natureOfBusinesses</param>
+        /// <returns>A task that represents the asynchronous operation</returns>
+        Task DeleteNatureOfBusinessesAsync(IList<NatureOfBusiness> natureOfBusinesses);
 
 
         /// <summary>

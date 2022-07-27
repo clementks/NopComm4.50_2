@@ -1,4 +1,4 @@
-﻿@model ManufacturerModel
+﻿@*@model NatureOfBusinessModel
 
 @if (Model.Id > 0)
 {
@@ -6,9 +6,9 @@
     @await Html.PartialAsync("Table", new DataTablesModel
     {
         Name = "products-grid",
-        UrlRead = new DataUrl("ProductList", "Manufacturer", new RouteValueDictionary { [nameof(Model.ManufacturerProductSearchModel.ManufacturerId)] = Model.ManufacturerProductSearchModel.ManufacturerId }),
-        UrlDelete = new DataUrl("ProductDelete", "Manufacturer", null),
-        UrlUpdate = new DataUrl("ProductUpdate", "Manufacturer", null),
+        UrlRead = new DataUrl("ProductList", "NatureOfBusiness", new RouteValueDictionary { [nameof(Model.CustomerNatureOfBusinessSearchModel.NatureOfBusinessId)] = Model.CustomerNatureOfBusinessSearchModel.NatureOfBusinessId }),
+        UrlDelete = new DataUrl("ProductDelete", "NatureOfBusiness", null),
+        UrlUpdate = new DataUrl("ProductUpdate", "NatureOfBusiness", null),
         Length = Model.ManufacturerProductSearchModel.PageSize,
         LengthMenu = Model.ManufacturerProductSearchModel.AvailablePageSizes,
         ColumnCollection = new List<ColumnProperty>
@@ -82,4 +82,4 @@ else
     <div class="card-body">
         @T("Admin.Catalog.Manufacturers.Products.SaveBeforeEdit")
     </div>
-}
+}*@

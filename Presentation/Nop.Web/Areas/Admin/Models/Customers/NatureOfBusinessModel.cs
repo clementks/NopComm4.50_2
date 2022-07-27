@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Web.Framework.Models;
@@ -29,7 +30,7 @@ namespace Nop.Web.Areas.Admin.Models.Customers
             SelectedStoreIds = new List<int>();
             AvailableStores = new List<SelectListItem>();
 
-            customerNatureOfBusinessSearchModel = new CustomerNatureOfBusinessSearchModel();
+            CustomerNatureOfBusinessSearchModel = new CustomerNatureOfBusinessSearchModel();
         }
 
         #endregion
@@ -39,6 +40,10 @@ namespace Nop.Web.Areas.Admin.Models.Customers
 
         [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.Name")]
         public string NatureOfBusinessName { get; set; }
+
+
+        [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.Description")]
+        public int NatureOfBusinessId { get; set; }
 
         public IList<NatureOfBusinessLocalizedModel> Locales { get; set; }
 
@@ -51,6 +56,21 @@ namespace Nop.Web.Areas.Admin.Models.Customers
         [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.DisplayOrder")]
         public int DisplayOrder { get; set; }
 
+        [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.AllowCustomersToSelectPageSize")]
+        public bool AllowCustomersToSelectPageSize { get; set; }
+
+        [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.PageSizeOptions")]
+        public string PageSizeOptions { get; set; }
+
+        [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.Published")]
+        public bool Published { get; set; }
+
+        [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.SeName")]
+        public string SeName { get; set; }
+
+        [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.CreateOn")]
+        public DateTime CreatedOnUtc { get; set; }
+
         //ACL (customer roles)
         [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.AclCustomerRoles")]
         public IList<int> SelectedCustomerRoleIds { get; set; }
@@ -61,7 +81,7 @@ namespace Nop.Web.Areas.Admin.Models.Customers
         public IList<int> SelectedStoreIds { get; set; }
         public IList<SelectListItem> AvailableStores { get; set; }
 
-        public CustomerNatureOfBusinessSearchModel customerNatureOfBusinessSearchModel { get; set; }
+        public CustomerNatureOfBusinessSearchModel CustomerNatureOfBusinessSearchModel { get; set; }
 
 
         #endregion
@@ -85,8 +105,8 @@ namespace Nop.Web.Areas.Admin.Models.Customers
         [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.MetaDescription")]
         public string MetaDescription { get; set; }
 
-        [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.CreateOn")]
-        public DateTime CreatedOnUtc { get; set; }
+        [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.SeName")]
+        public string SeName { get; set; }
 
 
 

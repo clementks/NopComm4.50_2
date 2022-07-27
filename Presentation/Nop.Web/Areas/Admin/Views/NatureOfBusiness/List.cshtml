@@ -1,20 +1,20 @@
-@model ManufacturerSearchModel
+@model NatureOfBusinessSearchModel
 
 @{
     //page title
-    ViewBag.PageTitle = T("Admin.Catalog.Manufacturers").Text;
+    ViewBag.PageTitle = T("Admin.Customers.NatureOfBusiness").Text;
     //active menu item (system name)
-    NopHtml.SetActiveMenuItemSystemName("Manufacturers");
+    NopHtml.SetActiveMenuItemSystemName("Nature Of Business");
 }
 
 @{
-    const string hideSearchBlockAttributeName = "ManufacturersPage.HideSearchBlock";
+    const string hideSearchBlockAttributeName = "NatureOfBusinessPage.HideSearchBlock";
     var hideSearchBlock = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideSearchBlockAttributeName);
 }
 
 <div class="content-header clearfix">
     <h1 class="float-left">
-        @T("Admin.Catalog.Manufacturers")
+        @T("Admin.Customers.NatureOfBusiness")
     </h1>
     <div class="float-right">
         <a asp-action="Create" class="btn btn-primary">
@@ -49,7 +49,7 @@
             <i class="fas fa-upload"></i>
             @T("Admin.Common.Import")
         </button>
-        @await Component.InvokeAsync("AdminWidget", new { widgetZone = AdminWidgetZones.ManufacturerListButtons, additionalData = Model })
+        @await Component.InvokeAsync("AdminWidget", new { widgetZone = AdminWidgetZones.NatureOfBusinessListButtons, additionalData = Model })
         <button type="button" id="delete-selected" class="btn btn-danger">
             <i class="far fa-trash-alt"></i>
             @T("Admin.Common.Delete.Selected")
@@ -75,33 +75,34 @@
                                 <div class="col-md-6">
                                     <div class="form-group row">
                                         <div class="col-md-4">
-                                            <nop-label asp-for="SearchManufacturerName" />
+                                            <nop-label asp-for="SearchNatureOfBusinessName" />
                                         </div>
                                         <div class="col-md-8">
-                                            <nop-editor asp-for="SearchManufacturerName" />
+                                            <nop-editor asp-for="SearchNatureOfBusinessName" />
                                         </div>
                                     </div>
-                                    <div class="form-group row" @(Model.HideStoresList ? Html.Raw("style=\"display:none\"") : null)>
+                                   @* <div class="form-group row" @(Model.HideStoresList ? Html.Raw("style=\"display:none\"") : null)>*@
+                                   <div class="form-group row">
                                         <div class="col-md-4">
-                                            <nop-label asp-for="SearchStoreId" />
+                                            <nop-label asp-for="SearchUserName" />
                                         </div>
                                         <div class="col-md-8">
-                                            <nop-select asp-for="SearchStoreId" asp-items="Model.AvailableStores" />
+                                            <nop-editor asp-for="SearchUserName" />
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-md-4">
-                                            <nop-label asp-for="SearchPublishedId" />
+                                            <nop-label asp-for="SearchEmail" />
                                         </div>
                                         <div class="col-md-8">
-                                            <nop-select asp-for="SearchPublishedId" asp-items="Model.AvailablePublishedOptions" />
+                                            <nop-editor asp-for="SearchEmail"/>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <div class="text-center col-12">
-                                    <button type="button" id="search-manufacturers" class="btn btn-primary btn-search">
+                                    <button type="button" id="search-natureOfBusiness" class="btn btn-primary btn-search">
                                         <i class="fas fa-search"></i>
                                         @T("Admin.Common.Search")
                                     </button>
@@ -113,48 +114,48 @@
             </div>
             <div class="card card-default">
                 <div class="card-body">
-                    <nop-doc-reference asp-string-resource="@T("Admin.Documentation.Reference.Manufacturers", Docs.Manufacturers + Utm.OnAdmin)" />
-
+                    <nop-doc-reference asp-string-resource="@T("Admin.Documentation.Reference.NatureOfBusiness", Docs.NatureOfBusiness + Utm.OnAdmin)" />
+                    
                     @await Html.PartialAsync("Table", new DataTablesModel
                     {
                         Name = "manufacturers-grid",
-                        UrlRead = new DataUrl("List", "Manufacturer", null),
-                        SearchButtonId = "search-manufacturers",
-                        Length = Model.PageSize,
-                        LengthMenu = Model.AvailablePageSizes,
+                        UrlRead = new DataUrl("List", "NatureOfBusiness", null),
+                        SearchButtonId = "search-natureOfBusiness",
+                        //Length = Model.PageSize,
+                        //LengthMenu = Model.AvailablePageSizes,
                         Filters = new List<FilterParameter>
                         {
-                            new FilterParameter(nameof(Model.SearchManufacturerName)),
-                            new FilterParameter(nameof(Model.SearchStoreId)),
-                            new FilterParameter(nameof(Model.SearchPublishedId))
+                            new FilterParameter(nameof(Model.SearchNatureOfBusinessName)),
+                            new FilterParameter(nameof(Model.SearchUserName)),
+                            new FilterParameter(nameof(Model.SearchEmail))
                         },
                         ColumnCollection = new List<ColumnProperty>
                         {
-                            new ColumnProperty(nameof(ManufacturerModel.Id))
+                            new ColumnProperty(nameof(NatureOfBusinessModel.Id))
                             {
                                 IsMasterCheckBox = true,
-                                Render = new RenderCheckBox("checkbox_manufacturers"),
+                                Render = new RenderCheckBox("checkbox_natureOfBusiness"),
                                 ClassName =  NopColumnClassDefaults.CenterAll,
                                 Width = "50"
                             },
-                            new ColumnProperty(nameof(ManufacturerModel.Name))
+                            new ColumnProperty(nameof(NatureOfBusinessModel.NatureOfBusinessName))
                             {
-                                Title = T("Admin.Catalog.Manufacturers.Fields.Name").Text
+                                Title = T("Admin.Customers.NatureOfBusiness.Fields.NatureOfBusinessName").Text
                             },
-                            new ColumnProperty(nameof(ManufacturerModel.Published))
+                            new ColumnProperty(nameof(NatureOfBusinessModel.Published))
                             {
-                                Title = T("Admin.Catalog.Manufacturers.Fields.Published").Text,
+                                Title = T("Admin.Customers.NatureOfBusiness.Fields.Published").Text,
                                 Width = "100",
                                 ClassName =  NopColumnClassDefaults.CenterAll,
                                 Render = new RenderBoolean()
                             },
-                            new ColumnProperty(nameof(ManufacturerModel.DisplayOrder))
+                            new ColumnProperty(nameof(NatureOfBusinessModel.CreatedOnUtc))
                             {
-                                Title = T("Admin.Catalog.Manufacturers.Fields.DisplayOrder").Text,
-                                Width = "150",
+                                Title = T("Admin.Customers.NatureOfBusiness.Fields.CreatedOnUtc").Text,
+                                Width = "100",
                                 ClassName = NopColumnClassDefaults.CenterAll
                             },
-                            new ColumnProperty(nameof(ManufacturerModel.Id))
+                            new ColumnProperty(nameof(NatureOfBusinessModel.Id))
                             {
                                 Title = T("Admin.Common.Edit").Text,
                                 Width = "100",
@@ -167,7 +168,7 @@
 
                     <script>
                         $(document).ready(function () {
-                            $('#delete-selected-action-confirmation-submit-button').bind('click', function () {
+                            //$('#delete-selected-action-confirmation-submit-button').bind('click', function () {
                                 var postData = {
                                     selectedIds: selectedIds
                                 };
@@ -175,7 +176,7 @@
                                 $.ajax({
                                     cache: false,
                                     type: "POST",
-                                    url: "@(Url.Action("DeleteSelected", "Manufacturer"))",
+                                    url: "@(Url.Action("DeleteSelected", "NatureOfBusiness"))",
                                     data: postData,
                                     error: function (jqXHR, textStatus, errorThrown) {
                                         showAlert('deleteSelectedFailed', errorThrown);
@@ -186,12 +187,12 @@
                                             showAlert('nothingSelectedAlert', '@T("Admin.Common.Alert.NothingSelected")');
                                             return;
                                         }
-                                        updateTable('#manufacturers-grid');
+                                        //updateTable('manufacturers-grid');
                                     }
                                 });
-                                $('#delete-selected-action-confirmation').modal('toggle');
-                                return false;
-                            });
+                            //    $('#delete-selected-action-confirmation').modal('toggle');
+                            //    return false;
+                            //});
                         });
                     </script>
                     <nop-alert asp-alert-id="deleteSelectedFailed" />
@@ -209,12 +210,12 @@
                 <h4 class="modal-title" id="importexcel-window-title">@T("Admin.Common.ImportFromExcel")</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>                                
             </div>
-            <form asp-controller="Manufacturer" asp-action="ImportFromXlsx" method="post" enctype="multipart/form-data">
-                <div class="form-horizontal">
+            <form asp-controller="NatureOfBusiness" asp-action="ImportFromXlsx" method="post" enctype="multipart/form-data">
+                <div class="form-horizontal">expo
                     <div class="modal-body">
                         <ul class="common-list">
                             <li>
-                                <em>@T("Admin.Catalog.Manufacturers.List.ImportFromExcelTip")</em>
+                                <em>@T("Admin.Customers.NatureOfBusiness.List.ImportFromExcelTip")</em>
                             </li>
                             <li>
                                 <em>@T("Admin.Common.ImportFromExcel.ManyRecordsWarning")</em>

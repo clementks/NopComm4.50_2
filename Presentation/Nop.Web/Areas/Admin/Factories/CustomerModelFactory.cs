@@ -838,21 +838,21 @@ namespace Nop.Web.Areas.Admin.Factories
                 throw new ArgumentNullException(nameof(searchModel));
 
             //search nature of business by default
-            var registeredNatureOfBusiness = await _customerService.GetNatureOfBusinessByNameAsync(NopCustomerDefaults.RegisteredNatureOfBusiness);
-            if (registeredNatureOfBusiness != null)
-                searchModel.SelectedNatureOfBusinessIds.Add(registeredNatureOfBusiness.Id);
+            //var registeredNatureOfBusiness = await _customerService.GetNatureOfBusinessByNameAsync(NopCustomerDefaults.NatureOfBusinessAttribute);
+            //if (registeredNatureOfBusiness != null)
+            //    searchModel.SelectedNatureOfBusinessIds.Add(registeredNatureOfBusiness.Id);
 
 
             //prepare "published" filter (0 - all; 1 - published only; 2 - unpublished only) as selection list item
             searchModel.AvailableNatureOfBusiness.Add(new SelectListItem
             {
                 Value = "0",
-                Text = await _localizationService.GetResourceAsync("Admin.Customers.NatureOfBusiness.List.AvailableNatureOfBusiness.All")
+                Text = await _localizationService.GetResourceAsync("Admin.Customers.NatureOfBusiness.List.SearchNatureOfBusinessName.All")
             });
-            searchModel.AvailableCustomerRoles.Add(new SelectListItem
+            searchModel.AvailableUserNames.Add(new SelectListItem
             {
                 Value = "1",
-                Text = await _localizationService.GetResourceAsync("Admin.Customers.NatureOfBusiness.List.AvailableCustomerRoles.All")
+                Text = await _localizationService.GetResourceAsync("Admin.Customers.NatureOfBusiness.List.SearchUserName.All")
             });
 
 
@@ -1050,10 +1050,11 @@ namespace Nop.Web.Areas.Admin.Factories
                 return natureOfBusinesses.SelectAwait(async natureOfBusiness =>
                 {
                     var natureOfBusinessModel = natureOfBusiness.ToModel<NatureOfBusinessModel>();
+                    natureOfBusinessModel.SeName = await _urlRecordService.GetSeNameAsync(natureOfBusiness, 0, true, false);
 
-                    natureOfBusinessModel.NatureOfBusinessName = (await _customerService.GetNatureOfBusinessByNameAsync(natureOfBusiness.NatureOfBusinessName))?.NatureOfBusinessName;
-                    natureOfBusinessModel.NatureOfBusinessId = (await _customerService.GetNatureOfBusinessByIdAsync(natureOfBusiness.NatureOfBusinessId))?.NatureOfBusinessId;
-                    natureOfBusinessModel.CreatedOnUtc = await _dateTimeHelper.ConvertToUserTimeAsync(natureOfBusiness.CreatedOnUtc, DateTimeKind.Utc);
+                    //natureOfBusinessModel.NatureOfBusinessName = (await _customerService.GetNatureOfBusinessByNameAsync(natureOfBusiness.NatureOfBusinessName))?.NatureOfBusinessName;
+                    //natureOfBusinessModel.NatureOfBusinessId = (int) (await _customerService.GetNatureOfBusinessByIdAsync(natureOfBusiness.NatureOfBusinessId))?.NatureOfBusinessId;
+                    //natureOfBusinessModel.CreatedOnUtc = await _dateTimeHelper.ConvertToUserTimeAsync(natureOfBusiness.CreatedOnUtc, DateTimeKind.Utc);
 
                     return natureOfBusinessModel;
                 });
@@ -1144,7 +1145,7 @@ namespace Nop.Web.Areas.Admin.Factories
             //get customers
             var customers = await _customerService.SearchCustomerAsync(customerIds: new List<int> { searchModel.SearchCustomerId },
                email: searchModel.SearchEmail,
-               username: searchModel.SearchUsername,
+               username: searchModel.SearchUserName,
                pageIndex: searchModel.Page - 1, pageSize: searchModel.PageSize);
 
 

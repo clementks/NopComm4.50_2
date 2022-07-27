@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Web.Framework.Models;
 using Nop.Web.Framework.Mvc.ModelBinding;
@@ -15,7 +16,8 @@ namespace Nop.Web.Areas.Admin.Models.Customers
         public NatureOfBusinessSearchModel()
         {
             SelectedNatureOfBusinessIds = new List<int>();
-            AvailableCustomerRoles = new List<SelectListItem>();
+            AvailableUserNames = new List<SelectListItem>();
+            AvailableEmails = new List<SelectListItem>();
             AvailableNatureOfBusiness = new List<SelectListItem>();
 
 
@@ -28,7 +30,9 @@ namespace Nop.Web.Areas.Admin.Models.Customers
         [NopResourceDisplayName("Admin.Customers.Customers.List.CustomerRoles")]
         public IList<int> SelectedNatureOfBusinessIds { get; set; }
 
-        public IList<SelectListItem> AvailableCustomerRoles { get; set; }
+        public IList<SelectListItem> AvailableUserNames { get; set; }
+
+        public IList<SelectListItem> AvailableEmails { get; set; }
 
         public IList<SelectListItem> AvailableNatureOfBusiness { get; set; }
 

@@ -7,13 +7,13 @@
     NopHtml.SetActiveMenuItemSystemName("NatureOfBusiness");
 }
 
-<form asp-controller="Manufacturer" asp-action="Create" method="post" id="NatureOfBusiness-form">
+<form asp-controller="NatureOfBusiness" asp-action="Create" method="post" id="NatureOfBusiness-form">
     <div class="content-header clearfix">
         <h1 class="float-left">
-            @T("Admin.Catalog.Manufacturers.AddNew")
+            @T("Admin.Customers.NatureOfBusiness.AddNew")
             <small>
                 <i class="fas fa-arrow-circle-left"></i>
-                <a asp-action="List">@T("Admin.Catalog.Manufacturers.BackToList")</a>
+                <a asp-action="List">@T("Admin.Customers.NatureOfBusiness.BackToList")</a>
             </small>
         </h1>
         <div class="float-right">
@@ -25,7 +25,7 @@
                 <i class="far fa-save"></i>
                 @T("Admin.Common.SaveContinue")
             </button>
-            @await Component.InvokeAsync("AdminWidget", new { widgetZone = AdminWidgetZones.ManufacturerDetailsButtons, additionalData = Model })
+            @await Component.InvokeAsync("AdminWidget", new { widgetZone = AdminWidgetZones.NatureOfBusinessDetailsButtons, additionalData = Model })
         </div>
     </div>
     @await Html.PartialAsync("_CreateOrUpdate", Model)

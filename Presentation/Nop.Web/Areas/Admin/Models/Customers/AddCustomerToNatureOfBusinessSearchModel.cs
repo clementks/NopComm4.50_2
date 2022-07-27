@@ -28,13 +28,14 @@ namespace Nop.Web.Areas.Admin.Models.Customers
 
         public int SearchCustomerId { get; set; }
 
+        [NopResourceDisplayName("Admin.Customer.NatureOfBusiness.List.SearchNatureOfBusinessName")]
         public string SearchNatureOfBusinessName { get; set; }
 
-        public string SearchUsername { get; set; }
+        public string SearchUserName { get; set; }
 
         public string SearchEmail { get; set; }
 
-       
+
 
         #endregion
     }

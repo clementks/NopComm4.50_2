@@ -159,7 +159,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         public virtual async Task<IActionResult> List()
         {
-            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageNatureOfBusiness))
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
 
             //prepare model
@@ -182,14 +182,14 @@ namespace Nop.Web.Areas.Admin.Controllers
 
 
         [HttpPost]
-        public virtual async Task<IActionResult> NatureOfBusinessList(NatureOfBusinessSearchModel searchModel)
+        public virtual async Task<IActionResult> List(NatureOfBusinessSearchModel searchModel)
         {
-            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageNatureOfBusiness))
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageCustomers))
                 return await AccessDeniedDataTablesJson();
 
             //try to get nature of business with the specified nature of business name
-            var natureOfBusiness = await _customerService.GetNatureOfBusinessByNameAsync(searchModel.SearchNatureOfBusinessName)
-                ?? throw new ArgumentException("No nature of business found with the specified name");
+            //var natureOfBusiness = await _customerService.GetNatureOfBusinessByNameAsync(searchModel.SearchNatureOfBusinessName)
+            //    ?? throw new ArgumentException("No nature of business found with the specified name");
 
             //prepare model
             var model = await _customerModelFactory.PrepareNatureOfBusinessListModelAsync(searchModel);
@@ -289,6 +289,101 @@ namespace Nop.Web.Areas.Admin.Controllers
         //    return View(new AddCustomerToNatureOfBusinessModel());
         //}
 
+        [HttpPost]
+        public virtual async Task<IActionResult> DeleteSelected(ICollection<int> selectedIds)
+        {
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageCustomers))
+                return AccessDeniedView();
+
+            if (selectedIds == null || selectedIds.Count == 0)
+                return NoContent();
+
+            var natureOfBusinesses = await _customerService.GetNatureOfBusinessByIdsAsync(selectedIds.ToArray());
+            await _customerService.DeleteNatureOfBusinessesAsync(natureOfBusinesses);
+
+            var locale = await _localizationService.GetResourceAsync("ActivityLog.DeleteNatureOfBusiness");
+            foreach (var natureOfBusiness in natureOfBusinesses)
+            {
+                //activity log
+                await _customerActivityService.InsertActivityAsync("DeleteNatureOfBusiness", string.Format(locale, natureOfBusiness.NatureOfBusinessName), natureOfBusiness);
+            }
+
+            return Json(new { Result = true });
+        }
+
+
+
+        #endregion
+
+        #region Export / Import
+
+        public virtual async Task<IActionResult> ExportXml()
+        {
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageManufacturers))
+                return AccessDeniedView();
+
+            try
+            {
+                var natureOfBusiness = await _customerService.GetAllNatureOfBusinessAsync(showHidden: true);
+                var xml = await _exportManager.ExportNatureOfBusinessToXmlAsync(natureOfBusiness);
+                return File(Encoding.UTF8.GetBytes(xml), "application/xml", "natureOfBusiness.xml");
+            }
+            catch (Exception exc)
+            {
+                await _notificationService.ErrorNotificationAsync(exc);
+                return RedirectToAction("List");
+            }
+        }
+
+        public virtual async Task<IActionResult> ExportXlsx()
+        {
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageManufacturers))
+                return AccessDeniedView();
+
+            try
+            {
+                var bytes = await _exportManager.ExportNatureOfBusinessesToXlsxAsync((await _customerService.GetAllNatureOfBusinessAsync(showHidden: true)).Where(p => !p.Deleted));
+
+                return File(bytes, MimeTypes.TextXlsx, "natureOfBusiness.xlsx");
+            }
+            catch (Exception exc)
+            {
+                await _notificationService.ErrorNotificationAsync(exc);
+                return RedirectToAction("List");
+            }
+        }
+
+        [HttpPost]
+        public virtual async Task<IActionResult> ImportFromXlsx(IFormFile importexcelfile)
+        {
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageManufacturers))
+                return AccessDeniedView();
+
+            //a vendor cannot import manufacturers
+            if (await _workContext.GetCurrentVendorAsync() != null)
+                return AccessDeniedView();
+
+            try
+            {
+                if (importexcelfile != null && importexcelfile.Length > 0)
+                {
+                    await _importManager.ImportManufacturersFromXlsxAsync(importexcelfile.OpenReadStream());
+                }
+                else
+                {
+                    _notificationService.ErrorNotification(await _localizationService.GetResourceAsync("Admin.Common.UploadFile"));
+                    return RedirectToAction("List");
+                }
+
+                _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.Customers.NatureOfBusiness.Imported"));
+                return RedirectToAction("List");
+            }
+            catch (Exception exc)
+            {
+                await _notificationService.ErrorNotificationAsync(exc);
+                return RedirectToAction("List");
+            }
+        }
 
         #endregion
 

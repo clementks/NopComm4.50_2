@@ -92,6 +92,11 @@
             public static string Manufacturers => "https://docs.nopcommerce.com/running-your-store/catalog/manufacturers.html";
 
             /// <summary>
+            /// Gets a URL of the nature of business docs page
+            /// </summary>
+            public static string NatureOfBusiness => "https://docs.nopcommerce.com/running-your-store/catalog/manufacturers.html";
+
+            /// <summary>
             /// Gets a URL of the product reviews docs page
             /// </summary>
             public static string ProductReviews => "https://docs.nopcommerce.com/running-your-store/catalog/products/product-reviews.html";

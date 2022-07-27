@@ -8482,6 +8482,12 @@ namespace Nop.Services.Installation
                 },
                 new ActivityLogType
                 {
+                    SystemKeyword = "DeleteNatureOfBusiness",
+                    Enabled = true,
+                    Name = "Delete a nature of Business"
+                },
+                new ActivityLogType
+                {
                     SystemKeyword = "DeleteMeasureDimension",
                     Enabled = true,
                     Name = "Delete a measure dimension"

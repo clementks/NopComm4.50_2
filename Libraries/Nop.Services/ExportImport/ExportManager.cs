@@ -858,6 +858,87 @@ namespace Nop.Services.ExportImport
         }
 
         /// <summary>
+        /// Export nature of businesses to XLSX
+        /// </summary>
+        /// <param name="nature Of Businesses">nature Of Businesses</param>
+        /// <returns>A task that represents the asynchronous operation</returns>
+        public virtual async Task<byte[]> ExportNatureOfBusinessesToXlsxAsync(IEnumerable<NatureOfBusiness> natureOfBusinesses)
+        {
+            //property manager 
+            var manager = new PropertyManager<NatureOfBusiness>(new[]
+            {
+                new PropertyByName<NatureOfBusiness>("Id", p => p.Id),
+                new PropertyByName<NatureOfBusiness>("Nature O fBusinessName", p => p.NatureOfBusinessName),
+                new PropertyByName<NatureOfBusiness>("Creation Date", p => p.CreatedOnUtc),
+                new PropertyByName<NatureOfBusiness>("Published", p => p.Published)
+
+            }, _catalogSettings);
+
+            return await manager.ExportToXlsxAsync(natureOfBusinesses);
+        }
+
+        /// <summary>
+        /// Export nature Of Businesses list to XML
+        /// </summary>
+        /// <param name="nature Of Businesses">nature Of Businesses</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the result in XML format
+        /// </returns>
+        public virtual async Task<string> ExportNatureOfBusinessToXmlAsync(IList<NatureOfBusiness> natureOfBusinesses)
+        {
+            var settings = new XmlWriterSettings
+            {
+                Async = true,
+                ConformanceLevel = ConformanceLevel.Auto
+            };
+
+            await using var stringWriter = new StringWriter();
+            await using var xmlWriter = XmlWriter.Create(stringWriter, settings);
+
+            await xmlWriter.WriteStartDocumentAsync();
+            await xmlWriter.WriteStartElementAsync("NatureOfBusiness");
+            await xmlWriter.WriteAttributeStringAsync("Version", NopVersion.CURRENT_VERSION);
+
+            foreach (var natureOfBusiness in natureOfBusinesses)
+            {
+                await xmlWriter.WriteStartElementAsync("NatureOfBusiness");
+
+                await xmlWriter.WriteStringAsync("ManufacturerId", natureOfBusiness.Id.ToString());
+                await xmlWriter.WriteStringAsync("Nature Of Business Name", natureOfBusiness.NatureOfBusinessName);
+                await xmlWriter.WriteStringAsync("Creation Date", natureOfBusiness.CreatedOnUtc);
+
+                var productManufacturers = await _manufacturerService.GetProductManufacturersByManufacturerIdAsync(natureOfBusiness.Id, showHidden: true);
+                if (productManufacturers != null)
+                {
+                    foreach (var productManufacturer in productManufacturers)
+                    {
+                        var product = await _productService.GetProductByIdAsync(productManufacturer.ProductId);
+                        if (product == null || product.Deleted)
+                            continue;
+
+                        await xmlWriter.WriteStartElementAsync("ProductManufacturer");
+                        await xmlWriter.WriteStringAsync("ProductManufacturerId", productManufacturer.Id);
+                        await xmlWriter.WriteStringAsync("ProductId", productManufacturer.ProductId);
+                        await xmlWriter.WriteStringAsync("ProductName", product.Name);
+                        await xmlWriter.WriteStringAsync("IsFeaturedProduct", productManufacturer.IsFeaturedProduct);
+                        await xmlWriter.WriteStringAsync("DisplayOrder", productManufacturer.DisplayOrder);
+                        await xmlWriter.WriteEndElementAsync();
+                    }
+                }
+
+                await xmlWriter.WriteEndElementAsync();
+                await xmlWriter.WriteEndElementAsync();
+            }
+
+            await xmlWriter.WriteEndElementAsync();
+            await xmlWriter.WriteEndDocumentAsync();
+            await xmlWriter.FlushAsync();
+
+            return stringWriter.ToString();
+        }
+
+        /// <summary>
         /// Export category list to XML
         /// </summary>
         /// <returns>

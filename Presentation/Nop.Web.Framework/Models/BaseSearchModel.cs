@@ -25,6 +25,7 @@ namespace Nop.Web.Framework.Models
         /// </summary>
         public int Page => (Start / Length) + 1;
 
+
         /// <summary>
         /// Gets a page size
         /// </summary>
@@ -79,8 +80,8 @@ namespace Nop.Web.Framework.Models
         /// <param name="availablePageSizes">Available page sizes; pass null to use default value</param>
         public void SetGridPageSize(int pageSize, string availablePageSizes = null)
         {
-            Start = 0;
-            Length = pageSize;
+            Start = 0;  
+            Length = pageSize;  
             AvailablePageSizes = availablePageSizes;
         }
 

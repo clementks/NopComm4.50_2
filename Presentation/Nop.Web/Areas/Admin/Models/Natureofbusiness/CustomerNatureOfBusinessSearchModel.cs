@@ -1,7 +1,7 @@
 ﻿using Nop.Web.Framework.Models;
 
-namespace Nop.Web.Areas.Admin.Models.Customers
-{
+namespace Nop.Web.Areas.Admin.Models.Natureofbusiness
+{ 
     /// <summary>
     /// Represents a nature of business search model
     /// </summary>

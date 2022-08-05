@@ -1,9 +1,9 @@
 ﻿using Nop.Web.Framework.Models;
 
-namespace Nop.Web.Areas.Admin.Models.Customers
+namespace Nop.Web.Areas.Admin.Models.Natureofbusiness
 {
     /// <summary>
-    /// Represents a manufacturer list model
+    /// Represents a nature of business list model
     /// </summary>
     public partial record NatureOfBusinessListModel : BasePagedListModel<NatureOfBusinessModel>
     {

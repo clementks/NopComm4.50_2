@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Nop.Core;
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Customers;
+using Nop.Core.Domain.Natureofbusinesses;
 using Nop.Core.Domain.Orders;
 using Nop.Core.Domain.Tax;
 
@@ -76,11 +77,12 @@ namespace Nop.Services.Customers
         /// A task that represents the asynchronous operation
         /// The task result contains the categories
         /// </returns>
-        Task<IPagedList<NatureOfBusiness>> GetAllNatureOfBusinessAsync(string natureOfBusinessName = "", string storeName = "", string customerRole = "",
-            int pageIndex = 0,
-            int pageSize = int.MaxValue,
-            bool showHidden = false);
 
+        Task<IPagedList<Natureofbusiness>> GetAllNatureOfBusinessAsync(string natureOfBusinessName = "",
+                                                                                                       int pageIndex = 0,
+                                                                                                       int pageSize = int.MaxValue,
+                                                                                                       bool showHidden = false);
+                                                                                                       
         /// <summary>
         /// Gets customers with shopping carts
         /// </summary>
@@ -275,7 +277,7 @@ namespace Nop.Services.Customers
         /// </summary>
         /// <param name="natureOfBusiness">natureOfBusiness</param>
         /// <returns>A task that represents the asynchronous operation</returns>
-         Task UpdateNatureOfBusinessAsync(NatureOfBusiness natureOfBusiness);
+         Task UpdateNatureOfBusinessAsync(Natureofbusiness natureOfBusiness);
 
 
         /// <summary>
@@ -334,7 +336,7 @@ namespace Nop.Services.Customers
         /// A task that represents the asynchronous operation
         /// The task result contains the  Nature Of Business mapping
         /// </returns>
-        Task<NatureOfBusiness> GetNatureOfBusinessByIdAsync(int id);
+        Task<Natureofbusiness> GetNatureOfBusinessByIdAsync(int id);
 
 
         /// <summary>
@@ -345,7 +347,7 @@ namespace Nop.Services.Customers
         /// A task that represents the asynchronous operation
         /// The task result contains the products
         /// </returns>
-        Task<IList<NatureOfBusiness>> GetNatureOfBusinessByIdsAsync(int[] natureOfBusinessIds);
+        Task<IList<Natureofbusiness>> GetNatureOfBusinessByIdsAsync(int[] natureOfBusinessIds);
 
         /// <summary>
         /// Gets nature of business mapping 
@@ -355,7 +357,7 @@ namespace Nop.Services.Customers
         /// A task that represents the asynchronous operation
         /// The task result contains the  Nature Of Business mapping
         /// </returns>
-        Task<NatureOfBusiness> GetNatureOfBusinessByNameAsync(string natureOfBusinessName);
+        Task<Natureofbusiness> GetNatureOfBusinessByNameAsync(string natureOfBusinessName);
 
         /// <summary>
         /// Gets a customer - Nature Of Business mapping collection
@@ -367,8 +369,8 @@ namespace Nop.Services.Customers
         /// A task that represents the asynchronous operation
         /// The task result contains the product manufacturer mapping collection
         /// </returns>
-        Task<IPagedList<NatureOfBusiness>> GetAllNatureOfBusinessAsync(int[] natureOfBusinessIds,
-           string email, string userName, string natureOfBusinessName, int pageIndex = 0, int pageSize = int.MaxValue);
+        //Task<IPagedList<Natureofbusiness>> GetAllNatureOfBusinessAsync(int[] natureOfBusinessIds,
+        //   string email, string userName, string natureOfBusinessName, int pageIndex = 0, int pageSize = int.MaxValue);
 
 
         /// <summary>
@@ -376,7 +378,7 @@ namespace Nop.Services.Customers
         /// </summary>
         /// <param name="natureOfBusinesses">natureOfBusinesses</param>
         /// <returns>A task that represents the asynchronous operation</returns>
-        Task DeleteNatureOfBusinessesAsync(IList<NatureOfBusiness> natureOfBusinesses);
+        Task DeleteNatureOfBusinessesAsync(IList<Natureofbusiness> natureOfBusinesses);
 
 
         /// <summary>

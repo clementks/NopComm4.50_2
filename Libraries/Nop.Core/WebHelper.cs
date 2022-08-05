@@ -33,7 +33,7 @@ namespace Nop.Core
 
         #region Ctor
 
-        public WebHelper(IActionContextAccessor actionContextAccessor,
+       public WebHelper(IActionContextAccessor actionContextAccessor,
             IHostApplicationLifetime hostApplicationLifetime,
             IHttpContextAccessor httpContextAccessor,
             IUrlHelperFactory urlHelperFactory,

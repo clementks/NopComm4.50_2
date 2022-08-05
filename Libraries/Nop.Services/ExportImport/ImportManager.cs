@@ -15,10 +15,12 @@ using Nop.Core.Domain.Messages;
 using Nop.Core.Domain.Shipping;
 using Nop.Core.Domain.Tax;
 using Nop.Core.Domain.Vendors;
+using Nop.Core.Domain.Customers;  //added on 1-Aug-2022
 using Nop.Core.Http;
 using Nop.Core.Infrastructure;
 using Nop.Data;
 using Nop.Services.Catalog;
+using Nop.Services.Customers;   //added on 1-Aug-2022
 using Nop.Services.Directory;
 using Nop.Services.ExportImport.Help;
 using Nop.Services.Localization;
@@ -42,6 +44,7 @@ namespace Nop.Services.ExportImport
         #region Fields
 
         private readonly CatalogSettings _catalogSettings;
+        private readonly CustomerSettings _customerSettings;
         private readonly ICategoryService _categoryService;
         private readonly ICountryService _countryService;
         private readonly ICustomerActivityService _customerActivityService;
@@ -72,12 +75,14 @@ namespace Nop.Services.ExportImport
         private readonly IWorkContext _workContext;
         private readonly MediaSettings _mediaSettings;
         private readonly VendorSettings _vendorSettings;
+        private readonly ICustomerService _customerService;
 
         #endregion
 
         #region Ctor
 
         public ImportManager(CatalogSettings catalogSettings,
+            CustomerSettings customerSettings,
             ICategoryService categoryService,
             ICountryService countryService,
             ICustomerActivityService customerActivityService,
@@ -107,9 +112,11 @@ namespace Nop.Services.ExportImport
             IVendorService vendorService,
             IWorkContext workContext,
             MediaSettings mediaSettings,
-            VendorSettings vendorSettings)
+            VendorSettings vendorSettings,
+            ICustomerService customerService)
         {
             _catalogSettings = catalogSettings;
+            _customerSettings = customerSettings;
             _categoryService = categoryService;
             _countryService = countryService;
             _customerActivityService = customerActivityService;
@@ -140,6 +147,7 @@ namespace Nop.Services.ExportImport
             _workContext = workContext;
             _mediaSettings = mediaSettings;
             _vendorSettings = vendorSettings;
+            _customerService = customerService;  // added on 1-Aug-2022
         }
 
         #endregion
@@ -2083,6 +2091,139 @@ namespace Nop.Services.ExportImport
             await _customerActivityService.InsertActivityAsync("ImportManufacturers",
                 string.Format(await _localizationService.GetResourceAsync("ActivityLog.ImportManufacturers"), iRow - 2));
         }
+
+
+        /// <summary>
+        /// Import nature of business from XLSX file
+        /// </summary>
+        /// <param name="stream">Stream</param>
+        /// <returns>A task that represents the asynchronous operation</returns>
+        //public virtual async Task ImportNatureOfBusinessFromXlsxAsync(Stream stream)
+        //{
+        //    using var workbook = new XLWorkbook(stream);
+        //    // get the first worksheet in the workbook
+        //    var worksheet = workbook.Worksheets.FirstOrDefault();
+        //    if (worksheet == null)
+        //        throw new NopException("No worksheet found");
+
+        //    //the columns
+        //    var properties = GetPropertiesByExcelCells<NatureOfBusiness>(worksheet);
+
+        //    var manager = new PropertyManager<NatureOfBusiness>(properties, _catalogSettings);
+
+        //    var iRow = 2;
+        //    var setSeName = properties.Any(p => p.PropertyName == "SeName");
+
+        //    while (true)
+        //    {
+        //        var allColumnsAreEmpty = manager.GetProperties
+        //            .Select(property => worksheet.Row(iRow).Cell(property.PropertyOrderPosition))
+        //            .All(cell => cell?.Value == null || string.IsNullOrEmpty(cell.Value.ToString()));
+
+        //        if (allColumnsAreEmpty)
+        //            break;
+
+        //        manager.ReadFromXlsx(worksheet, iRow);
+
+        //        var manufacturer = await _customerService.GetNatureOfBusinessByIdAsync(manager.GetProperty("Id").IntValue);
+
+        //        var isNew = manufacturer == null;
+
+        //        manufacturer ??= new NatureOfBusiness();
+
+        //        if (isNew)
+        //        {
+        //            manufacturer.CreatedOnUtc = DateTime.UtcNow;
+
+        //            //default values
+        //            manufacturer.PageSize = _catalogSettings.DefaultManufacturerPageSize;
+        //            manufacturer.PageSizeOptions = _catalogSettings.DefaultManufacturerPageSizeOptions;
+        //            manufacturer.Published = true;
+        //            manufacturer.AllowCustomersToSelectPageSize = true;
+        //        }
+
+        //        var seName = string.Empty;
+
+        //        foreach (var property in manager.GetProperties)
+        //        {
+        //            switch (property.PropertyName)
+        //            {
+        //                case "Name":
+        //                    manufacturer.Name = property.StringValue;
+        //                    break;
+        //                case "Description":
+        //                    manufacturer.Description = property.StringValue;
+        //                    break;
+        //                case "ManufacturerTemplateId":
+        //                    manufacturer.ManufacturerTemplateId = property.IntValue;
+        //                    break;
+        //                case "MetaKeywords":
+        //                    manufacturer.MetaKeywords = property.StringValue;
+        //                    break;
+        //                case "MetaDescription":
+        //                    manufacturer.MetaDescription = property.StringValue;
+        //                    break;
+        //                case "MetaTitle":
+        //                    manufacturer.MetaTitle = property.StringValue;
+        //                    break;
+        //                case "Picture":
+        //                    var picture = await LoadPictureAsync(manager.GetProperty("Picture").StringValue, manufacturer.Name, isNew ? null : (int?)manufacturer.PictureId);
+
+        //                    if (picture != null)
+        //                        manufacturer.PictureId = picture.Id;
+
+        //                    break;
+        //                case "PageSize":
+        //                    manufacturer.PageSize = property.IntValue;
+        //                    break;
+        //                case "AllowCustomersToSelectPageSize":
+        //                    manufacturer.AllowCustomersToSelectPageSize = property.BooleanValue;
+        //                    break;
+        //                case "PageSizeOptions":
+        //                    manufacturer.PageSizeOptions = property.StringValue;
+        //                    break;
+        //                case "PriceRangeFiltering":
+        //                    manufacturer.PriceRangeFiltering = property.BooleanValue;
+        //                    break;
+        //                case "PriceFrom":
+        //                    manufacturer.PriceFrom = property.DecimalValue;
+        //                    break;
+        //                case "PriceTo":
+        //                    manufacturer.PriceTo = property.DecimalValue;
+        //                    break;
+        //                case "AutomaticallyCalculatePriceRange":
+        //                    manufacturer.ManuallyPriceRange = property.BooleanValue;
+        //                    break;
+        //                case "Published":
+        //                    manufacturer.Published = property.BooleanValue;
+        //                    break;
+        //                case "DisplayOrder":
+        //                    manufacturer.DisplayOrder = property.IntValue;
+        //                    break;
+        //                case "SeName":
+        //                    seName = property.StringValue;
+        //                    break;
+        //            }
+        //        }
+
+        //        manufacturer.UpdatedOnUtc = DateTime.UtcNow;
+
+        //        if (isNew)
+        //            await _manufacturerService.InsertManufacturerAsync(manufacturer);
+        //        else
+        //            await _manufacturerService.UpdateManufacturerAsync(manufacturer);
+
+        //        //search engine name
+        //        if (setSeName)
+        //            await _urlRecordService.SaveSlugAsync(manufacturer, await _urlRecordService.ValidateSeNameAsync(manufacturer, seName, manufacturer.Name, true), 0);
+
+        //        iRow++;
+        //    }
+
+        //    //activity log
+        //    await _customerActivityService.InsertActivityAsync("ImportManufacturers",
+        //        string.Format(await _localizationService.GetResourceAsync("ActivityLog.ImportManufacturers"), iRow - 2));
+        //}
 
         /// <summary>
         /// Import categories from XLSX file

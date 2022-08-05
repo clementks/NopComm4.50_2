@@ -25,6 +25,7 @@ using Nop.Core.Domain.Stores;
 using Nop.Core.Domain.Tax;
 using Nop.Core.Domain.Topics;
 using Nop.Core.Domain.Vendors;
+using Nop.Core.Domain.Natureofbusinesses;    // added on 5-Aug-2022
 using Nop.Core.Infrastructure.Mapper;
 using Nop.Data.Configuration;
 using Nop.Services.Authentication.External;
@@ -63,6 +64,7 @@ using Nop.Web.Areas.Admin.Models.Tax;
 using Nop.Web.Areas.Admin.Models.Templates;
 using Nop.Web.Areas.Admin.Models.Topics;
 using Nop.Web.Areas.Admin.Models.Vendors;
+using Nop.Web.Areas.Admin.Models.Natureofbusiness;     // added on 5-Aug-2022
 using Nop.Web.Framework.Configuration;
 using Nop.Web.Framework.Models;
 
@@ -109,6 +111,7 @@ namespace Nop.Web.Areas.Admin.Infrastructure.Mapper
             CreateTopicsMaps();
             CreateVendorsMaps();
             CreateWarehouseMaps();
+            CreateNatureOfBusinessMaps();      // create nature of business maps on 5-Aug-2022
 
             //add some generic mapping rules
             ForAllMaps((mapConfiguration, map) =>
@@ -1679,6 +1682,24 @@ namespace Nop.Web.Areas.Admin.Infrastructure.Mapper
                 .ForMember(entity => entity.Address, options => options.Ignore());
             CreateMap<WarehouseModel, Warehouse>()
                 .ForMember(entity => entity.AddressId, options => options.Ignore());
+        }
+
+
+        /// <summary>
+        /// Create nature of business maps 
+        /// </summary>
+        protected virtual void CreateNatureOfBusinessMaps()
+        {
+            CreateMap<Natureofbusiness, NatureOfBusinessModel>()
+                .ForMember(model => model.DisplayOrder, options => options.Ignore())
+                .ForMember(model => model.AllowCustomersToSelectPageSize, options => options.Ignore())
+                .ForMember(model => model.PageSizeOptions, options => options.Ignore())
+                .ForMember(model => model.SeName, options => options.Ignore());
+            CreateMap<NatureOfBusinessModel, Natureofbusiness>()
+                .ForMember(settings => settings.Deleted, options => options.Ignore());
+                //.ForMember(settings => settings.AzureCacheControlHeader, options => options.Ignore())
+                //.ForMember(settings => settings.UseAbsoluteImagePath, options => options.Ignore())
+                //.ForMember(settings => settings.ImageSquarePictureSize, options => options.Ignore());
         }
 
         #endregion

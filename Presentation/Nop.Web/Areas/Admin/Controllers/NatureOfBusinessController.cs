@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
 using Nop.Core.Domain.Customers;
+using Nop.Core.Domain.Natureofbusinesses;
 using Nop.Core.Domain.Messages;
 using Nop.Services.Catalog;
 using Nop.Services.Customers;
+
 using Nop.Services.Discounts;
 using Nop.Services.ExportImport;
 using Nop.Services.Localization;
@@ -22,6 +24,7 @@ using Nop.Services.Seo;
 using Nop.Services.Stores;
 using Nop.Web.Areas.Admin.Factories;
 using Nop.Web.Areas.Admin.Models.Customers;
+using Nop.Web.Areas.Admin.Models.Natureofbusiness;
 using Nop.Web.Areas.Admin.Infrastructure.Mapper.Extensions;
 using Nop.Web.Framework.Controllers;
 using Nop.Web.Framework.Mvc;
@@ -110,56 +113,62 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Utilities
 
-        protected virtual async Task UpdateLocalesAsync(NatureOfBusiness natureOfBusiness, NatureOfBusinessModel model)
-        {
-            foreach (var localized in model.Locales)
-            {
-                await _localizedEntityService.SaveLocalizedValueAsync(natureOfBusiness,
-                    x => x.NatureOfBusinessName,
-                    localized.NatureOfBusinessName,
-                    localized.LanguageId);
+        //protected virtual async Task UpdateLocalesAsync(NatureOfBusiness natureOfBusiness, NatureOfBusinessModel model)
+        //{
+        //    foreach (var localized in model.Locales)
+        //    {
+        //        await _localizedEntityService.SaveLocalizedValueAsync(natureOfBusiness,
+        //            x => x.NatureOfBusinessName,
+        //            localized.NatureOfBusinessName,
+        //            localized.LanguageId);
 
-                //search engine name
-                //var seName = await _urlRecordService.ValidateSeNameAsync(natureOfBusiness, localized.SeName, localized.NatureOfBusinessName, false);
-                //await _urlRecordService.SaveSlugAsync(natureOfBusiness, seName, localized.LanguageId);
-            }
-        }
+        //        //search engine name
+        //        //var seName = await _urlRecordService.ValidateSeNameAsync(natureOfBusiness, localized.SeName, localized.NatureOfBusinessName, false);
+        //        //await _urlRecordService.SaveSlugAsync(natureOfBusiness, seName, localized.LanguageId);
+        //    }
+        //}
 
-        protected virtual async Task SaveNatureOfBusinessAclAsync(NatureOfBusiness natureOfBusiness, NatureOfBusinessModel model)
-        {
-            natureOfBusiness.SubjectToAcl = model.SelectedCustomerRoleIds.Any();
-            await _customerService.UpdateNatureOfBusinessAsync(natureOfBusiness);
+        //protected virtual async Task SaveNatureOfBusinessAclAsync(NatureOfBusiness natureOfBusiness, NatureOfBusinessModel model)
+        //{
+        //    natureOfBusiness.SubjectToAcl = model.SelectedCustomerRoleIds.Any();
+        //    await _customerService.UpdateNatureOfBusinessAsync(natureOfBusiness);
 
-            var existingAclRecords = await _aclService.GetAclRecordsAsync(natureOfBusiness);
-            var allCustomerRoles = await _customerService.GetAllCustomerRolesAsync(true);
-            foreach (var customerRole in allCustomerRoles)
-            {
-                if (model.SelectedCustomerRoleIds.Contains(customerRole.Id))
-                {
-                    //new role
-                    if (!existingAclRecords.Any(acl => acl.CustomerRoleId == customerRole.Id))
-                        await _aclService.InsertAclRecordAsync(natureOfBusiness, customerRole.Id);
-                }
-                else
-                {
-                    //remove role
-                    var aclRecordToDelete = existingAclRecords.FirstOrDefault(acl => acl.CustomerRoleId == customerRole.Id);
-                    if (aclRecordToDelete != null)
-                        await _aclService.DeleteAclRecordAsync(aclRecordToDelete);
-                }
-            }
-        }
+        //    var existingAclRecords = await _aclService.GetAclRecordsAsync(natureOfBusiness);
+        //    var allCustomerRoles = await _customerService.GetAllCustomerRolesAsync(true);
+        //    foreach (var customerRole in allCustomerRoles)
+        //    {
+        //        if (model.SelectedCustomerRoleIds.Contains(customerRole.Id))
+        //        {
+        //            //new role
+        //            if (!existingAclRecords.Any(acl => acl.CustomerRoleId == customerRole.Id))
+        //                await _aclService.InsertAclRecordAsync(natureOfBusiness, customerRole.Id);
+        //        }
+        //        else
+        //        {
+        //            //remove role
+        //            var aclRecordToDelete = existingAclRecords.FirstOrDefault(acl => acl.CustomerRoleId == customerRole.Id);
+        //            if (aclRecordToDelete != null)
+        //                await _aclService.DeleteAclRecordAsync(aclRecordToDelete);
+        //        }
+        //    }
+        //}
 
 
         #endregion
 
 
-        #region nature of business
+        #region Nature of business
+
+
+        public virtual IActionResult Index()
+        {
+            return RedirectToAction("List");
+        }
 
 
         public virtual async Task<IActionResult> List()
         {
-            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageCustomers))
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageNatureOfBusiness))
                 return AccessDeniedView();
 
             //prepare model
@@ -168,23 +177,10 @@ namespace Nop.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        //[HttpPost]
-        //public virtual async Task<IActionResult> CustomerList(CustomerSearchModel searchModel)
-        //{
-        //    if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageCustomers))
-        //        return await AccessDeniedDataTablesJson();
-
-        //    //prepare model
-        //    var model = await _customerModelFactory.PrepareCustomerListModelAsync(searchModel);
-
-        //    return Json(model);
-        //}
-
-
         [HttpPost]
         public virtual async Task<IActionResult> List(NatureOfBusinessSearchModel searchModel)
         {
-            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageCustomers))
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageNatureOfBusiness))
                 return await AccessDeniedDataTablesJson();
 
             //try to get nature of business with the specified nature of business name
@@ -196,6 +192,79 @@ namespace Nop.Web.Areas.Admin.Controllers
             
 
             return Json(model);
+        }
+
+        public virtual async Task<IActionResult> Create()
+        {
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageNatureOfBusiness))
+                return AccessDeniedView();
+
+            //prepare model
+            var model = await _customerModelFactory.PrepareVendorModelAsync(new VendorModel(), null);
+
+            return View(model);
+        }
+
+        [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
+        [FormValueRequired("save", "save-continue")]
+        public virtual async Task<IActionResult> Create(NatureOfBusinessModel model, bool continueEditing, IFormCollection form)
+        {
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageNatureOfBusiness))
+                return AccessDeniedView();
+
+            //parse vendor attributes
+            var vendorAttributesXml = await ParseVendorAttributesAsync(form);
+            (await _vendorAttributeParser.GetAttributeWarningsAsync(vendorAttributesXml)).ToList()
+                .ForEach(warning => ModelState.AddModelError(string.Empty, warning));
+
+            if (ModelState.IsValid)
+            {
+                var vendor = model.ToEntity<Vendor>();
+                await _vendorService.InsertVendorAsync(vendor);
+
+                //activity log
+                await _customerActivityService.InsertActivityAsync("AddNewVendor",
+                    string.Format(await _localizationService.GetResourceAsync("ActivityLog.AddNewVendor"), vendor.Id), vendor);
+
+                //search engine name
+                model.SeName = await _urlRecordService.ValidateSeNameAsync(vendor, model.SeName, vendor.Name, true);
+                await _urlRecordService.SaveSlugAsync(vendor, model.SeName, 0);
+
+                //address
+                var address = model.Address.ToEntity<Address>();
+                address.CreatedOnUtc = DateTime.UtcNow;
+
+                //some validation
+                if (address.CountryId == 0)
+                    address.CountryId = null;
+                if (address.StateProvinceId == 0)
+                    address.StateProvinceId = null;
+                await _addressService.InsertAddressAsync(address);
+                vendor.AddressId = address.Id;
+                await _vendorService.UpdateVendorAsync(vendor);
+
+                //vendor attributes
+                await _genericAttributeService.SaveAttributeAsync(vendor, NopVendorDefaults.VendorAttributes, vendorAttributesXml);
+
+                //locales
+                await UpdateLocalesAsync(vendor, model);
+
+                //update picture seo file name
+                await UpdatePictureSeoNamesAsync(vendor);
+
+                _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.Vendors.Added"));
+
+                if (!continueEditing)
+                    return RedirectToAction("List");
+
+                return RedirectToAction("Edit", new { id = vendor.Id });
+            }
+
+            //prepare model
+            model = await _vendorModelFactory.PrepareVendorModelAsync(model, null, true);
+
+            //if we got this far, something failed, redisplay form
+            return View(model);
         }
 
         [HttpPost]
@@ -292,7 +361,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         [HttpPost]
         public virtual async Task<IActionResult> DeleteSelected(ICollection<int> selectedIds)
         {
-            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageCustomers))
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageNatureOfBusiness))
                 return AccessDeniedView();
 
             if (selectedIds == null || selectedIds.Count == 0)
@@ -305,7 +374,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             foreach (var natureOfBusiness in natureOfBusinesses)
             {
                 //activity log
-                await _customerActivityService.InsertActivityAsync("DeleteNatureOfBusiness", string.Format(locale, natureOfBusiness.NatureOfBusinessName), natureOfBusiness);
+                await _customerActivityService.InsertActivityAsync("DeleteNatureOfBusiness", string.Format(locale, natureOfBusiness.Name), natureOfBusiness);
             }
 
             return Json(new { Result = true });
@@ -319,7 +388,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         public virtual async Task<IActionResult> ExportXml()
         {
-            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageManufacturers))
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
 
             try
@@ -337,7 +406,7 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         public virtual async Task<IActionResult> ExportXlsx()
         {
-            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageManufacturers))
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageCustomers))
                 return AccessDeniedView();
 
             try
@@ -353,37 +422,37 @@ namespace Nop.Web.Areas.Admin.Controllers
             }
         }
 
-        [HttpPost]
-        public virtual async Task<IActionResult> ImportFromXlsx(IFormFile importexcelfile)
-        {
-            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageManufacturers))
-                return AccessDeniedView();
+        //[HttpPost]
+        //public virtual async Task<IActionResult> ImportFromXlsx(IFormFile importexcelfile)
+        //{
+        //    if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageCustomers))
+        //        return AccessDeniedView();
 
-            //a vendor cannot import manufacturers
-            if (await _workContext.GetCurrentVendorAsync() != null)
-                return AccessDeniedView();
+        //    //a vendor cannot import nature of business
+        //    if (await _workContext.GetCurrentVendorAsync() != null)
+        //        return AccessDeniedView();
 
-            try
-            {
-                if (importexcelfile != null && importexcelfile.Length > 0)
-                {
-                    await _importManager.ImportManufacturersFromXlsxAsync(importexcelfile.OpenReadStream());
-                }
-                else
-                {
-                    _notificationService.ErrorNotification(await _localizationService.GetResourceAsync("Admin.Common.UploadFile"));
-                    return RedirectToAction("List");
-                }
+        //    try
+        //    {
+        //        if (importexcelfile != null && importexcelfile.Length > 0)
+        //        {
+        //            await _importManager.ImportManufacturersFromXlsxAsync(importexcelfile.OpenReadStream());
+        //        }
+        //        else
+        //        {
+        //            _notificationService.ErrorNotification(await _localizationService.GetResourceAsync("Admin.Common.UploadFile"));
+        //            return RedirectToAction("List");
+        //        }
 
-                _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.Customers.NatureOfBusiness.Imported"));
-                return RedirectToAction("List");
-            }
-            catch (Exception exc)
-            {
-                await _notificationService.ErrorNotificationAsync(exc);
-                return RedirectToAction("List");
-            }
-        }
+        //        _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.Customers.NatureOfBusiness.Imported"));
+        //        return RedirectToAction("List");
+        //    }
+        //    catch (Exception exc)
+        //    {
+        //        await _notificationService.ErrorNotificationAsync(exc);
+        //        return RedirectToAction("List");
+        //    }
+        //}
 
         #endregion
 

@@ -247,6 +247,40 @@ namespace Nop.Web.Areas.Admin.Factories
 
             return result;
         }
+        /// <summary>
+        /// Get nature of business list
+        /// </summary>
+        /// <param name="showHidden">A value indicating whether to show hidden records</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the nature of business list
+        /// </returns>
+        protected virtual async Task<List<SelectListItem>> GetNatureOfBusinessListAsync(bool showHidden = false)
+        {
+            var cacheKey = _staticCacheManager.PrepareKeyForDefaultCache(NopModelCacheDefaults.NatureOfBusinesssListKey, showHidden);
+            var listItems = await _staticCacheManager.GetAsync(cacheKey, async () =>
+            {
+                var natureofBusinesses = await _customerService.GetAllNatureOfBusinessAsync(showHidden: showHidden);
+                return await natureofBusinesses.Select(c => new SelectListItem
+                {
+                    Text = c.Name,
+                    Value = c.Id.ToString()
+                }).ToListAsync();
+            });
+
+            var result = new List<SelectListItem>();
+            //clone the list to ensure that "selected" property is not set
+            foreach (var item in listItems)
+            {
+                result.Add(new SelectListItem
+                {
+                    Text = item.Text,
+                    Value = item.Value
+                });
+            }
+
+            return result;
+        }
 
         #endregion
 
@@ -539,40 +573,7 @@ namespace Nop.Web.Areas.Admin.Factories
             await PrepareDefaultItemAsync(items, withSpecialDefaultItem, defaultItemText);
         }
 
-        /// <summary>
-        /// Get nature of business list
-        /// </summary>
-        /// <param name="showHidden">A value indicating whether to show hidden records</param>
-        /// <returns>
-        /// A task that represents the asynchronous operation
-        /// The task result contains the nature of business list
-        /// </returns>
-        protected virtual async Task<List<SelectListItem>> GetNatureOfBusinessListAsync(bool showHidden = true)
-        {
-            var cacheKey = _staticCacheManager.PrepareKeyForDefaultCache(NopModelCacheDefaults.NatureOfBusinesssListKey, showHidden);
-            var listItems = await _staticCacheManager.GetAsync(cacheKey, async () =>
-            {
-                var natureofBusinesses = await _customerService.GetAllNatureOfBusinessAsync(showHidden: showHidden);
-                return await natureofBusinesses.Select(c => new SelectListItem
-                {
-                    Text = c.NatureOfBusinessName,
-                    Value = c.Id.ToString()
-                }).ToListAsync();
-            });
-
-            var result = new List<SelectListItem>();
-            //clone the list to ensure that "selected" property is not set
-            foreach (var item in listItems)
-            {
-                result.Add(new SelectListItem
-                {
-                    Text = item.Text,
-                    Value = item.Value
-                });
-            }
-
-            return result;
-        }
+       
 
 
         /// <summary>

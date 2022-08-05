@@ -94,7 +94,7 @@
             /// <summary>
             /// Gets a URL of the nature of business docs page
             /// </summary>
-            public static string NatureOfBusiness => "https://docs.nopcommerce.com/running-your-store/catalog/manufacturers.html";
+            public static string NatureOfBusiness => "https://docs.nopcommerce.com/running-your-store/customer-management/managing-customers.html";
 
             /// <summary>
             /// Gets a URL of the product reviews docs page

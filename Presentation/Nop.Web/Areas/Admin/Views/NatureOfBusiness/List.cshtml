@@ -1,4 +1,7 @@
 @model NatureOfBusinessSearchModel
+@*@{
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}*@
 
 @{
     //page title
@@ -82,7 +85,7 @@
                                         </div>
                                     </div>
                                    @* <div class="form-group row" @(Model.HideStoresList ? Html.Raw("style=\"display:none\"") : null)>*@
-                                   <div class="form-group row">
+                                   @*<div class="form-group row">
                                         <div class="col-md-4">
                                             <nop-label asp-for="SearchUserName" />
                                         </div>
@@ -97,12 +100,12 @@
                                         <div class="col-md-8">
                                             <nop-editor asp-for="SearchEmail"/>
                                         </div>
-                                    </div>
+                                    </div>*@
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <div class="text-center col-12">
-                                    <button type="button" id="search-natureOfBusiness" class="btn btn-primary btn-search">
+                                    <button type="button" id="search-natureOfBusinesses" class="btn btn-primary btn-search">
                                         <i class="fas fa-search"></i>
                                         @T("Admin.Common.Search")
                                     </button>
@@ -118,34 +121,40 @@
                     
                     @await Html.PartialAsync("Table", new DataTablesModel
                     {
-                        Name = "manufacturers-grid",
+                        Name = "natureofbusiness-grid",
                         UrlRead = new DataUrl("List", "NatureOfBusiness", null),
-                        SearchButtonId = "search-natureOfBusiness",
-                        //Length = Model.PageSize,
-                        //LengthMenu = Model.AvailablePageSizes,
+                        SearchButtonId = "search-natureOfBusinesses",
+                        Length = Model.PageSize,
+                        LengthMenu = Model.AvailablePageSizes,
                         Filters = new List<FilterParameter>
                         {
                             new FilterParameter(nameof(Model.SearchNatureOfBusinessName)),
-                            new FilterParameter(nameof(Model.SearchUserName)),
-                            new FilterParameter(nameof(Model.SearchEmail))
+                            //new FilterParameter(nameof(Model.SearchUserName)),
+                            //new FilterParameter(nameof(Model.SearchEmail))
                         },
                         ColumnCollection = new List<ColumnProperty>
                         {
                             new ColumnProperty(nameof(NatureOfBusinessModel.Id))
                             {
                                 IsMasterCheckBox = true,
-                                Render = new RenderCheckBox("checkbox_natureOfBusiness"),
+                                Render = new RenderCheckBox("checkbox_natureofbusiness"),
                                 ClassName =  NopColumnClassDefaults.CenterAll,
                                 Width = "50"
                             },
-                            new ColumnProperty(nameof(NatureOfBusinessModel.NatureOfBusinessName))
+                            new ColumnProperty(nameof(NatureOfBusinessModel.NatureOfBusinessId))
                             {
-                                Title = T("Admin.Customers.NatureOfBusiness.Fields.NatureOfBusinessName").Text
+                                Title = T("Admin.Customers.NatureOfBusiness.Fields.NatureOfBusinessId").Text,
+                                Width = "50"
+                            },
+                            new ColumnProperty(nameof(NatureOfBusinessModel.Name))
+                            {
+                                Title = T("Admin.Customers.NatureOfBusiness.Fields.NatureOfBusinessName").Text,
+                                Width = "100"
                             },
                             new ColumnProperty(nameof(NatureOfBusinessModel.Published))
                             {
                                 Title = T("Admin.Customers.NatureOfBusiness.Fields.Published").Text,
-                                Width = "100",
+                                Width = "50",
                                 ClassName =  NopColumnClassDefaults.CenterAll,
                                 Render = new RenderBoolean()
                             },
@@ -153,7 +162,15 @@
                             {
                                 Title = T("Admin.Customers.NatureOfBusiness.Fields.CreatedOnUtc").Text,
                                 Width = "100",
-                                ClassName = NopColumnClassDefaults.CenterAll
+                                ClassName = NopColumnClassDefaults.CenterAll,
+                                Render = new RenderDate()
+                            },
+                             new ColumnProperty(nameof(NatureOfBusinessModel.UpdatedOnUtc))
+                            {
+                                Title = T("Admin.Customers.NatureOfBusiness.Fields.UpdatedOnUtc").Text,
+                                Width = "100",
+                                ClassName = NopColumnClassDefaults.CenterAll,
+                                Render = new RenderDate()
                             },
                             new ColumnProperty(nameof(NatureOfBusinessModel.Id))
                             {
@@ -166,9 +183,9 @@
                     })
 
 
-                    <script>
+                    @*<script>
                         $(document).ready(function () {
-                            //$('#delete-selected-action-confirmation-submit-button').bind('click', function () {
+                            $('#delete-selected-action-confirmation-submit-button').bind('click', function () {
                                 var postData = {
                                     selectedIds: selectedIds
                                 };
@@ -187,14 +204,14 @@
                                             showAlert('nothingSelectedAlert', '@T("Admin.Common.Alert.NothingSelected")');
                                             return;
                                         }
-                                        //updateTable('manufacturers-grid');
+                                        updateTable('natureofbusinesses-grid');
                                     }
                                 });
-                            //    $('#delete-selected-action-confirmation').modal('toggle');
-                            //    return false;
-                            //});
+                                $('#delete-selected-action-confirmation').modal('toggle');
+                                return false;
+                            });
                         });
-                    </script>
+                    </script>*@
                     <nop-alert asp-alert-id="deleteSelectedFailed" />
                     <nop-alert asp-alert-id="nothingSelectedAlert" />
                 </div>
@@ -202,8 +219,8 @@
         </div>
     </div>   
 </section>
-@*import manufacturers form*@
-<div id="importexcel-window" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="importexcel-window-title">
+@*import nature of business form*@
+@*<div id="importexcel-window" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="importexcel-window-title">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -243,4 +260,4 @@
             </form>
         </div>
     </div>
-</div>
+</div>*@

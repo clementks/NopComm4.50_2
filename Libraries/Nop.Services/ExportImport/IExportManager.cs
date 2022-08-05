@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Customers;
+using Nop.Core.Domain.Natureofbusinesses;
 using Nop.Core.Domain.Directory;
 using Nop.Core.Domain.Messages;
 using Nop.Core.Domain.Orders;
@@ -35,7 +36,7 @@ namespace Nop.Services.ExportImport
         /// </summary>
         /// <param name="nature Of Businesses">nature Of Businesses</param>
         /// <returns>A task that represents the asynchronous operation</returns>
-        Task<byte[]> ExportNatureOfBusinessesToXlsxAsync(IEnumerable<NatureOfBusiness> natureOfBusinesses);
+        Task<byte[]> ExportNatureOfBusinessesToXlsxAsync(IEnumerable<Natureofbusiness> natureOfBusinesses);
 
         /// <summary>
         /// Export nature Of Businesses list to XML
@@ -45,7 +46,7 @@ namespace Nop.Services.ExportImport
         /// A task that represents the asynchronous operation
         /// The task result contains the result in XML format
         /// </returns>
-        Task<string> ExportNatureOfBusinessToXmlAsync(IList<NatureOfBusiness> natureOfBusinesses);
+        Task<string> ExportNatureOfBusinessToXmlAsync(IList<Natureofbusiness> natureOfBusinesses);
 
         /// <summary>
         /// Export category list to XML

@@ -1,7 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Customers;
+using Nop.Core.Domain.Natureofbusinesses;
 using Nop.Web.Areas.Admin.Models.Customers;
+using Nop.Web.Areas.Admin.Models.Natureofbusiness;
 
 namespace Nop.Web.Areas.Admin.Factories
 {
@@ -234,7 +236,7 @@ namespace Nop.Web.Areas.Admin.Factories
         /// A task that represents the asynchronous operation
         /// The task result contains the nature of business list model
         /// </returns>
-        Task<CustomerNatureOfBusinessListModel> PrepareCustomerNatureOfBusinessListModelAsync(CustomerNatureOfBusinessSearchModel searchModel, NatureOfBusiness natureOfBusiness);
+        Task<CustomerNatureOfBusinessListModel> PrepareCustomerNatureOfBusinessListModelAsync(CustomerNatureOfBusinessSearchModel searchModel, Natureofbusiness natureOfBusiness);
 
 
 

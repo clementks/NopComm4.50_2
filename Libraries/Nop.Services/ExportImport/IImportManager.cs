@@ -44,6 +44,13 @@ namespace Nop.Services.ExportImport
         Task ImportManufacturersFromXlsxAsync(Stream stream);
 
         /// <summary>
+        /// Import nature of business from XLSX file
+        /// </summary>
+        /// <param name="stream">Stream</param>
+        /// <returns>A task that represents the asynchronous operation</returns>
+        // Task ImportNatureOfBusinessFromXlsxAsync(Stream stream);
+
+        /// <summary>
         /// Import categories from XLSX file
         /// </summary>
         /// <param name="stream">Stream</param>

@@ -26,12 +26,17 @@ namespace Nop.Core
             TotalCount = totalCount ?? source.Count;
             TotalPages = TotalCount / pageSize;
 
+            if (pageSize == 0)
+                pageSize = 1;
+
             if (TotalCount % pageSize > 0)
                 TotalPages++;
+
 
             PageSize = pageSize;
             PageIndex = pageIndex;
             AddRange(totalCount != null ? source : source.Skip(pageIndex * pageSize).Take(pageSize));
+            
         }
 
         /// <summary>

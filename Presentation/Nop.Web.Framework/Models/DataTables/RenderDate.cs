@@ -20,7 +20,8 @@
         public RenderDate()
         {
             //set default values
-            Format = DEFAULT_DATE_FORMAT;
+            Format = DEFAULT_DATE_FORMAT = "DD-MMM-YYYY HH:mm:ss";
+            ;
         }
 
         #endregion

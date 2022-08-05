@@ -11,6 +11,7 @@ using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Customers;
+using Nop.Core.Domain.Natureofbusinesses;
 using Nop.Core.Domain.Directory;
 using Nop.Core.Domain.Forums;
 using Nop.Core.Domain.Gdpr;
@@ -862,15 +863,15 @@ namespace Nop.Services.ExportImport
         /// </summary>
         /// <param name="nature Of Businesses">nature Of Businesses</param>
         /// <returns>A task that represents the asynchronous operation</returns>
-        public virtual async Task<byte[]> ExportNatureOfBusinessesToXlsxAsync(IEnumerable<NatureOfBusiness> natureOfBusinesses)
+        public virtual async Task<byte[]> ExportNatureOfBusinessesToXlsxAsync(IEnumerable<Natureofbusiness> natureOfBusinesses)
         {
             //property manager 
-            var manager = new PropertyManager<NatureOfBusiness>(new[]
+            var manager = new PropertyManager<Natureofbusiness>(new[]
             {
-                new PropertyByName<NatureOfBusiness>("Id", p => p.Id),
-                new PropertyByName<NatureOfBusiness>("Nature O fBusinessName", p => p.NatureOfBusinessName),
-                new PropertyByName<NatureOfBusiness>("Creation Date", p => p.CreatedOnUtc),
-                new PropertyByName<NatureOfBusiness>("Published", p => p.Published)
+                new PropertyByName<Natureofbusiness>("Id", p => p.Id),
+                new PropertyByName<Natureofbusiness>("Nature Of BusinessName", p => p.Name),
+                new PropertyByName<Natureofbusiness>("Creation Date", p => p.CreatedOnUtc),
+                new PropertyByName<Natureofbusiness>("Published", p => p.Published)
 
             }, _catalogSettings);
 
@@ -885,7 +886,7 @@ namespace Nop.Services.ExportImport
         /// A task that represents the asynchronous operation
         /// The task result contains the result in XML format
         /// </returns>
-        public virtual async Task<string> ExportNatureOfBusinessToXmlAsync(IList<NatureOfBusiness> natureOfBusinesses)
+        public virtual async Task<string> ExportNatureOfBusinessToXmlAsync(IList<Natureofbusiness> natureOfBusinesses)
         {
             var settings = new XmlWriterSettings
             {
@@ -905,24 +906,24 @@ namespace Nop.Services.ExportImport
                 await xmlWriter.WriteStartElementAsync("NatureOfBusiness");
 
                 await xmlWriter.WriteStringAsync("ManufacturerId", natureOfBusiness.Id.ToString());
-                await xmlWriter.WriteStringAsync("Nature Of Business Name", natureOfBusiness.NatureOfBusinessName);
+                await xmlWriter.WriteStringAsync("Nature Of Business Name", natureOfBusiness.Name);
                 await xmlWriter.WriteStringAsync("Creation Date", natureOfBusiness.CreatedOnUtc);
 
-                var productManufacturers = await _manufacturerService.GetProductManufacturersByManufacturerIdAsync(natureOfBusiness.Id, showHidden: true);
-                if (productManufacturers != null)
+                var customerNatureOfBusinesses = await _customerService.GetCustomerNatureOfBusinessByNatureofBusinessAsync(natureOfBusiness.Id, showHidden: true);
+                if (customerNatureOfBusinesses != null)
                 {
-                    foreach (var productManufacturer in productManufacturers)
+                    foreach (var customerNatureOfBusiness in customerNatureOfBusinesses)
                     {
-                        var product = await _productService.GetProductByIdAsync(productManufacturer.ProductId);
+                        var product = await _productService.GetProductByIdAsync(customerNatureOfBusiness.NatureOfBusinessId);
                         if (product == null || product.Deleted)
                             continue;
 
-                        await xmlWriter.WriteStartElementAsync("ProductManufacturer");
-                        await xmlWriter.WriteStringAsync("ProductManufacturerId", productManufacturer.Id);
-                        await xmlWriter.WriteStringAsync("ProductId", productManufacturer.ProductId);
-                        await xmlWriter.WriteStringAsync("ProductName", product.Name);
-                        await xmlWriter.WriteStringAsync("IsFeaturedProduct", productManufacturer.IsFeaturedProduct);
-                        await xmlWriter.WriteStringAsync("DisplayOrder", productManufacturer.DisplayOrder);
+                        await xmlWriter.WriteStartElementAsync("CustomerNatureOfBusiness");
+                        await xmlWriter.WriteStringAsync("CustomerNatureOfBusinessId", customerNatureOfBusiness.Id);
+                        await xmlWriter.WriteStringAsync("NatureOfBusinessId", customerNatureOfBusiness.NatureOfBusinessId);
+                        await xmlWriter.WriteStringAsync("NatureOfBusinessName", customerNatureOfBusiness.NatureOfBusinessName);
+                        await xmlWriter.WriteStringAsync("UserName", customerNatureOfBusiness.Username);
+                        await xmlWriter.WriteStringAsync("Email", customerNatureOfBusiness.Email);
                         await xmlWriter.WriteEndElementAsync();
                     }
                 }

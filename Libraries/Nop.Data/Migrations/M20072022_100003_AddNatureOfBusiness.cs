@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentMigrator;
 using Nop.Core.Domain.Customers;
+using Nop.Core.Domain.Natureofbusinesses;
 using System.Data.SqlClient;
 using FluentMigrator.Runner;
 
@@ -51,13 +52,12 @@ namespace Nop.Data.Migrations
             //    .AlterColumn(nameof(NatureOfBusiness.UpdatedOnUtc)).AsDateTime2().Nullable();
 
             Alter.Table("NatureOfBusiness")
-                .AlterColumn(nameof(NatureOfBusiness.Id)).AsInt32().NotNullable().PrimaryKey("PK_NatureOfBusiness_Id")
-                .AlterColumn(nameof(NatureOfBusiness.NatureOfBusinessName)).AsString(400).NotNullable()
-                .AlterColumn(nameof(NatureOfBusiness.Deleted)).AsBoolean().Nullable()
-                .AlterColumn(nameof(NatureOfBusiness.SubjectToAcl)).AsBoolean().NotNullable()
-                .AlterColumn(nameof(NatureOfBusiness.Published)).AsBoolean().NotNullable()
-                .AlterColumn(nameof(NatureOfBusiness.CreatedOnUtc)).AsDateTime2().Nullable()
-                .AlterColumn(nameof(NatureOfBusiness.UpdatedOnUtc)).AsDateTime2().Nullable();
+                .AlterColumn(nameof(Natureofbusiness.Id)).AsInt32().NotNullable().PrimaryKey("PK_NatureOfBusiness_Id")
+                .AlterColumn(nameof(Natureofbusiness.Name)).AsString(400).NotNullable()
+                .AlterColumn(nameof(Natureofbusiness.Deleted)).AsBoolean().Nullable()
+                .AlterColumn(nameof(Natureofbusiness.Published)).AsBoolean().NotNullable()
+                .AlterColumn(nameof(Natureofbusiness.CreatedOnUtc)).AsDateTime2().Nullable()
+                .AlterColumn(nameof(Natureofbusiness.UpdatedOnUtc)).AsDateTime2().Nullable();
 
             Alter.Table("CustomerNatureOfBusiness")
                 .AlterColumn(nameof(CustomerNatureOfBusiness.Id)).AsInt32().NotNullable().PrimaryKey("PK_CustomerNatureOfBusiness_Id")

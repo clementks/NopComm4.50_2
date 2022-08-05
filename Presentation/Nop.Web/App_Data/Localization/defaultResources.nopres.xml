@@ -753,6 +753,9 @@
   <LocaleResource Name="ActivityLog.AddNewManufacturer">
     <Value>Added a new manufacturer ('{0}')</Value>
   </LocaleResource>
+  <LocaleResource Name="ActivityLog.AddNewNatureOfBusiness">
+    <Value>Added a new nature of business ('{0}')</Value>
+  </LocaleResource>
   <LocaleResource Name="ActivityLog.AddNewMeasureDimension">
     <Value>Added a new measure dimension (ID = {0})</Value>
   </LocaleResource>
@@ -860,6 +863,9 @@
   </LocaleResource>
   <LocaleResource Name="ActivityLog.DeleteManufacturer">
     <Value>Deleted a manufacturer ('{0}')</Value>
+  </LocaleResource>
+  <LocaleResource Name="ActivityLog.DeleteNatureOfBusiness">
+    <Value>Deleted a nature of business ('{0}')</Value>
   </LocaleResource>
   <LocaleResource Name="ActivityLog.DeleteMeasureDimension">
     <Value>Deleted a measure dimension (ID = {0})</Value>
@@ -990,6 +996,9 @@
   <LocaleResource Name="ActivityLog.EditManufacturer">
     <Value>Edited a manufacturer ('{0}')</Value>
   </LocaleResource>
+  <LocaleResource Name="ActivityLog.EditNatureOfBusiness">
+    <Value>Edited a nature of business ('{0}')</Value>
+  </LocaleResource>
   <LocaleResource Name="ActivityLog.EditMeasureDimension">
     <Value>Edited a measure dimension (ID = {0})</Value>
   </LocaleResource>
@@ -1077,6 +1086,9 @@
   <LocaleResource Name="ActivityLog.ImportManufacturers">
     <Value>{0} manufacturers were imported</Value>
   </LocaleResource>
+  <LocaleResource Name="ActivityLog.ImportNatureOfBusiness">
+    <Value>{0} nature of business were imported</Value>
+  </LocaleResource>
   <LocaleResource Name="ActivityLog.ImportProducts">
     <Value>{0} products were imported</Value>
   </LocaleResource>
@@ -1124,6 +1136,9 @@
   </LocaleResource>
   <LocaleResource Name="ActivityLog.PublicStore.ViewManufacturer">
     <Value>Public store. Viewed a manufacturer details page ('{0}')</Value>
+  </LocaleResource>
+  <LocaleResource Name="ActivityLog.PublicStore.ViewNatureOfBusiness">
+    <Value>Public store. Viewed a nature of business details page ('{0}')</Value>
   </LocaleResource>
   <LocaleResource Name="ActivityLog.PublicStore.ViewProduct">
     <Value>Public store. Viewed a product details page ('{0}')</Value>
@@ -2301,6 +2316,9 @@
   <LocaleResource Name="Admin.Catalog.Manufacturers">
     <Value>Manufacturers</Value>
   </LocaleResource>
+  <LocaleResource Name="Admin.Customers.NatureOfBusiness">
+    <Value>Nature Of Business</Value>
+  </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Manufacturers.Added">
     <Value>The new manufacturer has been added successfully.</Value>
   </LocaleResource>
@@ -2519,6 +2537,12 @@
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.Manufacturers.Updated">
     <Value>The manufacturer has been updated successfully.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Customers.NatureOfBusiness.Fields.NatureOfBusinessName">
+    <Value>Nature Of Business Name</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Customers.NatureOfBusiness.Fields.DisplayOrder">
+    <Value>Display Order</Value>
   </LocaleResource>
   <LocaleResource Name="Admin.Catalog.ProductReviews">
     <Value>Product reviews</Value>
@@ -18272,6 +18296,9 @@
   </LocaleResource>
   <LocaleResource Name="Permission.ManageNews">
     <Value>Admin area. Manage News</Value>
+  </LocaleResource>
+  <LocaleResource Name="Permission.ManageNatureOfBusiness">
+    <Value>Admin area. Manage Nature Of Business</Value>
   </LocaleResource>
   <LocaleResource Name="Permission.ManageNewsletterSubscribers">
     <Value>Admin area. Manage Newsletter Subscribers</Value>

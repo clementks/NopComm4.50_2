@@ -1,5 +1,6 @@
 ﻿using FluentMigrator.Builders.Create.Table;
 using Nop.Core.Domain.Customers;
+using Nop.Core.Domain.Natureofbusinesses;
 using Nop.Data.Extensions;
 using System.Data;
 
@@ -32,7 +33,7 @@ namespace Nop.Data.Mapping.Builders.Customers
                .WithColumn(nameof(CustomerNatureOfBusiness.NatureOfBusinessId)).AsInt64().Identity().PrimaryKey()
                .WithColumn(NameCompatibilityManager.GetColumnName(typeof(CustomerNatureOfBusiness), nameof(CustomerNatureOfBusiness.NatureOfBusinessName))).AsString()
                .WithColumn(NameCompatibilityManager.GetColumnName(typeof(CustomerNatureOfBusiness), nameof(CustomerNatureOfBusiness.NatureOfBusinessId)))
-                   .AsInt32().PrimaryKey().ForeignKey<NatureOfBusiness>()
+                   .AsInt32().PrimaryKey().ForeignKey<Natureofbusiness>()
                .WithColumn(NameCompatibilityManager.GetColumnName(typeof(CustomerNatureOfBusiness), nameof(CustomerNatureOfBusiness.Id)))
                    .AsInt32().ForeignKey<Customer>();
 

@@ -17,11 +17,11 @@ namespace Nop.Web.Areas.Admin.Models.Natureofbusiness
 
         public NatureOfBusinessModel()
         {
-            //if (PageSize < 1)
-            //{
-            //    PageSize = 5;
-            //}
-            //Locales = new List<NatureOfBusinessLocalizedModel>();
+            if (PageSize < 1)
+            {
+                PageSize = 5;
+            }
+            Locales = new List<NatureOfBusinessLocalizedModel>();
 
             //SelectedCustomerRoleIds = new List<int>();
             //AvailableCustomerRoles = new List<SelectListItem>();
@@ -44,10 +44,10 @@ namespace Nop.Web.Areas.Admin.Models.Natureofbusiness
         [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.Id")]
         public int NatureOfBusinessId { get; set; }
 
-        //public IList<NatureOfBusinessLocalizedModel> Locales { get; set; }
+        public IList<NatureOfBusinessLocalizedModel> Locales { get; set; }
 
-        //[NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.PageSize")]
-        //public int PageSize { get; set; }
+        [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.PageSize")]
+        public int PageSize { get; set; }
 
         //[NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.Deleted")]
         //public bool Deleted { get; set; }
@@ -92,26 +92,24 @@ namespace Nop.Web.Areas.Admin.Models.Natureofbusiness
         #endregion
     }
 
-    //public partial record NatureOfBusinessLocalizedModel : ILocalizedLocaleModel
-    //{
-    //    public int LanguageId { get; set; }
+    public partial record NatureOfBusinessLocalizedModel : ILocalizedLocaleModel
+    {
+        public int LanguageId { get; set; }
 
-    //    [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.Name")]
-    //    public string Name { get; set; }
+        [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.Name")]
+        public string Name { get; set; }
 
-    //    public int NatureOfBusinessId { get; set; }
+        [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.Description")]
+        public string Description { get; set; }
 
-    //    [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.Description")]
-    //    public string Description { get; set; }
+        [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.MetaKeywords")]
+        public string MetaKeywords { get; set; }
 
-    //    [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.MetaKeywords")]
-    //    public string MetaKeywords { get; set; }
+        [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.MetaDescription")]
+        public string MetaDescription { get; set; }
 
-    //    [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.MetaDescription")]
-    //    public string MetaDescription { get; set; }
+        [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.SeName")]
+        public string SeName { get; set; }
 
-    //    [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.SeName")]
-    //    public string SeName { get; set; }
-
-    //}
- }
+    }
+}

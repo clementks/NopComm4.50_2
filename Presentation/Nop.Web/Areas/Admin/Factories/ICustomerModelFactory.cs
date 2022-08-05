@@ -82,15 +82,16 @@ namespace Nop.Web.Areas.Admin.Factories
         /// Prepare nature of business search model
         /// </summary>
         /// <param name="searchModel">nature of business search model</param>
+        /// <param name="nature of business">nature of business search model</param>
         /// <returns>
         /// A task that represents the asynchronous operation
         /// The task result contains the nature of business search model
         /// </returns>
-        //Task<NatureOfBusinessSearchModel> PrepareNatureOfBusinessCustomerSearchModelAsync(NatureOfBusinessSearchModel searchModel, Customer customer);
+        Task<CustomerNatureOfBusinessSearchModel> PrepareCustomerNatureOfBusinessSearchModelAsync(CustomerNatureOfBusinessSearchModel searchModel, Natureofbusiness natureofbusiness);
 
 
 
-       
+
 
         /// <summary>
         /// Prepare paged reward points list model
@@ -215,6 +216,18 @@ namespace Nop.Web.Areas.Admin.Factories
         /// The task result contains the gDPR request list model
         /// </returns>
         Task<GdprLogListModel> PrepareGdprLogListModelAsync(GdprLogSearchModel searchModel);
+
+
+        /// <summary>
+        /// Prepare with creation of Customer model with Nature Of Business
+        /// </summary>
+        /// <param name="model">Nature Of Business model</param>
+        /// <param name="excludeProperties">Whether to exclude populating of some properties of model</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the customer model
+        /// </returns>
+        Task<NatureOfBusinessModel> PrepareNatureOfBusinessModelAsync(NatureOfBusinessModel model, Natureofbusiness natureofbusiness, bool excludeProperties = false);
 
         /// <summary>
         /// Prepare paged nature of business list model

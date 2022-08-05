@@ -880,37 +880,28 @@ namespace Nop.Web.Areas.Admin.Factories
         /// <summary>
         /// Prepare nature of business search model
         /// </summary>
-        /// <param name="searchModel, customer">nature of business search model</param>
+        /// <param name="searchModel">nature of business search model</param>
+        /// <param name="nature of business">nature of business search model</param>
         /// <returns>
         /// A task that represents the asynchronous operation
         /// The task result contains the nature of business search model
         /// </returns>
-        //public virtual async Task<NatureOfBusinessSearchModel> PrepareNatureOfBusinessCustomerSearchModelAsync(NatureOfBusinessSearchModel searchModel, Customer customer)
-        //{
-        //    if (searchModel == null)
-        //        throw new ArgumentNullException(nameof(searchModel));
+        public virtual async Task<CustomerNatureOfBusinessSearchModel> PrepareCustomerNatureOfBusinessSearchModelAsync(CustomerNatureOfBusinessSearchModel searchModel, Natureofbusiness natureofbusiness)
+        {
+            if (searchModel == null)
+                throw new ArgumentNullException(nameof(searchModel));
 
-        //    if (customer == null)
-        //        throw new ArgumentNullException(nameof(customer));
+            if (natureofbusiness == null)
+                throw new ArgumentNullException(nameof(natureofbusiness));
 
-        //    searchModel.SearchNatureOfBusinessName = customer.NatureOfBusiness;
+            searchModel.Id = natureofbusiness.NatureOfBusinessId;
 
-
-        //    //search registered customers by default
-        //    var registeredRole = await _customerService.GetCustomerRoleBySystemNameAsync(NopCustomerDefaults.RegisteredRoleName);
-        //    if (registeredRole != null)
-        //        searchModel.SelectedCustomerRoleIds.Add(registeredRole.Id);
+            //prepare page parameters
+            searchModel.SetGridPageSize();
 
 
-        //    //prepare page parameters
-        //    searchModel.SetGridPageSize();
-
-
-        //    //prepare page parameters
-        //    searchModel.SetGridPageSize();
-
-        //    return searchModel;
-        //}
+            return searchModel;
+        }
 
 
 
@@ -924,113 +915,118 @@ namespace Nop.Web.Areas.Admin.Factories
         /// A task that represents the asynchronous operation
         /// The task result contains the customer model
         /// </returns>
-        //public virtual async Task<NatureOfBusinessModel> PrepareNatureOfBusinessModelAsync(NatureOfBusinessModel model, bool excludeProperties = false)
-        //{
-        //    if (customer != null)
-        //    {
-        //        //fill in model values from the entity
-        //        //model ??= new NatureOfBusinessModel();
+        public virtual async Task<NatureOfBusinessModel> PrepareNatureOfBusinessModelAsync(NatureOfBusinessModel model, Natureofbusiness natureofbusiness, bool excludeProperties = false)
+        {
+            if (natureofbusiness != null)
+            {
 
-        //        //model.Id = NatureOfBusinessModel.Id;
-        //        //model.NatureOfBusinessName = await _customerService.GetCustomerNatureOfBusinessAsync(customer);
+                if (model == null)
+                {
+                    model = natureofbusiness.ToModel<NatureOfBusinessModel>();
+                    model.SeName = await _urlRecordService.GetSeNameAsync(natureofbusiness, 0, true, false);
+                }
+                //prepare nested search model
+                PrepareCustomerNatureOfBusinessSearchModelAsync(model.CustomerNatureOfBusinessSearchModel, natureofbusiness);
 
-        //        NatureOfBusinessModel model = new NatureOfBusinessModel
-        //        {
+                //define localized model configuration action
+                localizedModelConfiguration = async (locale, languageId) =>
+                {
+                    locale.Name = await _localizationService.GetLocalizedAsync(natureofbusiness, entity => entity.Name, languageId, false, false);
+                    locale.Description = await _localizationService.GetLocalizedAsync(natureofbusiness, entity => entity.Description, languageId, false, false);
+                    locale.MetaKeywords = await _localizationService.GetLocalizedAsync(natureofbusiness, entity => entity.MetaKeywords, languageId, false, false);
+                    locale.MetaDescription = await _localizationService.GetLocalizedAsync(natureofbusiness, entity => entity.MetaDescription, languageId, false, false);
+                    locale.MetaTitle = await _localizationService.GetLocalizedAsync(natureofbusiness, entity => entity.MetaTitle, languageId, false, false);
+                    locale.SeName = await _urlRecordService.GetSeNameAsync(natureofbusiness, languageId, false, false);
+                };
 
-        //            NatureOfBusinessName = model.NatureOfBusinessName
+                if (natureofbusiness == null)
+                {
+                    model.Published = true;
+                    model.PageSize = _catalogSettings.DefaultManufacturerPageSize;
+                    model.PageSizeOptions = _catalogSettings.DefaultManufacturerPageSizeOptions;
+                }
+                
+                //fill in model values from the entity
+                //model ??= new NatureOfBusinessModel();
 
-        //        };
+                //model.Id = NatureOfBusinessModel.Id;
+                //model.NatureOfBusinessName = await _customerService.GetCustomerNatureOfBusinessAsync(customer);
 
+                NatureOfBusinessModel model = new NatureOfBusinessModel
+                {
 
-        //        //whether to fill in some of properties
-        //        if (!excludeProperties)
-        //        {
-        //            model.Email = customer.Email;
-        //            model.Username = customer.Username;
-        //            model.VendorId = customer.VendorId;
-        //            model.AdminComment = customer.AdminComment;
-        //            model.IsTaxExempt = customer.IsTaxExempt;
-        //            model.Active = customer.Active;
-        //            model.FirstName = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.FirstNameAttribute);
-        //            model.LastName = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.LastNameAttribute);
-        //            model.Gender = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.GenderAttribute);
-        //            model.DateOfBirth = await _genericAttributeService.GetAttributeAsync<DateTime?>(customer, NopCustomerDefaults.DateOfBirthAttribute);
-        //            model.Company = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.CompanyAttribute);
-        //            model.StreetAddress = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.StreetAddressAttribute);
-        //            model.StreetAddress2 = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.StreetAddress2Attribute);
-        //            model.ZipPostalCode = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.ZipPostalCodeAttribute);
-        //            model.City = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.CityAttribute);
-        //            model.County = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.CountyAttribute);
-        //            model.CountryId = await _genericAttributeService.GetAttributeAsync<int>(customer, NopCustomerDefaults.CountryIdAttribute);
-        //            model.StateProvinceId = await _genericAttributeService.GetAttributeAsync<int>(customer, NopCustomerDefaults.StateProvinceIdAttribute);
-        //            model.Phone = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.PhoneAttribute);
-        //            model.Fax = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.FaxAttribute);
-        //            model.TimeZoneId = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.TimeZoneIdAttribute);
-        //            model.VatNumber = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.VatNumberAttribute);
-        //            model.VatNumberStatusNote = await _localizationService.GetLocalizedEnumAsync((VatNumberStatus)await _genericAttributeService
-        //                .GetAttributeAsync<int>(customer, NopCustomerDefaults.VatNumberStatusIdAttribute));
-        //            model.CreatedOn = await _dateTimeHelper.ConvertToUserTimeAsync(customer.CreatedOnUtc, DateTimeKind.Utc);
-        //            model.LastActivityDate = await _dateTimeHelper.ConvertToUserTimeAsync(customer.LastActivityDateUtc, DateTimeKind.Utc);
-        //            model.LastIpAddress = customer.LastIpAddress;
-        //            model.LastVisitedPage = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.LastVisitedPageAttribute);
-        //            model.NatureOfBusiness = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.NatureOfBusinessAttribute);
-        //            model.SelectedCustomerRoleIds = (await _customerService.GetCustomerRoleIdsAsync(customer)).ToList();
-        //            model.RegisteredInStore = (await _storeService.GetAllStoresAsync())
-        //                .FirstOrDefault(store => store.Id == customer.RegisteredInStoreId)?.Name ?? string.Empty;
-        //            model.DisplayRegisteredInStore = model.Id > 0 && !string.IsNullOrEmpty(model.RegisteredInStore) &&
-        //                (await _storeService.GetAllStoresAsync()).Select(x => x.Id).Count() > 1;
+                    NatureOfBusinessName = model.NatureOfBusinessName
 
-        //            //prepare model affiliate
-        //            var affiliate = await _affiliateService.GetAffiliateByIdAsync(customer.AffiliateId);
-        //            if (affiliate != null)
-        //            {
-        //                model.AffiliateId = affiliate.Id;
-        //                model.AffiliateName = await _affiliateService.GetAffiliateFullNameAsync(affiliate);
-        //            }
-
-        //            //prepare model newsletter subscriptions
-        //            if (!string.IsNullOrEmpty(customer.Email))
-        //            {
-        //                model.SelectedNewsletterSubscriptionStoreIds = await (await _storeService.GetAllStoresAsync())
-        //                    .WhereAwait(async store => await _newsLetterSubscriptionService.GetNewsLetterSubscriptionByEmailAndStoreIdAsync(customer.Email, store.Id) != null)
-        //                    .Select(store => store.Id).ToListAsync();
-        //            }
-        //        }
+                };
 
 
-        //        //prepare nested search models
-        //        PrepareRewardPointsSearchModel(model.CustomerRewardPointsSearchModel, customer);
-        //        PrepareCustomerAddressSearchModel(model.CustomerAddressSearchModel, customer);
-        //        PrepareCustomerOrderSearchModel(model.CustomerOrderSearchModel, customer);
-        //        await PrepareCustomerShoppingCartSearchModelAsync(model.CustomerShoppingCartSearchModel, customer);
-        //        PrepareCustomerActivityLogSearchModel(model.CustomerActivityLogSearchModel, customer);
-        //        PrepareCustomerBackInStockSubscriptionSearchModel(model.CustomerBackInStockSubscriptionSearchModel, customer);
-        //        await PrepareCustomerAssociatedExternalAuthRecordsSearchModelAsync(model.CustomerAssociatedExternalAuthRecordsSearchModel, customer);
-        //    }
-        //    else
-        //    {
-        //        //whether to fill in some of properties
-        //        if (!excludeProperties)
-        //        {
-        //            //precheck Registered Role as a default role while creating a new customer through admin
-        //            var registeredRole = await _customerService.GetCustomerRoleBySystemNameAsync(NopCustomerDefaults.RegisteredRoleName);
-        //            if (registeredRole != null)
-        //                model.SelectedCustomerRoleIds.Add(registeredRole.Id);
-        //        }
-        //    }
+                //whether to fill in some of properties
+                if (!excludeProperties)
+                {
+                    model.Email = customer.Email;
+                    model.Username = customer.Username;
+                    model.VendorId = customer.VendorId;
+                    model.AdminComment = customer.AdminComment;
+                    model.IsTaxExempt = customer.IsTaxExempt;
+                    model.Active = customer.Active;
+                    model.FirstName = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.FirstNameAttribute);
+                    model.LastName = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.LastNameAttribute);
+                    model.Gender = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.GenderAttribute);
+                    model.DateOfBirth = await _genericAttributeService.GetAttributeAsync<DateTime?>(customer, NopCustomerDefaults.DateOfBirthAttribute);
+                    model.Company = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.CompanyAttribute);
+                    model.StreetAddress = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.StreetAddressAttribute);
+                    model.StreetAddress2 = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.StreetAddress2Attribute);
+                    model.ZipPostalCode = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.ZipPostalCodeAttribute);
+                    model.City = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.CityAttribute);
+                    model.County = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.CountyAttribute);
+                    model.CountryId = await _genericAttributeService.GetAttributeAsync<int>(customer, NopCustomerDefaults.CountryIdAttribute);
+                    model.StateProvinceId = await _genericAttributeService.GetAttributeAsync<int>(customer, NopCustomerDefaults.StateProvinceIdAttribute);
+                    model.Phone = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.PhoneAttribute);
+                    model.Fax = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.FaxAttribute);
+                    model.TimeZoneId = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.TimeZoneIdAttribute);
+                    model.VatNumber = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.VatNumberAttribute);
+                    model.VatNumberStatusNote = await _localizationService.GetLocalizedEnumAsync((VatNumberStatus)await _genericAttributeService
+                        .GetAttributeAsync<int>(customer, NopCustomerDefaults.VatNumberStatusIdAttribute));
+                    model.CreatedOn = await _dateTimeHelper.ConvertToUserTimeAsync(customer.CreatedOnUtc, DateTimeKind.Utc);
+                    model.LastActivityDate = await _dateTimeHelper.ConvertToUserTimeAsync(customer.LastActivityDateUtc, DateTimeKind.Utc);
+                    model.LastIpAddress = customer.LastIpAddress;
+                    model.LastVisitedPage = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.LastVisitedPageAttribute);
+                    model.NatureOfBusiness = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.NatureOfBusinessAttribute);
+                    model.SelectedCustomerRoleIds = (await _customerService.GetCustomerRoleIdsAsync(customer)).ToList();
+                    model.RegisteredInStore = (await _storeService.GetAllStoresAsync())
+                        .FirstOrDefault(store => store.Id == customer.RegisteredInStoreId)?.Name ?? string.Empty;
+                    model.DisplayRegisteredInStore = model.Id > 0 && !string.IsNullOrEmpty(model.RegisteredInStore) &&
+                        (await _storeService.GetAllStoresAsync()).Select(x => x.Id).Count() > 1;
+
+                    
+                }
+
+
+            }
+            else
+            {
+                //whether to fill in some of properties
+                if (!excludeProperties)
+                {
+                    //precheck Registered Role as a default role while creating a new customer through admin
+                    var registeredRole = await _customerService.GetCustomerRoleBySystemNameAsync(NopCustomerDefaults.RegisteredRoleName);
+                    if (registeredRole != null)
+                        model.SelectedCustomerRoleIds.Add(registeredRole.Id);
+                }
+            }
 
 
 
-        //    //set default values for the new model
-        //    if (customer == null)
-        //    {
-        //        model.Active = true;
-        //        model.DisplayVatNumber = false;
-        //    }
+            //set default values for the new model
+            if (customer == null)
+            {
+                model.Active = true;
+                model.DisplayVatNumber = false;
+            }
 
 
-        //    return model;
-        //}
+            return model;
+        }
 
 
 

@@ -200,7 +200,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                 return AccessDeniedView();
 
             //prepare model
-            var model = await _customerModelFactory.PrepareVendorModelAsync(new VendorModel(), null);
+            var model = await _customerModelFactory.PrepareNatureOfBusinessModelAsync(new NatureOfBusinessModel(), null);
 
             return View(model);
         }

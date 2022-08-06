@@ -212,52 +212,43 @@ namespace Nop.Web.Areas.Admin.Controllers
             if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageNatureOfBusiness))
                 return AccessDeniedView();
 
-            //parse vendor attributes
-            var vendorAttributesXml = await ParseVendorAttributesAsync(form);
-            (await _vendorAttributeParser.GetAttributeWarningsAsync(vendorAttributesXml)).ToList()
-                .ForEach(warning => ModelState.AddModelError(string.Empty, warning));
 
             if (ModelState.IsValid)
             {
-                var vendor = model.ToEntity<Vendor>();
-                await _vendorService.InsertVendorAsync(vendor);
+                var natureofbusiness = model.ToEntity<Natureofbusiness>();
+                natureofbusiness.CreatedOnUtc = DateTime.UtcNow;
+                await _customerService.InsertNatureOfBusinessAsync(natureofbusiness);
 
                 //activity log
-                await _customerActivityService.InsertActivityAsync("AddNewVendor",
-                    string.Format(await _localizationService.GetResourceAsync("ActivityLog.AddNewVendor"), vendor.Id), vendor);
+                await _customerActivityService.InsertActivityAsync("AddNewNatureOfBusiness",
+                    string.Format(await _localizationService.GetResourceAsync("ActivityLog.AddNewNatureOfBusiness"), natureofbusiness.Id), natureofbusiness);
 
                 //search engine name
-                model.SeName = await _urlRecordService.ValidateSeNameAsync(vendor, model.SeName, vendor.Name, true);
-                await _urlRecordService.SaveSlugAsync(vendor, model.SeName, 0);
+                model.SeName = await _urlRecordService.ValidateSeNameAsync(natureofbusiness, natureofbusiness.SeName, natureofbusiness.Name, true);
+                await _urlRecordService.SaveSlugAsync(natureofbusiness, model.SeName, 0);
 
-                //address
-                var address = model.Address.ToEntity<Address>();
-                address.CreatedOnUtc = DateTime.UtcNow;
+                var customerNatureOfBusiness = model.CustomerNatureOfBusiness.ToEntity<CustomerNatureOfBusiness>();
+                customerNatureOfBusiness.CreatedOnUtc = DateTime.UtcNow;
 
-                //some validation
-                if (address.CountryId == 0)
+
+                //assign customer nature of business model
+                if (address.Id == 0)
                     address.CountryId = null;
                 if (address.StateProvinceId == 0)
                     address.StateProvinceId = null;
-                await _addressService.InsertAddressAsync(address);
-                vendor.AddressId = address.Id;
-                await _vendorService.UpdateVendorAsync(vendor);
-
-                //vendor attributes
-                await _genericAttributeService.SaveAttributeAsync(vendor, NopVendorDefaults.VendorAttributes, vendorAttributesXml);
+                await _customerService.InsertCustomerNatureOfBusinessAsync(customerNatureOfBusiness);
+                natureofbusiness.NatureOfBusinessId = customerNatureOfBusiness.Id;
+                await _customerService.UpdateNatureOfBusinessAsync(natureofbusiness);
 
                 //locales
-                await UpdateLocalesAsync(vendor, model);
+                await UpdateLocalesAsync(natureofbusiness, model);
 
-                //update picture seo file name
-                await UpdatePictureSeoNamesAsync(vendor);
-
-                _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.Vendors.Added"));
+                _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.NatureOfBusiness.Added"));
 
                 if (!continueEditing)
                     return RedirectToAction("List");
 
-                return RedirectToAction("Edit", new { id = vendor.Id });
+                return RedirectToAction("Edit", new { id = natureofbusiness.Id });
             }
 
             //prepare model

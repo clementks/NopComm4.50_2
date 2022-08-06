@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Web.Framework.Models;
 using Nop.Web.Framework.Mvc.ModelBinding;
+using Nop.Web.Areas.Admin.Models.Customers;
 
 
 namespace Nop.Web.Areas.Admin.Models.Natureofbusiness
@@ -23,11 +24,10 @@ namespace Nop.Web.Areas.Admin.Models.Natureofbusiness
             }
             Locales = new List<NatureOfBusinessLocalizedModel>();
 
+            CustomerNatureOfBusiness = new CustomerNatureOfBusinessModel();
+
             //SelectedCustomerRoleIds = new List<int>();
             //AvailableCustomerRoles = new List<SelectListItem>();
-
-            //SelectedStoreIds = new List<int>();
-            //AvailableStores = new List<SelectListItem>();
 
             //CustomerNatureOfBusinessSearchModel = new CustomerNatureOfBusinessSearchModel();
         }
@@ -68,11 +68,11 @@ namespace Nop.Web.Areas.Admin.Models.Natureofbusiness
         public string SeName { get; set; }
 
         [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.CreateOn")]
-        [Column(TypeName = "Date")]
+   
         public DateTime CreatedOnUtc { get; set; }
 
         [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.UpdateOn")]
-        [Column(TypeName = "Date")]
+
         public DateTime UpdatedOnUtc { get; set; }
 
         //public NatureOfBusinessSearchModel NatureOfBusinessSearchModel { get; set; }

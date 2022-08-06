@@ -228,7 +228,7 @@ namespace Nop.Services.Customers
         /// </summary>
         /// <param name="nature of business">nature of business</param>
         /// <returns>A task that represents the asynchronous operation</returns>
-        // Task InsertNatureOfBusinessAsync(NatureOfBusiness natureofBusiness);
+        Task InsertNatureOfBusinessAsync(NatureOfBusiness natureofBusiness);
 
         /// <summary>
         /// Gets a customer & nature of business mapping 
@@ -246,9 +246,9 @@ namespace Nop.Services.Customers
         /// <summary>
         /// Insert a customer's Nature Of Business
         /// </summary>
-        /// <param name="natureOfBusiness">NatureOfBusiness</param>
+        /// <param name="customerNatureOfBusiness">NatureOfBusiness</param>
         /// <returns>A task that represents the asynchronous operation</returns>
-        //Task InsertCustomerNatureOfBusinessAsync(CustomerNatureOfBusiness customerNatureOfBusiness);
+        Task InsertCustomerNatureOfBusinessAsync(CustomerNatureOfBusiness customerNatureOfBusiness);
 
         /// <summary>
         /// Get customer by nature Of Business

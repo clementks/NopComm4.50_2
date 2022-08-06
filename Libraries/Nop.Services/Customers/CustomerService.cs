@@ -1832,10 +1832,10 @@ namespace Nop.Services.Customers
         /// </summary>
         /// <param name="nature of business">Customer</param>
         /// <returns>A task that represents the asynchronous operation</returns>
-        //public virtual async Task InsertNatureOfBusinessAsync(NatureOfBusiness natureofBusiness)
-        //{
-        //    await _natureOfBusinessRepository.InsertAsync(natureofBusiness);
-        //}
+        public virtual async Task InsertNatureOfBusinessAsync(NatureOfBusiness natureofBusiness)
+        {
+            await _natureOfBusinessRepository.InsertAsync(natureofBusiness);
+        }
 
 
         /// <summary>
@@ -1960,10 +1960,10 @@ namespace Nop.Services.Customers
         /// </summary>
         /// <param name="customerNatureOfBusiness">customerNatureOfBusiness</param>
         /// <returns>A task that represents the asynchronous operation</returns>
-        //public virtual async Task InsertCustomerNatureOfBusinessAsync(CustomerNatureOfBusiness customerNatureOfBusiness)
-        //{
-        //    await _customerNatureOfBusinessRepository.InsertAsync(customerNatureOfBusiness);
-        //}
+        public virtual async Task InsertCustomerNatureOfBusinessAsync(CustomerNatureOfBusiness customerNatureOfBusiness)
+        {
+            await _customerNatureOfBusinessRepository.InsertAsync(customerNatureOfBusiness);
+        }
 
 
         /// <summary>

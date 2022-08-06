@@ -52,6 +52,7 @@ namespace Nop.Web.Areas.Admin.Factories
 
         private readonly AddressSettings _addressSettings;
         private readonly CustomerSettings _customerSettings;
+        private readonly CatalogSettings _catalogSettings;
         private readonly DateTimeSettings _dateTimeSettings;
         private readonly GdprSettings _gdprSettings;
         private readonly ForumSettings _forumSettings;
@@ -96,6 +97,7 @@ namespace Nop.Web.Areas.Admin.Factories
 
         public CustomerModelFactory(AddressSettings addressSettings,
             CustomerSettings customerSettings,
+            CatalogSettings catalogSettings;
             DateTimeSettings dateTimeSettings,
             GdprSettings gdprSettings,
             ForumSettings forumSettings,
@@ -136,6 +138,7 @@ namespace Nop.Web.Areas.Admin.Factories
         {
             _addressSettings = addressSettings;
             _customerSettings = customerSettings;
+            _catalogSettings = catalogSettings;
             _dateTimeSettings = dateTimeSettings;
             _gdprSettings = gdprSettings;
             _forumSettings = forumSettings;
@@ -835,7 +838,7 @@ namespace Nop.Web.Areas.Admin.Factories
         /// A task that represents the asynchronous operation
         /// The task result contains the nature of business search model
         /// </returns>
-        public virtual Task<NatureOfBusinessSearchModel> PrepareNatureOfBusinessSearchModelAsync(NatureOfBusinessSearchModel searchModel)
+        public virtual async Task<NatureOfBusinessSearchModel> PrepareNatureOfBusinessSearchModelAsync(NatureOfBusinessSearchModel searchModel)
         {
             if (searchModel == null)
                 throw new ArgumentNullException(nameof(searchModel));
@@ -843,12 +846,9 @@ namespace Nop.Web.Areas.Admin.Factories
             //searchModel.NatureOfBusinessEnabled = _customerSettings.NatureOfBusinessEnabled;
 
             //search nature of business by default name
-            //var registeredNatureOfBusiness = await _customerService.GetNatureOfBusinessByNameAsync(NopCustomerDefaults.NatureOfBusinessAttribute);
-            //if (registeredNatureOfBusiness != null)
-            //    searchModel.NatureOfBusinessIds.Add(registeredNatureOfBusiness.Id);
-            //searchModel.NatureOfBusinessNames.Add(registeredNatureOfBusiness.NatureOfBusinessName); error
-            //searchModel.Published.Add(registeredNatureOfBusiness.Published);
-            //searchModel.CreatedOn.Add(registeredNatureOfBusiness.CreatedOnUtc);
+            var registeredNatureOfBusiness = await _customerService.GetNatureOfBusinessByNameAsync(NopCustomerDefaults.NatureOfBusinessAttribute);
+            if (registeredNatureOfBusiness != null)
+                searchModel.NatureOfBusinessIds.Add(registeredNatureOfBusiness.Id);
 
 
             //prepare "published" filter (0 - all; 1 - published only; 2 - unpublished only) as selection list item
@@ -863,15 +863,14 @@ namespace Nop.Web.Areas.Admin.Factories
             //    Text = await _localizationService.GetResourceAsync("Admin.Customers.NatureOfBusiness.List.SearchUserName.All")
             //});
 
-
+            //prepare available stores
+            await _baseAdminModelFactory.PrepareStoresAsync(searchModel.AvailableStores);
 
             //prepare page parameters
             searchModel.SetGridPageSize();
 
-            return Task.FromResult(searchModel);
-            //searchModel.SetGridPageSize(pageSize: 2, availablePageSizes: "");
-
-            //return searchModel;
+           
+            return searchModel;
         }
 
 
@@ -922,7 +921,11 @@ namespace Nop.Web.Areas.Admin.Factories
 
                 if (model == null)
                 {
-                    model = natureofbusiness.ToModel<NatureOfBusinessModel>();
+                    model ??= natureofbusiness.ToModel<NatureOfBusinessModel>();
+                    model.Name = natureofbusiness.Name;
+                    model.NatureOfBusinessId = natureofbusiness.NatureOfBusinessId;
+                    model.CreatedOnUtc = natureofbusiness.CreatedOnUtc;
+                    model.UpdatedOnUtc = natureofbusiness.UpdatedOnUtc;
                     model.SeName = await _urlRecordService.GetSeNameAsync(natureofbusiness, 0, true, false);
                 }
                 //prepare nested search model
@@ -938,91 +941,24 @@ namespace Nop.Web.Areas.Admin.Factories
                     locale.MetaTitle = await _localizationService.GetLocalizedAsync(natureofbusiness, entity => entity.MetaTitle, languageId, false, false);
                     locale.SeName = await _urlRecordService.GetSeNameAsync(natureofbusiness, languageId, false, false);
                 };
-
-                if (natureofbusiness == null)
-                {
-                    model.Published = true;
-                    model.PageSize = _catalogSettings.DefaultManufacturerPageSize;
-                    model.PageSizeOptions = _catalogSettings.DefaultManufacturerPageSizeOptions;
-                }
-                
-                //fill in model values from the entity
-                //model ??= new NatureOfBusinessModel();
-
-                //model.Id = NatureOfBusinessModel.Id;
-                //model.NatureOfBusinessName = await _customerService.GetCustomerNatureOfBusinessAsync(customer);
-
-                NatureOfBusinessModel model = new NatureOfBusinessModel
-                {
-
-                    NatureOfBusinessName = model.NatureOfBusinessName
-
-                };
-
-
-                //whether to fill in some of properties
-                if (!excludeProperties)
-                {
-                    model.Email = customer.Email;
-                    model.Username = customer.Username;
-                    model.VendorId = customer.VendorId;
-                    model.AdminComment = customer.AdminComment;
-                    model.IsTaxExempt = customer.IsTaxExempt;
-                    model.Active = customer.Active;
-                    model.FirstName = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.FirstNameAttribute);
-                    model.LastName = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.LastNameAttribute);
-                    model.Gender = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.GenderAttribute);
-                    model.DateOfBirth = await _genericAttributeService.GetAttributeAsync<DateTime?>(customer, NopCustomerDefaults.DateOfBirthAttribute);
-                    model.Company = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.CompanyAttribute);
-                    model.StreetAddress = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.StreetAddressAttribute);
-                    model.StreetAddress2 = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.StreetAddress2Attribute);
-                    model.ZipPostalCode = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.ZipPostalCodeAttribute);
-                    model.City = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.CityAttribute);
-                    model.County = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.CountyAttribute);
-                    model.CountryId = await _genericAttributeService.GetAttributeAsync<int>(customer, NopCustomerDefaults.CountryIdAttribute);
-                    model.StateProvinceId = await _genericAttributeService.GetAttributeAsync<int>(customer, NopCustomerDefaults.StateProvinceIdAttribute);
-                    model.Phone = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.PhoneAttribute);
-                    model.Fax = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.FaxAttribute);
-                    model.TimeZoneId = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.TimeZoneIdAttribute);
-                    model.VatNumber = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.VatNumberAttribute);
-                    model.VatNumberStatusNote = await _localizationService.GetLocalizedEnumAsync((VatNumberStatus)await _genericAttributeService
-                        .GetAttributeAsync<int>(customer, NopCustomerDefaults.VatNumberStatusIdAttribute));
-                    model.CreatedOn = await _dateTimeHelper.ConvertToUserTimeAsync(customer.CreatedOnUtc, DateTimeKind.Utc);
-                    model.LastActivityDate = await _dateTimeHelper.ConvertToUserTimeAsync(customer.LastActivityDateUtc, DateTimeKind.Utc);
-                    model.LastIpAddress = customer.LastIpAddress;
-                    model.LastVisitedPage = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.LastVisitedPageAttribute);
-                    model.NatureOfBusiness = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.NatureOfBusinessAttribute);
-                    model.SelectedCustomerRoleIds = (await _customerService.GetCustomerRoleIdsAsync(customer)).ToList();
-                    model.RegisteredInStore = (await _storeService.GetAllStoresAsync())
-                        .FirstOrDefault(store => store.Id == customer.RegisteredInStoreId)?.Name ?? string.Empty;
-                    model.DisplayRegisteredInStore = model.Id > 0 && !string.IsNullOrEmpty(model.RegisteredInStore) &&
-                        (await _storeService.GetAllStoresAsync()).Select(x => x.Id).Count() > 1;
-
-                    
-                }
-
-
             }
-            else
+            if (natureofbusiness == null)
             {
-                //whether to fill in some of properties
-                if (!excludeProperties)
-                {
-                    //precheck Registered Role as a default role while creating a new customer through admin
-                    var registeredRole = await _customerService.GetCustomerRoleBySystemNameAsync(NopCustomerDefaults.RegisteredRoleName);
-                    if (registeredRole != null)
-                        model.SelectedCustomerRoleIds.Add(registeredRole.Id);
-                }
-            }
+                model.Published = true;
+                model.PageSize = _catalogSettings.DefaultManufacturerPageSize;
+                model.PageSizeOptions = _catalogSettings.DefaultManufacturerPageSizeOptions;
+                model.AllowCustomersToSelectPageSize = true;
 
 
+            //fill in model values from the entity
+            //model ??= new NatureOfBusinessModel();
 
-            //set default values for the new model
-            if (customer == null)
-            {
-                model.Active = true;
-                model.DisplayVatNumber = false;
-            }
+            //model.Id = NatureOfBusinessModel.Id;
+            //model.NatureOfBusinessName = await _customerService.GetCustomerNatureOfBusinessAsync(customer);
+
+        }
+         
+
 
 
             return model;

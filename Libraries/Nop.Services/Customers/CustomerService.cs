@@ -1832,7 +1832,7 @@ namespace Nop.Services.Customers
         /// </summary>
         /// <param name="nature of business">Customer</param>
         /// <returns>A task that represents the asynchronous operation</returns>
-        public virtual async Task InsertNatureOfBusinessAsync(NatureOfBusiness natureofBusiness)
+        public virtual async Task InsertNatureOfBusinessAsync(Natureofbusiness natureofBusiness)
         {
             await _natureOfBusinessRepository.InsertAsync(natureofBusiness);
         }

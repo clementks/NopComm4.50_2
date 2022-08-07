@@ -1691,15 +1691,13 @@ namespace Nop.Web.Areas.Admin.Infrastructure.Mapper
         protected virtual void CreateNatureOfBusinessMaps()
         {
             CreateMap<Natureofbusiness, NatureOfBusinessModel>()
+                .ForMember(model => model.CustomerNatureOfBusiness, options => options.Ignore())
+                .ForMember(model => model.CustomerNatureOfBusinessSearchModel, options => options.Ignore())
                 .ForMember(model => model.DisplayOrder, options => options.Ignore())
                 .ForMember(model => model.AllowCustomersToSelectPageSize, options => options.Ignore())
                 .ForMember(model => model.PageSize, options => options.Ignore())
                 .ForMember(model => model.PageSizeOptions, options => options.Ignore())
-                .ForMember(model => model.LanguageId, options => options.Ignore())
-                .ForMember(model => model.SeName, options => options.Ignore())
-                .ForMember(model => model.MetaKeywords, options => options.Ignore())
-                .ForMember(model => model.MetaDescription, options => options.Ignore())
-                .ForMember(model => model.Description, options => options.Ignore());
+                .ForMember(model => model.SeName, options => options.Ignore());               
             CreateMap<NatureOfBusinessModel, Natureofbusiness>()
                 .ForMember(settings => settings.Deleted, options => options.Ignore());
                 //.ForMember(settings => settings.AzureCacheControlHeader, options => options.Ignore())

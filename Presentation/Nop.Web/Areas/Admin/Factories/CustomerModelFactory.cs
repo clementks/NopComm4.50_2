@@ -97,7 +97,7 @@ namespace Nop.Web.Areas.Admin.Factories
 
         public CustomerModelFactory(AddressSettings addressSettings,
             CustomerSettings customerSettings,
-            CatalogSettings catalogSettings;
+            CatalogSettings catalogSettings,
             DateTimeSettings dateTimeSettings,
             GdprSettings gdprSettings,
             ForumSettings forumSettings,
@@ -843,7 +843,6 @@ namespace Nop.Web.Areas.Admin.Factories
             if (searchModel == null)
                 throw new ArgumentNullException(nameof(searchModel));
 
-            //searchModel.NatureOfBusinessEnabled = _customerSettings.NatureOfBusinessEnabled;
 
             //search nature of business by default name
             var registeredNatureOfBusiness = await _customerService.GetNatureOfBusinessByNameAsync(NopCustomerDefaults.NatureOfBusinessAttribute);
@@ -863,8 +862,6 @@ namespace Nop.Web.Areas.Admin.Factories
             //    Text = await _localizationService.GetResourceAsync("Admin.Customers.NatureOfBusiness.List.SearchUserName.All")
             //});
 
-            //prepare available stores
-            await _baseAdminModelFactory.PrepareStoresAsync(searchModel.AvailableStores);
 
             //prepare page parameters
             searchModel.SetGridPageSize();
@@ -893,7 +890,7 @@ namespace Nop.Web.Areas.Admin.Factories
             if (natureofbusiness == null)
                 throw new ArgumentNullException(nameof(natureofbusiness));
 
-            searchModel.Id = natureofbusiness.NatureOfBusinessId;
+            searchModel.NatureOfBusinessId = natureofbusiness.NatureOfBusinessId;
 
             //prepare page parameters
             searchModel.SetGridPageSize();
@@ -932,15 +929,15 @@ namespace Nop.Web.Areas.Admin.Factories
                 PrepareCustomerNatureOfBusinessSearchModelAsync(model.CustomerNatureOfBusinessSearchModel, natureofbusiness);
 
                 //define localized model configuration action
-                localizedModelConfiguration = async (locale, languageId) =>
-                {
-                    locale.Name = await _localizationService.GetLocalizedAsync(natureofbusiness, entity => entity.Name, languageId, false, false);
-                    locale.Description = await _localizationService.GetLocalizedAsync(natureofbusiness, entity => entity.Description, languageId, false, false);
-                    locale.MetaKeywords = await _localizationService.GetLocalizedAsync(natureofbusiness, entity => entity.MetaKeywords, languageId, false, false);
-                    locale.MetaDescription = await _localizationService.GetLocalizedAsync(natureofbusiness, entity => entity.MetaDescription, languageId, false, false);
-                    locale.MetaTitle = await _localizationService.GetLocalizedAsync(natureofbusiness, entity => entity.MetaTitle, languageId, false, false);
-                    locale.SeName = await _urlRecordService.GetSeNameAsync(natureofbusiness, languageId, false, false);
-                };
+                //localizedModelConfiguration = async (locale, languageId) =>
+                //{
+                //    locale.Name = await _localizationService.GetLocalizedAsync(natureofbusiness, entity => entity.Name, languageId, false, false);
+                //    locale.Description = await _localizationService.GetLocalizedAsync(natureofbusiness, entity => entity.Description, languageId, false, false);
+                //    locale.MetaKeywords = await _localizationService.GetLocalizedAsync(natureofbusiness, entity => entity.MetaKeywords, languageId, false, false);
+                //    locale.MetaDescription = await _localizationService.GetLocalizedAsync(natureofbusiness, entity => entity.MetaDescription, languageId, false, false);
+                //    locale.MetaTitle = await _localizationService.GetLocalizedAsync(natureofbusiness, entity => entity.MetaTitle, languageId, false, false);
+                //    locale.SeName = await _urlRecordService.GetSeNameAsync(natureofbusiness, languageId, false, false);
+                //};
             }
             if (natureofbusiness == null)
             {
@@ -950,13 +947,13 @@ namespace Nop.Web.Areas.Admin.Factories
                 model.AllowCustomersToSelectPageSize = true;
 
 
-            //fill in model values from the entity
-            //model ??= new NatureOfBusinessModel();
+                //fill in model values from the entity
+                //model ??= new NatureOfBusinessModel();
 
-            //model.Id = NatureOfBusinessModel.Id;
-            //model.NatureOfBusinessName = await _customerService.GetCustomerNatureOfBusinessAsync(customer);
+                //model.Id = NatureOfBusinessModel.Id;
+                //model.NatureOfBusinessName = await _customerService.GetCustomerNatureOfBusinessAsync(customer);
 
-        }
+             }
          
 
 
@@ -996,8 +993,8 @@ namespace Nop.Web.Areas.Admin.Factories
                     natureOfBusinessModel.SeName = await _urlRecordService.GetSeNameAsync(natureofbusiness, 0, true, false);
                     natureOfBusinessModel.Name = (await _customerService.GetNatureOfBusinessByIdAsync(natureofbusiness.Id))?.Name;
 
-                    natureOfBusinessModel.NatureOfBusinessName = (await _customerService.GetNatureOfBusinessByNameAsync(natureofbusiness.NatureOfBusinessName))?.NatureOfBusinessName;
-                    natureOfBusinessModel.NatureOfBusinessId = (int) (await _customerService.GetNatureOfBusinessByIdAsync(natureOfBusiness.NatureOfBusinessId))?.NatureOfBusinessId;
+                    //natureOfBusinessModel.NatureOfBusinessName = (await _customerService.GetNatureOfBusinessByNameAsync(natureofbusiness.NatureOfBusinessName))?.NatureOfBusinessName;
+                    natureOfBusinessModel.NatureOfBusinessId = (int) (await _customerService.GetNatureOfBusinessByIdAsync(natureofbusiness.Id))?.NatureOfBusinessId;
                     //natureOfBusinessModel.CreatedOnUtc = await _dateTimeHelper.ConvertToUserTimeAsync(natureOfBusiness.CreatedOnUtc, DateTimeKind.Utc);
 
                     return natureOfBusinessModel;

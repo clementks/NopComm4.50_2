@@ -224,7 +224,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                     string.Format(await _localizationService.GetResourceAsync("ActivityLog.AddNewNatureOfBusiness"), natureofbusiness.Id), natureofbusiness);
 
                 //search engine name
-                model.SeName = await _urlRecordService.ValidateSeNameAsync(natureofbusiness, natureofbusiness.SeName, natureofbusiness.Name, true);
+                model.SeName = await _urlRecordService.ValidateSeNameAsync(natureofbusiness, model.SeName, natureofbusiness.Name, true);
                 await _urlRecordService.SaveSlugAsync(natureofbusiness, model.SeName, 0);
 
                 var customerNatureOfBusiness = model.CustomerNatureOfBusiness.ToEntity<CustomerNatureOfBusiness>();
@@ -232,16 +232,11 @@ namespace Nop.Web.Areas.Admin.Controllers
 
 
                 //assign customer nature of business model
-                if (address.Id == 0)
-                    address.CountryId = null;
-                if (address.StateProvinceId == 0)
-                    address.StateProvinceId = null;
+
                 await _customerService.InsertCustomerNatureOfBusinessAsync(customerNatureOfBusiness);
                 natureofbusiness.NatureOfBusinessId = customerNatureOfBusiness.Id;
                 await _customerService.UpdateNatureOfBusinessAsync(natureofbusiness);
 
-                //locales
-                await UpdateLocalesAsync(natureofbusiness, model);
 
                 _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.NatureOfBusiness.Added"));
 
@@ -252,7 +247,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             }
 
             //prepare model
-            model = await _vendorModelFactory.PrepareVendorModelAsync(model, null, true);
+            model = await _customerModelFactory.PrepareNatureOfBusinessModelAsync(model, null, true);
 
             //if we got this far, something failed, redisplay form
             return View(model);
@@ -371,11 +366,11 @@ namespace Nop.Web.Areas.Admin.Controllers
             return Json(new { Result = true });
         }
 
-
+    
 
         #endregion
 
-        #region Export / Import
+            #region Export / Import
 
         public virtual async Task<IActionResult> ExportXml()
         {

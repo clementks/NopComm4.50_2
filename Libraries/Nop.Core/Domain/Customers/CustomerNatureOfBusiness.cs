@@ -35,7 +35,6 @@ namespace Nop.Core.Domain.Customers
         /// </summary>
         public string Username { get; set; }
 
-
         /// <summary>
         /// Gets or sets the email
         /// </summary>
@@ -50,6 +49,10 @@ namespace Nop.Core.Domain.Customers
         /// Gets or sets the display order
         /// </summary>
         public int DisplayOrder { get; set; }
+
+        public DateTime CreatedOnUtc { get; set; }
+
+        public DateTime UpdatedOnUtc { get; set; }
 
 
     }

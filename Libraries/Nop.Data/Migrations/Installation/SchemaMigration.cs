@@ -169,13 +169,13 @@ namespace Nop.Data.Migrations.Installation
 
 
             //Create.Table("NatureOfBusiness")
-            //    .WithColumn(nameof(NatureOfBusiness.Id)).AsInt32().NotNullable().PrimaryKey("PK_NatureOfBusiness_Id").Identity()
-            //    .WithColumn(nameof(NatureOfBusiness.NatureOfBusinessName)).AsString(400).NotNullable().Unique()
-            //    .WithColumn(nameof(NatureOfBusiness.Deleted)).AsBoolean().Nullable()
-            //    .WithColumn(nameof(NatureOfBusiness.SubjectToAcl)).AsBoolean().NotNullable()
-            //    .WithColumn(nameof(NatureOfBusiness.Published)).AsBoolean().NotNullable()
-            //    .WithColumn(nameof(NatureOfBusiness.CreatedOnUtc)).AsDateTime2().Nullable()
-            //    .WithColumn(nameof(NatureOfBusiness.UpdatedOnUtc)).AsDateTime2().Nullable();
+            //    .WithColumn(nameof(Natureofbusiness.Id)).AsInt32().NotNullable().PrimaryKey("PK_NatureOfBusiness_Id").Identity()
+            //    .WithColumn(nameof(Natureofbusiness.NatureOfBusinessName)).AsString(400).NotNullable().Unique()
+            //    .WithColumn(nameof(Natureofbusiness.Deleted)).AsBoolean().Nullable()
+            //    .WithColumn(nameof(Natureofbusiness.SubjectToAcl)).AsBoolean().NotNullable()
+            //    .WithColumn(nameof(Natureofbusiness.Published)).AsBoolean().NotNullable()
+            //    .WithColumn(nameof(Natureofbusiness.CreatedOnUtc)).AsDateTime2().Nullable()
+            //    .WithColumn(nameof(Natureofbusiness.UpdatedOnUtc)).AsDateTime2().Nullable();
 
             //Create.Table("CustomerNatureOfBusiness")
             //    .WithColumn(nameof(CustomerNatureOfBusiness.Id)).AsInt32().NotNullable().PrimaryKey("PK_CustomerNatureOfBusiness_Id").Identity()
@@ -183,8 +183,10 @@ namespace Nop.Data.Migrations.Installation
             //    //.WithColumn(nameof(CustomerNatureOfBusiness.NatureOfBusinessName)).AsString(400).NotNullable().Unique()
             //    .WithColumn(nameof(CustomerNatureOfBusiness.CustomerId)).AsInt32().NotNullable()
             //    .WithColumn(nameof(CustomerNatureOfBusiness.Email)).AsString(500).NotNullable()
-            //    .WithColumn(nameof(CustomerNatureOfBusiness.Username)).AsString(500).NotNullable();
-            //   //.WithColumn(nameof(CustomerNatureOfBusiness.Published)).AsBoolean().NotNullable();
+            //    .WithColumn(nameof(CustomerNatureOfBusiness.Username)).AsString(500).NotNullable()
+            //    .WithColumn(nameof(CustomerNatureOfBusiness.CreatedOnUtc)).AsDateTime2().Nullable()
+            //    .WithColumn(nameof(CustomerNatureOfBusiness.UpdatedOnUtc)).AsDateTime2().Nullable();
+            //.WithColumn(nameof(CustomerNatureOfBusiness.Published)).AsBoolean().NotNullable();
 
         }
     }

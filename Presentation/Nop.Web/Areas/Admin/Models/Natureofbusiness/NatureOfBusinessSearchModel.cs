@@ -13,23 +13,22 @@ namespace Nop.Web.Areas.Admin.Models.Natureofbusiness
     {
         #region Ctor
 
-        //public NatureOfBusinessSearchModel()
-        //{
-           
-            //NatureOfBusinessIds = new List<int>();
+        public NatureOfBusinessSearchModel()
+        {
+
+            NatureOfBusinessIds = new List<int>();
             //AvailableUserNames = new List<SelectListItem>();
             //AvailableEmails = new List<SelectListItem>();
             //AvailableNatureOfBusiness = new List<SelectListItem>();
 
-
-        //}
+        }
 
         #endregion
 
         #region Properties
 
         //[NopResourceDisplayName("Admin.Customers.Customers.List.CustomerRoles")]
-        //public IList<int> NatureOfBusinessIds { get; set; }
+        public IList<int> NatureOfBusinessIds { get; set; }
 
         //public IList<SelectListItem> AvailableUserNames { get; set; }
 

@@ -12,7 +12,7 @@ namespace Nop.Web.Areas.Admin.Models.Natureofbusiness
     /// <summary>
     /// Represents a Nature Of Business model
     /// </summary>
-    public partial record NatureOfBusinessModel : BaseNopEntityModel
+    public partial record NatureOfBusinessModel : BaseNopEntityModel, ILocalizedModel<NatureOfBusinessLocalizedModel>
     {
         #region Ctor
 
@@ -26,16 +26,16 @@ namespace Nop.Web.Areas.Admin.Models.Natureofbusiness
 
             CustomerNatureOfBusiness = new CustomerNatureOfBusinessModel();
 
-            //SelectedCustomerRoleIds = new List<int>();
-            //AvailableCustomerRoles = new List<SelectListItem>();
-
-            //CustomerNatureOfBusinessSearchModel = new CustomerNatureOfBusinessSearchModel();
+            CustomerNatureOfBusinessSearchModel = new CustomerNatureOfBusinessSearchModel();
         }
 
         #endregion
 
         #region Properties
 
+        public CustomerNatureOfBusinessModel CustomerNatureOfBusiness { get; set; }
+
+        public CustomerNatureOfBusinessSearchModel CustomerNatureOfBusinessSearchModel { get; set; }
 
         [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.Name")]
         public string Name { get; set; }
@@ -48,6 +48,7 @@ namespace Nop.Web.Areas.Admin.Models.Natureofbusiness
 
         [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.PageSize")]
         public int PageSize { get; set; }
+        
 
         //[NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.Deleted")]
         //public bool Deleted { get; set; }
@@ -69,11 +70,11 @@ namespace Nop.Web.Areas.Admin.Models.Natureofbusiness
 
         [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.CreateOn")]
    
-        public DateTime CreatedOnUtc { get; set; }
+        public DateTime? CreatedOnUtc { get; set; }
 
         [NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.UpdateOn")]
 
-        public DateTime UpdatedOnUtc { get; set; }
+        public DateTime? UpdatedOnUtc { get; set; }
 
         //public NatureOfBusinessSearchModel NatureOfBusinessSearchModel { get; set; }
 
@@ -86,8 +87,6 @@ namespace Nop.Web.Areas.Admin.Models.Natureofbusiness
         //[NopResourceDisplayName("Admin.Customers.NatureOfBusiness.Fields.LimitedToStores")]
         //public IList<int> SelectedStoreIds { get; set; }
         //public IList<SelectListItem> AvailableStores { get; set; }
-
-
 
         #endregion
     }

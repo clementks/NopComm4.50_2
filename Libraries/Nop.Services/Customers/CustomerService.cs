@@ -1795,7 +1795,9 @@ namespace Nop.Services.Customers
         /// A task that represents the asynchronous operation
         /// The task result contains the categories
         /// </returns>
-        public virtual async Task<IPagedList<Natureofbusiness>> GetAllNatureOfBusinessAsync(string natureOfBusinessName = "", 
+        public virtual async Task<IPagedList<Natureofbusiness>> GetAllNatureOfBusinessAsync(string natureOfBusinessName = "",
+            int natureOfBusinessId = 0,
+            int[] natureOfBusinessIds = null,
             int pageIndex = 0,
             int pageSize = int.MaxValue,
             bool showHidden = false)
@@ -1897,6 +1899,17 @@ namespace Nop.Services.Customers
 
         /// <summary>
         /// Delete nature of business
+        /// </summary>
+        /// <param name="natureOfBusiness">natureOfBusinesses</param>
+        /// <returns>A task that represents the asynchronous operation</returns>
+        public virtual async Task DeleteNatureOfBusinessAsync(Natureofbusiness natureOfBusiness)
+        {
+            await _natureOfBusinessRepository.DeleteAsync(natureOfBusiness);
+        }
+
+
+        /// <summary>
+        /// Delete nature of businesses
         /// </summary>
         /// <param name="natureOfBusinesses">natureOfBusinesses</param>
         /// <returns>A task that represents the asynchronous operation</returns>

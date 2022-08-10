@@ -882,7 +882,7 @@ namespace Nop.Web.Areas.Admin.Factories
         /// A task that represents the asynchronous operation
         /// The task result contains the nature of business search model
         /// </returns>
-        public virtual async Task<CustomerNatureOfBusinessSearchModel> PrepareCustomerNatureOfBusinessSearchModelAsync(CustomerNatureOfBusinessSearchModel searchModel, Natureofbusiness natureofbusiness)
+        public virtual CustomerNatureOfBusinessSearchModel PrepareCustomerNatureOfBusinessSearchModelAsync(CustomerNatureOfBusinessSearchModel searchModel, Natureofbusiness natureofbusiness)
         {
             if (searchModel == null)
                 throw new ArgumentNullException(nameof(searchModel));
@@ -890,7 +890,8 @@ namespace Nop.Web.Areas.Admin.Factories
             if (natureofbusiness == null)
                 throw new ArgumentNullException(nameof(natureofbusiness));
 
-            searchModel.NatureOfBusinessId = natureofbusiness.NatureOfBusinessId;
+            searchModel.SearchNatureOfBusinessName = natureofbusiness.Name;
+        
 
             //prepare page parameters
             searchModel.SetGridPageSize();
@@ -905,7 +906,7 @@ namespace Nop.Web.Areas.Admin.Factories
         /// <summary>
         /// Prepare with creation of Customer model with Nature Of Business
         /// </summary>
-        /// <param name="model">Nature Of Business model</param>
+        /// <param name="natureofbusiness">Nature Of Business </param>
         /// <param name="excludeProperties">Whether to exclude populating of some properties of model</param>
         /// <returns>
         /// A task that represents the asynchronous operation
@@ -913,6 +914,9 @@ namespace Nop.Web.Areas.Admin.Factories
         /// </returns>
         public virtual async Task<NatureOfBusinessModel> PrepareNatureOfBusinessModelAsync(NatureOfBusinessModel model, Natureofbusiness natureofbusiness, bool excludeProperties = false)
         {
+            if (natureofbusiness == null)
+                throw new ArgumentNullException(nameof(natureofbusiness));
+
             if (natureofbusiness != null)
             {
 
@@ -1036,7 +1040,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 {
                     var natureOfBusinessCustomerModel = customerNatureOfBusiness.ToModel<CustomerNatureOfBusinessModel>();
 
-                    natureOfBusinessCustomerModel.NatureOfBusiness = (await _customerService.GetNatureOfBusinessByIdAsync(customerNatureOfBusiness.NatureOfBusinessId))?.Name;
+                    natureOfBusinessCustomerModel.NatureOfBusinessName = (await _customerService.GetNatureOfBusinessByIdAsync(customerNatureOfBusiness.NatureOfBusinessId))?.Name;
 
                     return natureOfBusinessCustomerModel;
                 });

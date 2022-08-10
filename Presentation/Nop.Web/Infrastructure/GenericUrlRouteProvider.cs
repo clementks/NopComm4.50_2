@@ -60,6 +60,10 @@ namespace Nop.Web.Infrastructure
                 pattern: genericPattern,
                 defaults: new { controller = "Catalog", action = "Manufacturer" });
 
+            endpointRouteBuilder.MapControllerRoute(name: "NatureOfBusiness",
+                pattern: genericPattern,
+                defaults: new { controller = "NatureOfBusiness", action = "NatureOfBusiness" });
+
             endpointRouteBuilder.MapControllerRoute(name: "Vendor",
                 pattern: genericPattern,
                 defaults: new { controller = "Catalog", action = "Vendor" });

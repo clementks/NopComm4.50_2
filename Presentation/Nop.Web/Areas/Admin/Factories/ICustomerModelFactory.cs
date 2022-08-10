@@ -87,7 +87,7 @@ namespace Nop.Web.Areas.Admin.Factories
         /// A task that represents the asynchronous operation
         /// The task result contains the nature of business search model
         /// </returns>
-        Task<CustomerNatureOfBusinessSearchModel> PrepareCustomerNatureOfBusinessSearchModelAsync(CustomerNatureOfBusinessSearchModel searchModel, Natureofbusiness natureofbusiness);
+        CustomerNatureOfBusinessSearchModel PrepareCustomerNatureOfBusinessSearchModelAsync(CustomerNatureOfBusinessSearchModel searchModel, Natureofbusiness natureofbusiness);
 
 
 
@@ -221,7 +221,7 @@ namespace Nop.Web.Areas.Admin.Factories
         /// <summary>
         /// Prepare with creation of Customer model with Nature Of Business
         /// </summary>
-        /// <param name="model">Nature Of Business model</param>
+        /// <param name="nature of business">Nature Of Business model</param>
         /// <param name="excludeProperties">Whether to exclude populating of some properties of model</param>
         /// <returns>
         /// A task that represents the asynchronous operation

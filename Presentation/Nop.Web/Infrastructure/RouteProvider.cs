@@ -85,6 +85,10 @@ namespace Nop.Web.Infrastructure
                 pattern: $"{lang}/order/paymentsummary",
                 defaults: new { controller = "Order", action = "paymentSummary" });
 
+            endpointRouteBuilder.MapControllerRoute(name: "NatureOfBusiness",
+                pattern: $"{lang}/customer/natureofbusiness",
+                defaults: new { controller = "NatureOfBusiness", action = "Edit" });
+
             //contact us
             endpointRouteBuilder.MapControllerRoute(name: "ContactUs",
                 pattern: $"{lang}/contactus",

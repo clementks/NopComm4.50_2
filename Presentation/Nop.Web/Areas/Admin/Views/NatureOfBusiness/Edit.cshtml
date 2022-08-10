@@ -1,23 +1,23 @@
-@model ManufacturerModel
+@model NatureOfBusinessModel
 
 @{
     //page title
-    ViewBag.PageTitle = T("Admin.Catalog.Manufacturers.EditManufacturerDetails").Text;
+    ViewBag.PageTitle = T("Admin.Customers.NatureOfBusiness.EditNatureOfBusinessDetails").Text;
     //active menu item (system name)
-    NopHtml.SetActiveMenuItemSystemName("Manufacturers");
+    NopHtml.SetActiveMenuItemSystemName("Nature Of Business");
 }
 
-<form asp-controller="Manufacturer" asp-action="Edit" method="post" id="manufacturer-form">
+<form asp-controller="NatureOfBusiness" asp-action="Edit" method="post" id="natureofbusiness-form">
     <div class="content-header clearfix">
         <h1 class="float-left">
-            @T("Admin.Catalog.Manufacturers.EditManufacturerDetails") - @Model.Name
+            @T("Admin.Customer.EditNatureOfBusinessDetails") - @Model.Name
             <small>
                 <i class="fas fa-arrow-circle-left"></i>
-                <a asp-action="List">@T("Admin.Catalog.Manufacturers.BackToList")</a>
+                <a asp-action="List">@T("Admin.Customers.NatureOfBusiness.BackToList")</a>
             </small>
         </h1>
         <div class="float-right">
-            <button type="button" onclick="javascript:OpenWindow('@Url.RouteUrl("Manufacturer", new {SeName = Model.SeName})', 800, 600, true); return false;" class="btn btn-info">
+            <button type="button" onclick="javascript:OpenWindow('@Url.RouteUrl("NatureOfBusiness", new {SeName = Model.SeName})', 800, 600, true); return false;" class="btn btn-info">
                 <i class="far fa-eye"></i>
                 @T("Admin.Common.Preview")
             </button>
@@ -29,13 +29,13 @@
                 <i class="far fa-save"></i>
                 @T("Admin.Common.SaveContinue")
             </button>
-            <span id="manufacturer-delete" class="btn btn-danger">
+            <span id="natureofbusiness-delete" class="btn btn-danger">
                 <i class="far fa-trash-alt"></i>
                 @T("Admin.Common.Delete")
             </span>
-            @await Component.InvokeAsync("AdminWidget", new { widgetZone = AdminWidgetZones.ManufacturerDetailsButtons, additionalData = Model })
+            @await Component.InvokeAsync("AdminWidget", new { widgetZone = AdminWidgetZones.NatureOfBusinessDetailsButtons, additionalData = Model })
         </div>
     </div>
     @await Html.PartialAsync("_CreateOrUpdate", Model)
 </form>
-<nop-delete-confirmation asp-model-id="@Model.Id" asp-button-id="manufacturer-delete" />
+<nop-delete-confirmation asp-model-id="@Model.Id" asp-button-id="natureofbusiness-delete" />

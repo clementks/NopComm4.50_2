@@ -24,7 +24,7 @@ namespace Nop.Web.Areas.Admin.Models.Natureofbusiness
             }
             Locales = new List<NatureOfBusinessLocalizedModel>();
 
-            CustomerNatureOfBusiness = new CustomerNatureOfBusinessModel();
+            //CustomerNatureOfBusiness = new CustomerNatureOfBusinessModel();
 
             CustomerNatureOfBusinessSearchModel = new CustomerNatureOfBusinessSearchModel();
         }
@@ -33,7 +33,7 @@ namespace Nop.Web.Areas.Admin.Models.Natureofbusiness
 
         #region Properties
 
-        public CustomerNatureOfBusinessModel CustomerNatureOfBusiness { get; set; }
+        //public CustomerNatureOfBusinessModel CustomerNatureOfBusiness { get; set; }
 
         public CustomerNatureOfBusinessSearchModel CustomerNatureOfBusinessSearchModel { get; set; }
 

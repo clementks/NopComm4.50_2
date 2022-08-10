@@ -112,6 +112,7 @@ namespace Nop.Web.Areas.Admin.Infrastructure.Mapper
             CreateVendorsMaps();
             CreateWarehouseMaps();
             CreateNatureOfBusinessMaps();      // create nature of business maps on 5-Aug-2022
+            CreateCustomerNatureBusinessMaps();
 
             //add some generic mapping rules
             ForAllMaps((mapConfiguration, map) =>
@@ -1691,7 +1692,7 @@ namespace Nop.Web.Areas.Admin.Infrastructure.Mapper
         protected virtual void CreateNatureOfBusinessMaps()
         {
             CreateMap<Natureofbusiness, NatureOfBusinessModel>()
-                .ForMember(model => model.CustomerNatureOfBusiness, options => options.Ignore())
+                //.ForMember(model => model.CustomerNatureOfBusiness, options => options.Ignore())
                 .ForMember(model => model.CustomerNatureOfBusinessSearchModel, options => options.Ignore())
                 .ForMember(model => model.DisplayOrder, options => options.Ignore())
                 .ForMember(model => model.AllowCustomersToSelectPageSize, options => options.Ignore())
@@ -1703,6 +1704,17 @@ namespace Nop.Web.Areas.Admin.Infrastructure.Mapper
                 //.ForMember(settings => settings.AzureCacheControlHeader, options => options.Ignore())
                 //.ForMember(settings => settings.UseAbsoluteImagePath, options => options.Ignore())
                 //.ForMember(settings => settings.ImageSquarePictureSize, options => options.Ignore());
+        }
+
+        protected virtual void CreateCustomerNatureBusinessMaps()
+        {
+            //CreateMap<CustomerNatureOfBusiness, CustomerNatureOfBusinessModel>()
+            //    .ForMember(model => model.SeName, options => options.Ignore());
+            //CreateMap<CustomerNatureOfBusinessModel, CustomerNatureOfBusiness>()
+            //    .ForMember(model => model.CustomerId, options => options.Ignore())
+            //    .ForMember(model => model.Published, options => options.Ignore());
+
+
         }
 
         #endregion

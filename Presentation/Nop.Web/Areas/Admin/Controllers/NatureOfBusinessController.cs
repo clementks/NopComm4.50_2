@@ -159,6 +159,27 @@ namespace Nop.Web.Areas.Admin.Controllers
 
         #region Nature of business
 
+        //public virtual async Task<IActionResult> NatureOfBusiness(int natureofbusinessId)
+        //{
+        //    var natureofbusiness = await _customerService.GetNatureOfBusinessByIdAsync(natureofbusinessId);
+
+
+        //    //display "edit" (manage) link
+        //    if (await _permissionService.AuthorizeAsync(StandardPermissionProvider.AccessAdminPanel) && await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageNatureOfBusiness))
+        //        DisplayEditLink(Url.Action("Edit", "NatureOfBusiness", new { id = natureofbusiness.Id, area = AreaNames.Admin }));
+
+        //    //activity log
+        //    await _customerActivityService.InsertActivityAsync("PublicStore.ViewNatureOfBusiness",
+        //        string.Format(await _localizationService.GetResourceAsync("ActivityLog.PublicStore.ViewNatureOfBusiness"), natureofbusiness.Name), natureofbusiness);
+
+        //    //model
+        //    var model = await _customerModelFactory.PrepareNatureOfBusinessModelAsync(natureofbusiness);
+
+           
+
+        //    return View(model);
+        //}
+
 
         public virtual IActionResult Index()
         {
@@ -227,23 +248,23 @@ namespace Nop.Web.Areas.Admin.Controllers
                 model.SeName = await _urlRecordService.ValidateSeNameAsync(natureofbusiness, model.SeName, natureofbusiness.Name, true);
                 await _urlRecordService.SaveSlugAsync(natureofbusiness, model.SeName, 0);
 
-                var customerNatureOfBusiness = model.CustomerNatureOfBusiness.ToEntity<CustomerNatureOfBusiness>();
-                customerNatureOfBusiness.CreatedOnUtc = DateTime.UtcNow;
-
-
+                //var customerNatureOfBusiness = model.CustomerNatureOfBusiness.ToEntity<CustomerNatureOfBusiness>();
+                
                 //assign customer nature of business model
-
-                await _customerService.InsertCustomerNatureOfBusinessAsync(customerNatureOfBusiness);
-                natureofbusiness.NatureOfBusinessId = customerNatureOfBusiness.Id;
-                await _customerService.UpdateNatureOfBusinessAsync(natureofbusiness);
+                //await _customerService.InsertCustomerNatureOfBusinessAsync(customerNatureOfBusiness);
+                //natureofbusiness.NatureOfBusinessId = customerNatureOfBusiness.Id;
+                //customerNatureOfBusiness.CreatedOnUtc = DateTime.UtcNow;
+                //await _customerService.UpdateNatureOfBusinessAsync(natureofbusiness);
 
 
                 _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.NatureOfBusiness.Added"));
 
                 if (!continueEditing)
-                    return RedirectToAction("List");
+                    return RedirectToAction("List", new { id = natureofbusiness.Id });
 
                 return RedirectToAction("Edit", new { id = natureofbusiness.Id });
+
+                //return continueEditing ? RedirectToAction("Edit", new { id = natureofbusiness.Id }) : RedirectToAction("List");
             }
 
             //prepare model
@@ -251,6 +272,130 @@ namespace Nop.Web.Areas.Admin.Controllers
 
             //if we got this far, something failed, redisplay form
             return View(model);
+        }
+
+
+        public virtual async Task<IActionResult> Edit(int id)
+        {
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageNatureOfBusiness))
+                return AccessDeniedView();
+
+            //try to get a nature Of Business with the specified id
+            var natureofbusiness = await _customerService.GetNatureOfBusinessByIdAsync(id);
+            if (natureofbusiness == null)
+                return RedirectToAction("List");
+
+            //prepare model
+            var model = await _customerModelFactory.PrepareNatureOfBusinessModelAsync(null, natureofbusiness);
+
+            return View(model);
+        }
+
+        [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
+        public virtual async Task<IActionResult> Edit(NatureOfBusinessModel model, bool continueEditing, IFormCollection form)
+        {
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageNatureOfBusiness))
+                return AccessDeniedView();
+
+            //try to get a nature of business with the specified id
+            var natureofbusiness = await _customerService.GetNatureOfBusinessByIdAsync(model.Id);
+            if (natureofbusiness == null || natureofbusiness.Deleted)
+                return RedirectToAction("List");
+
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    
+                    var CreationDate = natureofbusiness.CreatedOnUtc;
+                    natureofbusiness = model.ToEntity(natureofbusiness);
+                    natureofbusiness.CreatedOnUtc = CreationDate;
+                    natureofbusiness.UpdatedOnUtc = DateTime.UtcNow;
+                    await _customerService.UpdateNatureOfBusinessAsync(natureofbusiness);
+
+
+                    //search engine name
+                    model.SeName = await _urlRecordService.ValidateSeNameAsync(natureofbusiness, model.SeName, natureofbusiness.Name, true);
+                    await _urlRecordService.SaveSlugAsync(natureofbusiness, model.SeName, 0);
+
+
+                    //activity log
+                    await _customerActivityService.InsertActivityAsync("EditNatureOfBusiness",
+                        string.Format(await _localizationService.GetResourceAsync("ActivityLog.EditNatureOfBusiness"), natureofbusiness.Name), natureofbusiness);
+
+                    _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.NatureOfBusiness.Updated"));
+
+                    if (!continueEditing)
+                        return RedirectToAction("List");
+
+                    return RedirectToAction("Edit", new { id = natureofbusiness.Id });
+                }
+
+                //prepare model
+                model = await _customerModelFactory.PrepareNatureOfBusinessModelAsync(model, natureofbusiness, true);
+
+                //if we got this far, something failed, redisplay form
+                return View(model);
+            }
+            catch (Exception exc)
+            {
+                await _notificationService.ErrorNotificationAsync(exc);
+                return RedirectToAction("Edit", new { id = natureofbusiness.Id });
+            }
+        }
+
+        [HttpPost]
+        public virtual async Task<IActionResult> Delete(int id)
+        {
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageNatureOfBusiness))
+                return AccessDeniedView();
+
+            //try to get a vendor with the specified id
+            var natureofbusiness = await _customerService.GetNatureOfBusinessByIdAsync(id);
+            if (natureofbusiness == null)
+                return RedirectToAction("List");
+
+            //clear associated customer references
+            //var associatedNatureOfBusinesses = await _customerService.GetAllNatureOfBusinessAsync(natureOfBusinessId: natureofbusiness.Id);
+            //foreach (var customer in associatedCustomers)
+            //{
+            //    customer.VendorId = 0;
+            //    await _customerService.UpdateCustomerAsync(customer);
+            //}
+
+            //delete a nature of business
+            await _customerService.DeleteNatureOfBusinessAsync(natureofbusiness);
+
+            //activity log
+            await _customerActivityService.InsertActivityAsync("DeleteNatureOfBusiness",
+                string.Format(await _localizationService.GetResourceAsync("ActivityLog.DeleteNatureOfBusiness"), natureofbusiness.Id), natureofbusiness);
+
+            _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.Customers.NatureOfBusiness.Deleted"));
+
+            return RedirectToAction("List");
+        }
+
+
+        [HttpPost]
+        public virtual async Task<IActionResult> DeleteSelected(ICollection<int> selectedIds)
+        {
+            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageNatureOfBusiness))
+                return AccessDeniedView();
+
+            if (selectedIds == null || selectedIds.Count == 0)
+                return NoContent();
+
+            var natureOfBusinesses = (await _customerService.GetNatureOfBusinessByIdsAsync(selectedIds.ToArray())).ToList();
+            await _customerService.DeleteNatureOfBusinessesAsync(natureOfBusinesses);
+
+            var locale = await _localizationService.GetResourceAsync("ActivityLog.DeleteNatureOfBusiness");
+            foreach (var natureOfBusiness in natureOfBusinesses)
+            {
+                //activity log
+                await _customerActivityService.InsertActivityAsync("DeleteNatureOfBusiness", string.Format(locale, natureOfBusiness.Name), natureOfBusiness);
+            }
+
+            return Json(new { Result = true });
         }
 
         [HttpPost]
@@ -344,27 +489,7 @@ namespace Nop.Web.Areas.Admin.Controllers
         //    return View(new AddCustomerToNatureOfBusinessModel());
         //}
 
-        [HttpPost]
-        public virtual async Task<IActionResult> DeleteSelected(ICollection<int> selectedIds)
-        {
-            if (!await _permissionService.AuthorizeAsync(StandardPermissionProvider.ManageNatureOfBusiness))
-                return AccessDeniedView();
-
-            if (selectedIds == null || selectedIds.Count == 0)
-                return NoContent();
-
-            var natureOfBusinesses = await _customerService.GetNatureOfBusinessByIdsAsync(selectedIds.ToArray());
-            await _customerService.DeleteNatureOfBusinessesAsync(natureOfBusinesses);
-
-            var locale = await _localizationService.GetResourceAsync("ActivityLog.DeleteNatureOfBusiness");
-            foreach (var natureOfBusiness in natureOfBusinesses)
-            {
-                //activity log
-                await _customerActivityService.InsertActivityAsync("DeleteNatureOfBusiness", string.Format(locale, natureOfBusiness.Name), natureOfBusiness);
-            }
-
-            return Json(new { Result = true });
-        }
+       
 
     
 

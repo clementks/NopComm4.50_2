@@ -9,7 +9,6 @@ namespace Nop.Web.Areas.Admin.Models.Natureofbusiness
     {
         #region Properties
 
-        public int NatureOfBusinessId { get; set; }
 
         public string SearchNatureOfBusinessName { get; set; }
 

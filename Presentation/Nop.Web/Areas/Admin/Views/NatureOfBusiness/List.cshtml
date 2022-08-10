@@ -1,4 +1,6 @@
 @model NatureOfBusinessSearchModel
+
+@using Nop.Core.Domain.Natureofbusinesses;
 @*@{
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }*@
@@ -141,7 +143,7 @@
                                 ClassName =  NopColumnClassDefaults.CenterAll,
                                 Width = "50"
                             },
-                            new ColumnProperty(nameof(NatureOfBusinessModel.NatureOfBusinessId))
+                            new ColumnProperty(nameof(NatureOfBusinessModel.Id))
                             {
                                 Title = T("Admin.Customers.NatureOfBusiness.Fields.NatureOfBusinessId").Text,
                                 Width = "50"
@@ -183,7 +185,7 @@
                     })
 
 
-                    @*<script>
+                    <script>
                         $(document).ready(function () {
                             $('#delete-selected-action-confirmation-submit-button').bind('click', function () {
                                 var postData = {
@@ -211,7 +213,7 @@
                                 return false;
                             });
                         });
-                    </script>*@
+                    </script>
                     <nop-alert asp-alert-id="deleteSelectedFailed" />
                     <nop-alert asp-alert-id="nothingSelectedAlert" />
                 </div>

@@ -79,9 +79,11 @@ namespace Nop.Services.Customers
         /// </returns>
 
         Task<IPagedList<Natureofbusiness>> GetAllNatureOfBusinessAsync(string natureOfBusinessName = "",
-                                                                                                       int pageIndex = 0,
-                                                                                                       int pageSize = int.MaxValue,
-                                                                                                       bool showHidden = false);
+                                                                                                      int natureOfBusinessId = 0,
+                                                                                                      int[] natureOfBusinessIds = null,
+                                                                                                      int pageIndex = 0,
+                                                                                                      int pageSize = int.MaxValue,
+                                                                                                      bool showHidden = false);
                                                                                                        
         /// <summary>
         /// Gets customers with shopping carts
@@ -374,11 +376,19 @@ namespace Nop.Services.Customers
 
 
         /// <summary>
-        /// Delete nature of business
+        /// Delete a nature of business
+        /// </summary>
+        /// <param name="natureOfBusiness">natureOfBusiness</param>
+        /// <returns>A task that represents the asynchronous operation</returns>
+        Task DeleteNatureOfBusinessAsync(Natureofbusiness natureOfBusiness);
+
+        /// <summary>
+        /// Delete nature of businesses
         /// </summary>
         /// <param name="natureOfBusinesses">natureOfBusinesses</param>
         /// <returns>A task that represents the asynchronous operation</returns>
         Task DeleteNatureOfBusinessesAsync(IList<Natureofbusiness> natureOfBusinesses);
+
 
 
         /// <summary>

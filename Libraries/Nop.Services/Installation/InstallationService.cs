@@ -806,7 +806,13 @@ namespace Nop.Services.Installation
                 Active = true,
                 CreatedOnUtc = DateTime.UtcNow,
                 LastActivityDateUtc = DateTime.UtcNow,
-                RegisteredInStoreId = storeId
+                RegisteredInStoreId = storeId,
+                ContactPersonforPayment = null,
+                NatureOfBusiness = null,
+                ContactPersonAttention = null,
+                Einvoiceaddress = null
+
+
             };
             var defaultSecondUserAddress = await InsertInstallationDataAsync(
                 new Address
@@ -1077,7 +1083,11 @@ namespace Nop.Services.Installation
                 Active = true,
                 CreatedOnUtc = DateTime.UtcNow,
                 LastActivityDateUtc = DateTime.UtcNow,
-                RegisteredInStoreId = storeId
+                RegisteredInStoreId = storeId,
+                ContactPersonforPayment = null,
+                NatureOfBusiness = null,
+                ContactPersonAttention = null,
+                Einvoiceaddress = null
             };
             var defaultSixthUserAddress = await InsertInstallationDataAsync(
                 new Address
@@ -1202,7 +1212,13 @@ namespace Nop.Services.Installation
                 Active = true,
                 CreatedOnUtc = DateTime.UtcNow,
                 LastActivityDateUtc = DateTime.UtcNow,
-                RegisteredInStoreId = storeId
+                RegisteredInStoreId = storeId,
+                ContactPersonforPayment = null,
+                NatureOfBusiness = null,
+                ContactPersonAttention = null,
+                Einvoiceaddress = null
+
+
             };
 
             var defaultAdminUserAddress = await InsertInstallationDataAsync(

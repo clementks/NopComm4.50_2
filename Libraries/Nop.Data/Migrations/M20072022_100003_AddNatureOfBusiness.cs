@@ -9,12 +9,13 @@ using Nop.Core.Domain.Natureofbusinesses;
 using System.Data.SqlClient;
 using FluentMigrator.Runner;
 
+
 namespace Nop.Data.Migrations
 {
     //[NopMigration("2022-07-20 09:00:00", "4.50.2", UpdateMigrationType.Data, MigrationProcessType.Update)]
     [NopMigration("2022-07-20 14:43:16", "4.50.2", UpdateMigrationType.Data, MigrationProcessType.Update)]
     //[Migration(19072022100000, "4.50.3", UpdateMigrationType.Data, MigrationProcessType.NoMatter)]
-    public class M20072022_100003_AddNatureOfBusiness : AutoReversingMigration
+    public class M20072022_100003_AddNatureOfBusiness : Migration
     {
 
         //private readonly IMigrationManager _migrationManager;
@@ -59,14 +60,19 @@ namespace Nop.Data.Migrations
                 .AlterColumn(nameof(Natureofbusiness.CreatedOnUtc)).AsDateTime2().Nullable()
                 .AlterColumn(nameof(Natureofbusiness.UpdatedOnUtc)).AsDateTime2().Nullable();
 
-            Alter.Table("CustomerNatureOfBusiness")
-                .AlterColumn(nameof(CustomerNatureOfBusiness.Id)).AsInt32().NotNullable().PrimaryKey("PK_CustomerNatureOfBusiness_Id")
-                //.AlterColumn(nameof(CustomerNatureOfBusiness.NatureOfBusinessName)).AsString(400).NotNullable()
-                .AlterColumn(nameof(CustomerNatureOfBusiness.CustomerId)).AsInt32().NotNullable()
-                .AlterColumn(nameof(CustomerNatureOfBusiness.Email)).AsString(500).NotNullable()
-                .AlterColumn(nameof(CustomerNatureOfBusiness.Username)).AsString(500).NotNullable();
-            //.AlterColumn(nameof(CustomerNatureOfBusiness.Published)).AsBoolean().NotNullable();
+            //Alter.Table("Customer")
+            //    .AddColumn(nameof(Customer.ExpectedSalesVolume)).AsDouble().Nullable();
+            //   .AddColumn(nameof(Customer.ContactPersonAttention)).AsString(400).Nullable()
+            //    .AddColumn(nameof(Customer.Einvoiceaddress)).AsString(400).Nullable();
 
+
+            //Alter.Table("CustomerNatureOfBusiness")
+            //    .AlterColumn(nameof(CustomerNatureOfBusiness.Id)).AsInt32().NotNullable().PrimaryKey("PK_CustomerNatureOfBusiness_Id")
+            //    //.AlterColumn(nameof(CustomerNatureOfBusiness.NatureOfBusinessName)).AsString(400).NotNullable()
+            //    .AlterColumn(nameof(CustomerNatureOfBusiness.CustomerId)).AsInt32().NotNullable()
+            //    .AlterColumn(nameof(CustomerNatureOfBusiness.Email)).AsString(500).NotNullable()
+            //    .AlterColumn(nameof(CustomerNatureOfBusiness.Username)).AsString(500).NotNullable();
+            //.AlterColumn(nameof(CustomerNatureOfBusiness.Published)).AsBoolean().NotNullable();
 
 
             //Create.ForeignKey("FK_CustomerNatureOfBusiness_Id")
@@ -79,14 +85,13 @@ namespace Nop.Data.Migrations
             //.NotNullable()
             //.Unique();
 
-            //Insert.IntoTable("NatureOfBusiness").Row(new { USERNAME:"superadmin", EMAIL:"superadmin@mvcapp.com", PASSWORD_HASH:"dfgkmdglkdmfg34532+" });
-
         }
 
-        //public override void Down()
-        //{
-        //    Delete.Table("NatureOfBusiness");
-        //    Delete.Table("CustomerNatureOfBusiness");
-        //}
+        public override void Down()
+        {
+            //Delete.Table("CustomerNatureOfBusiness");
+            //Delete.Column(nameof(Natureofbusiness.NatureOfBusinessId)).FromTable("NatureOfBusiness");
+            
+        }
     }
 }

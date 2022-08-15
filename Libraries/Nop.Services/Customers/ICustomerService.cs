@@ -309,6 +309,16 @@ namespace Nop.Services.Customers
         //Task<IPagedList<CustomerNatureOfBusiness>> GetCustomerNatureOfBusinessByUserNameAsync(string userName, int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false);
 
         /// <summary>
+        /// Get nature of business in customer table
+        /// </summary>
+        /// <param name="customer">Customer</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the customer full name
+        /// </returns>
+        Task<string> GetNatureOfBusinessAsync(Customer customer);
+
+        /// <summary>
         /// Gets a customer Nature Of BusinessId mapping 
         /// </summary>
         /// <param name="customerNatureOfBusinessId">Product manufacturer mapping identifier</param>

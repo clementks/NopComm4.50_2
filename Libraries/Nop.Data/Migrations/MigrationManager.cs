@@ -119,7 +119,7 @@ namespace Nop.Data.Migrations
             foreach (var migrationInfo in GetUpMigrations(assembly, migrationProcessType))
             {
                 
-                _migrationRunner.Up(migrationInfo.Migration);
+                //_migrationRunner.Up(migrationInfo.Migration);
 
 
 #if DEBUG

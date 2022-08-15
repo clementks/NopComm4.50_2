@@ -118,7 +118,7 @@
         /// <summary>
         /// Gets a name of generic attribute to store the value of 'Nature Of Business'
         /// </summary>
-        public static string NatureOfBusinessAttribute => "Educational services";
+        public static string NatureOfBusinessAttribute => "NatureOfBusiness";
 
         /// <summary>
         /// Gets a name of generic attribute to store the value of 'Fax'

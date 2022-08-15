@@ -6,6 +6,7 @@ using Nop.Web.Framework.Mvc.ModelBinding;
 using Nop.Web.Framework.Models;
 using System.Globalization;
 using Nop.Core;
+using Nop.Core.Domain.Natureofbusinesses;
 
 namespace Nop.Web.Models.Customer
 {
@@ -20,6 +21,7 @@ namespace Nop.Web.Models.Customer
             AssociatedExternalAuthRecords = new List<AssociatedExternalAuthModel>();
             CustomerAttributes = new List<CustomerAttributeModel>();
             GdprConsents = new List<GdprConsentModel>();
+            SelectedNatureOfBusinessIds = new List<int>();
         }
         
         [DataType(DataType.EmailAddress)]
@@ -30,8 +32,6 @@ namespace Nop.Web.Models.Customer
         [NopResourceDisplayName("Account.Fields.EmailToRevalidate")]
         public string EmailToRevalidate { get; set; }
 
-        [NopResourceDisplayName("Account.Fields.PaymentContactPerson")]
-        public string ContactPersonforPayment { get; set; }
         public bool CheckUsernameAvailabilityEnabled { get; set; }
         public bool AllowUsersToChangeUsernames { get; set; }
         public bool UsernamesEnabled { get; set; }
@@ -70,8 +70,16 @@ namespace Nop.Web.Models.Customer
         [NopResourceDisplayName("Account.Fields.Company")]
         public string Company { get; set; }
 
+        // added NatureOfBusiness and ContactPersonforPayment
+
         [NopResourceDisplayName("Account.Fields.NatureOfBusiness")]
         public string NatureOfBusiness { get; set; }
+
+        [NopResourceDisplayName("Account.Fields.PaymentContactPerson")]
+        public string ContactPersonforPayment { get; set; }
+
+        [NopResourceDisplayName("Admin.Customers.Customers.Fields.NatureOfBusiness")]
+        public IList<int> SelectedNatureOfBusinessIds { get; set; }
 
         public IList<SelectListItem> NatureOfBusinessList { get; set; }
 

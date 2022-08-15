@@ -302,10 +302,6 @@
                                         Title = T("Admin.Customers.Customers.Fields.Username").Text
                                     });
                                 }
-                                gridModel.ColumnCollection.Add(new ColumnProperty(nameof(CustomerModel.FullName))
-                                {
-                                    Title = T("Admin.Customers.Customers.Fields.FullName").Text
-                                });
                                 gridModel.ColumnCollection.Add(new ColumnProperty(nameof(CustomerModel.CustomerRoleNames))
                                 {
                                     Title = T("Admin.Customers.Customers.Fields.CustomerRoles").Text,
@@ -318,6 +314,10 @@
                                         Title = T("Admin.Customers.Customers.Fields.Company").Text
                                     });
                                 }
+                                gridModel.ColumnCollection.Add(new ColumnProperty(nameof(CustomerModel.ContactPersonAttention))
+                                {
+                                        Title = T("Admin.Customers.Customers.Fields.ContactPersonAttention").Text
+                                });
                                 if (Model.PhoneEnabled)
                                 {
                                     gridModel.ColumnCollection.Add(new ColumnProperty(nameof(CustomerModel.Phone))
@@ -325,23 +325,26 @@
                                         Title = T("Admin.Customers.Customers.Fields.Phone").Text
                                     });
                                 }
-                                if (Model.ZipPostalCodeEnabled)
+                                gridModel.ColumnCollection.Add(new ColumnProperty(nameof(CustomerModel.ContactPersonforPayment))
                                 {
-                                    gridModel.ColumnCollection.Add(new ColumnProperty(nameof(CustomerModel.ZipPostalCode))
-                                    {
-                                        Title = T("Admin.Customers.Customers.Fields.ZipPostalCode").Text
-                                    });
-                                }
-                                gridModel.ColumnCollection.Add(new ColumnProperty(nameof(CustomerModel.Active))
+                                        Title = T("Admin.Customers.Customers.Fields.ContactPersonforPayment").Text
+                                });
+                                gridModel.ColumnCollection.Add(new ColumnProperty(nameof(CustomerModel.CreditLimit))
                                 {
-                                    Title = T("Admin.Customers.Customers.Fields.Active").Text,
+                                    Title = T("Admin.Customers.Customers.Fields.CreditLimit").Text,
                                     Width = "70",
-                                    ClassName = NopColumnClassDefaults.CenterAll,
-                                    Render = new RenderBoolean()
+                                    ClassName = NopColumnClassDefaults.CenterAll
+                     
                                 });
                                 gridModel.ColumnCollection.Add(new ColumnProperty(nameof(CustomerModel.NatureOfBusiness))
                                 {
                                         Title = T("Admin.Customers.Customers.Fields.NatureOfBusiness").Text,
+                                        Width = "90",
+                                        ClassName = NopColumnClassDefaults.CenterAll
+                                });
+                                 gridModel.ColumnCollection.Add(new ColumnProperty(nameof(CustomerModel.ExpectedSalesVolume))
+                                {
+                                        Title = T("Admin.Customers.Customers.Fields.ExpectedSalesVolume").Text,
                                         Width = "90",
                                         ClassName = NopColumnClassDefaults.CenterAll
                                 });

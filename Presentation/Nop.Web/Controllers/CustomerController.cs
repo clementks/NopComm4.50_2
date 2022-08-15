@@ -836,6 +836,16 @@ namespace Nop.Web.Controllers
                     {
                         await _genericAttributeService.SaveAttributeAsync(customer, NopCustomerDefaults.TimeZoneIdAttribute, model.TimeZoneId);
                     }
+
+
+                    // additional customer attributes/fields
+                    // required fields should not be empty or null as configured in the view settings(cshtml). Einvoiceaddress is optional field
+                    customer.NatureOfBusiness = model.NatureOfBusiness;
+                    customer.ContactPersonforPayment = model.ContactPersonforPayment;
+                    customer.ContactPersonAttention = model.ContactPersonAttention;
+                    customer.Einvoiceaddress = model.Einvoiceaddress;
+                    await _customerService.UpdateCustomerAsync(customer);
+
                     //VAT number
                     if (_taxSettings.EuVatEnabled)
                     {
@@ -1006,6 +1016,7 @@ namespace Nop.Web.Controllers
                         await _customerService.UpdateCustomerAsync(customer);
                     }
 
+
                     //notifications
                     if (_customerSettings.NotifyNewCustomerRegistration)
                         await _workflowMessageService.SendCustomerRegisteredNotificationMessageAsync(customer,
@@ -1039,6 +1050,7 @@ namespace Nop.Web.Controllers
                             return await _customerRegistrationService.SignInCustomerAsync(customer, returnUrl, true);
 
                         default:
+
                             return RedirectToRoute("Homepage");
                     }
                 }
@@ -1049,9 +1061,10 @@ namespace Nop.Web.Controllers
             }
 
             //If we got this far, something failed, redisplay form
-            model = await _customerModelFactory.PrepareRegisterModelAsync(model, true, customerAttributesXml);
+            //model = await _customerModelFactory.PrepareRegisterModelAsync(model, true, customerAttributesXml);
 
-            return View(model);
+            //return View(model);
+            return RedirectToRoute("RegisterResult");
         }
 
         //available even when navigation is not allowed
@@ -1288,6 +1301,7 @@ namespace Nop.Web.Controllers
                     if (_customerSettings.FaxEnabled)
                         await _genericAttributeService.SaveAttributeAsync(customer, NopCustomerDefaults.FaxAttribute, model.Fax);
 
+
                     //newsletter
                     if (_customerSettings.NewsletterEnabled)
                     {
@@ -1328,6 +1342,14 @@ namespace Nop.Web.Controllers
                     //save customer attributes
                     await _genericAttributeService.SaveAttributeAsync(customer,
                         NopCustomerDefaults.CustomCustomerAttributes, customerAttributesXml);
+
+
+                    //save nature of business fields - added on 12-Aug-2022
+                    customer.NatureOfBusiness = model.NatureOfBusiness;
+
+                    // save contact person for payment -  added on 12-Aug-2022
+                    customer.ContactPersonforPayment = model.ContactPersonforPayment;
+                    await _customerService.UpdateCustomerAsync(customer);
 
                     //GDPR
                     if (_gdprSettings.GdprEnabled)

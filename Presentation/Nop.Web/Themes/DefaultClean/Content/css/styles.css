@@ -149,7 +149,8 @@ button, .button-1, .button-2 {
 }
 
 label, label + * {
-  vertical-align: middle;
+  /*vertical-align: middle;*/
+  text-align: left;
 }
 
 .master-wrapper-content {
@@ -314,6 +315,7 @@ label, label + * {
   text-align: center;
   font-size: 14px; /*reset zeroing*/
   color: #444;
+  text-align: left;
 }
 
 .inputs input[type="text"],
@@ -361,6 +363,7 @@ label, label + * {
   font-size: 20px;
   font-weight: normal;
   color: #e4434b;
+  text-align: left;
 }
 
 .message-error,

@@ -1763,6 +1763,31 @@ namespace Nop.Services.Customers
 
         #region nature of business
 
+
+        /// <summary>
+        /// Get nature of business in customer table
+        /// </summary>
+        /// <param name="customer">Customer</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation
+        /// The task result contains the customer full name
+        /// </returns>
+        public virtual async Task<string> GetNatureOfBusinessAsync(Customer customer)
+        {
+            if (customer == null)
+                throw new ArgumentNullException(nameof(customer));
+
+
+            var query = from cust in _customerRepository.Table
+                        where cust.Username == customer.Username
+                        select cust.NatureOfBusiness;
+            return await query.FirstOrDefaultAsync();
+
+            //var query = await _genericAttributeService.GetAttributeAsync<string>(customer, "NatureOfBusiness");
+          
+
+        }
+
         /// <summary>
         /// Get customer by nature Of Business
         /// </summary>

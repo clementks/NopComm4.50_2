@@ -16,10 +16,10 @@
         <form asp-route="Register" asp-route-returnurl="@Context.Request.Query["ReturnUrl"]" method="post" autocomplete="off">
             <div asp-validation-summary="ModelOnly" class="message-error"></div>
             <div class="fieldset">
-                <div class="title">
+                @*<div class="title">
                     <strong>@T("Account.YourPersonalDetails")</strong>
-                </div>
-                <div class="form-fields">
+                </div>*@
+                @*<div class="form-fields">*@
                     @if (Model.GenderEnabled)
                     {
                         <div class="inputs">
@@ -80,21 +80,6 @@
                             <span asp-validation-for="DateOfBirthYear"></span>
                         </div>
                     }
-                    <div class="inputs">
-                        <label asp-for="Email" asp-postfix=":"></label>
-                        <input asp-for="Email" />
-                        <nop-required />
-                        <span asp-validation-for="Email"></span>
-                    </div>
-                    @if (Model.EnteringEmailTwice)
-                    {
-                        <div class="inputs">
-                            <label asp-for="ConfirmEmail" asp-postfix=":"></label>
-                            <input asp-for="ConfirmEmail" />
-                            <nop-required />
-                            <span asp-validation-for="ConfirmEmail"></span>
-                        </div>
-                    }
                     @if (Model.UsernamesEnabled)
                     {
                         <div class="inputs">
@@ -109,12 +94,12 @@
                         </div>
 
                     }
-                </div>
+                @*</div>*@
             </div>
             @if (Model.CompanyEnabled || Model.DisplayVatNumber)
             {
                 <div class="fieldset">
-                    <div class="title">
+                    <div class="title" style="border-left">
                         <strong>@T("Account.CompanyDetails")</strong>
                     </div>
                     <div class="form-fields">
@@ -129,6 +114,44 @@
                                 }
                                 <span asp-validation-for="Company"></span>
                             </div>
+                            <div class="inputs">
+                                <label asp-for="NatureOfBusiness" asp-postfix=":"></label>
+                                <select asp-for="NatureOfBusiness" asp-items="Model.NatureOfBusinessList"></select>
+                                <nop-required />
+                                <span asp-validation-for="NatureOfBusiness"></span>
+                            </div>
+                            <div class="inputs">
+                                <label asp-for="ContactPersonAttention" asp-postfix=":"></label>
+                                <input asp-for="ContactPersonAttention" />
+                                <nop-required />
+                                <span asp-validation-for="ContactPersonAttention"></span>
+                            </div>
+                            <div class="inputs">
+                                <label asp-for="Einvoiceaddress" asp-postfix=":"></label>
+                                <input asp-for="Einvoiceaddress" />
+                                <span asp-validation-for="Einvoiceaddress"></span>
+                            </div>
+                            <div class="inputs">
+                                <label asp-for="ContactPersonforPayment" asp-postfix=":"></label>
+                                <input asp-for="ContactPersonforPayment" />
+                                <nop-required />
+                                <span asp-validation-for="ContactPersonforPayment"></span>
+                            </div>
+                            <div class="inputs">
+                                <label asp-for="Email" asp-postfix=":"></label>
+                                <input asp-for="Email" />
+                                <nop-required />
+                                <span asp-validation-for="Email"></span>
+                            </div>
+                            @if (Model.EnteringEmailTwice)
+                            {
+                                <div class="inputs">
+                                    <label asp-for="ConfirmEmail" asp-postfix=":"></label>
+                                    <input asp-for="ConfirmEmail" />
+                                    <nop-required />
+                                    <span asp-validation-for="ConfirmEmail"></span>
+                                </div>
+                            }
                         }
                         @if (Model.DisplayVatNumber)
                         {
@@ -279,7 +302,8 @@
                     </div>
                 </div>
             }
-            @if (Model.NewsletterEnabled || Model.CustomerAttributes.Count > 0)
+            // deselect this customerattributes options in the registration process - opt-in at your discretion
+            @*@if (Model.NewsletterEnabled || Model.CustomerAttributes.Count > 0)
             {
                 <div class="fieldset">
                     <div class="title">
@@ -294,13 +318,13 @@
                                 <span asp-validation-for="Newsletter"></span>
                             </div>
                         }
-                        @if (Model.CustomerAttributes.Count > 0)
+                       @if (Model.CustomerAttributes.Count > 0)
                         {
                             @await Html.PartialAsync("_CustomerAttributes", Model.CustomerAttributes)
                         }
                     </div>
                 </div>
-            }
+            }*@
             @if (Model.AllowCustomersToSetTimeZone)
             {
                 <div class="fieldset">

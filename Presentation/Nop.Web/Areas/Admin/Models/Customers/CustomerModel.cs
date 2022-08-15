@@ -92,6 +92,7 @@ namespace Nop.Web.Areas.Admin.Models.Customers
         [NopResourceDisplayName("Admin.Customers.Customers.Fields.Company")]
         public string Company { get; set; }
 
+        [NopResourceDisplayName("Admin.Customers.Customers.Fields.NatureOfBusiness")]
         public string NatureOfBusiness { get; set; }
 
         public IList<SelectListItem> NatureOfBusinessList { get; set; }
@@ -257,6 +258,22 @@ namespace Nop.Web.Areas.Admin.Models.Customers
         public CustomerBackInStockSubscriptionSearchModel CustomerBackInStockSubscriptionSearchModel { get; set; }
 
         public CustomerAssociatedExternalAuthRecordsSearchModel CustomerAssociatedExternalAuthRecordsSearchModel { get; set; }
+
+        public double CreditLimit { get; set; }
+
+        [NopResourceDisplayName("Admin.Customers.Customers.Fields.ContactPersonAttention")]
+        public string ContactPersonAttention { get; set; }
+
+        [NopResourceDisplayName("Admin.Customers.Customers.Fields.ContactPersonforPayment")]
+        /// <summary>
+        /// Gets or sets the Contact Person for payment
+        /// </summary>
+        public string ContactPersonforPayment { get; set; }
+        public string Einvoiceaddress { get; set; }
+
+        [NopResourceDisplayName("Admin.Customers.Customers.Fields.ExpectedSalesVolume")]
+        public double ExpectedSalesVolume { get; set; }
+
 
         #endregion
 

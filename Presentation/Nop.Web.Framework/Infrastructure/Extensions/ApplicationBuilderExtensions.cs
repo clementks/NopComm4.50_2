@@ -77,7 +77,8 @@ namespace Nop.Web.Framework.Infrastructure.Extensions
                 // add nature of business entity/table migration 
                 var natureOfBusinessAssembly = Assembly.GetAssembly(typeof(M20072022_100003_AddNatureOfBusiness));
                 migrationManager.ApplyUpMigrations(natureOfBusinessAssembly, MigrationProcessType.Update);
-                
+                //migrationManager.ApplyDownMigrations(natureOfBusinessAssembly);
+
                 var taskScheduler = engine.Resolve<ITaskScheduler>();
                 taskScheduler.InitializeAsync().Wait();
                 taskScheduler.StartScheduler();

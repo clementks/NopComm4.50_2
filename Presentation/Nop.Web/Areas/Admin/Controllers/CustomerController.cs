@@ -512,6 +512,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             if (customer == null || customer.Deleted)
                 return RedirectToAction("List");
 
+
             //prepare model
             var model = await _customerModelFactory.PrepareCustomerModelAsync(null, customer);
 
@@ -529,6 +530,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             var customer = await _customerService.GetCustomerByIdAsync(model.Id);
             if (customer == null || customer.Deleted)
                 return RedirectToAction("List");
+
 
             //validate customer roles
             var allCustomerRoles = await _customerService.GetAllCustomerRolesAsync(true);
@@ -591,6 +593,16 @@ namespace Nop.Web.Areas.Admin.Controllers
                         else
                             customer.Username = model.Username;
                     }
+
+                    // additional customer attributes/fields
+                    // required fields should not be empty or null as configured in the view settings(cshtml). Einvoiceaddress is optional field
+                    customer.NatureOfBusiness = model.NatureOfBusiness;
+                    customer.ContactPersonforPayment = model.ContactPersonforPayment;
+                    customer.ContactPersonAttention = model.ContactPersonAttention;
+                    customer.Einvoiceaddress = model.Einvoiceaddress;
+                    customer.CreditLimit = model.CreditLimit;
+                    customer.ExpectedSalesVolume = model.ExpectedSalesVolume;
+                    await _customerService.UpdateCustomerAsync(customer);
 
                     //VAT number
                     if (_taxSettings.EuVatEnabled)

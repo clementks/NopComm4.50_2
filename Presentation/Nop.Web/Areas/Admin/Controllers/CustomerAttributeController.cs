@@ -271,7 +271,7 @@ namespace Nop.Web.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 var cav = model.ToEntity<CustomerAttributeValue>();
-                await _customerAttributeService.InsertCustomerAttributeValueAsync(cav);
+                await _customerAttributeService.InsertCustomerAttributeValueAsync(cav);  // insert into database
 
                 //activity log
                 await _customerActivityService.InsertActivityAsync("AddNewCustomerAttributeValue",

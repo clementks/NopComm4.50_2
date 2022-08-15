@@ -129,27 +129,6 @@ namespace Nop.Data.Migrations.UpgradeTo450
                 );
             }
 
-            //add or create table "Nature of Business"
-            // Create.Table("NatureOfBusiness")
-            //.WithColumn(nameof(NatureOfBusiness.Id)).AsInt64().NotNullable().Identity().PrimaryKey()
-            //.WithColumn(nameof(NatureOfBusiness.NatureOfBusinessName)).AsString().NotNullable().Unique()
-            //.WithColumn(nameof(NatureOfBusiness.Deleted)).AsBoolean().Nullable()
-            //.WithColumn(nameof(NatureOfBusiness.SubjectToAcl)).AsBoolean().NotNullable()
-            //.WithColumn(nameof(NatureOfBusiness.Published)).AsBoolean().NotNullable()
-            //.WithColumn(nameof(NatureOfBusiness.CreatedOnUtc)).AsDateTime2().NotNullable()
-            //.WithColumn(nameof(NatureOfBusiness.UpdatedOnUtc)).AsDateTime2().NotNullable();
-
-
-            // add or create table "Customer Nature of Business"
-            // Create.Table("CustomerNatureOfBusiness")
-            //.WithColumn("Id").AsInt32().NotNullable().PrimaryKey().Identity()
-            //.WithColumn(nameof(CustomerNatureOfBusiness.NatureOfBusinessId)).AsInt32().ForeignKey<NatureOfBusiness>(onDelete: Rule.None).NotNullable()
-            //.WithColumn(nameof(CustomerNatureOfBusiness.NatureOfBusinessName)).AsString(255).NotNullable().Unique()
-            //.WithColumn(nameof(CustomerNatureOfBusiness.CustomerId)).AsInt32().ForeignKey<Customer>(onDelete: Rule.None).NotNullable()
-            //.WithColumn(nameof(CustomerNatureOfBusiness.Username)).AsString(1000).NotNullable().Unique()
-            //.WithColumn(nameof(CustomerNatureOfBusiness.Email)).AsString(1000)
-            //.WithColumn(nameof(CustomerNatureOfBusiness.Published)).AsBoolean().NotNullable()
-            //.WithColumn(nameof(CustomerNatureOfBusiness.DisplayOrder)).AsInt32();
 
 
         }

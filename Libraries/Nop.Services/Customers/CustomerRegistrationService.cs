@@ -321,6 +321,7 @@ namespace Nop.Services.Customers
                     request.StoreId, await _localizationService.GetResourceAsync("RewardPoints.Message.EarnedForRegistration"), endDate: endDate);
             }
 
+
             await _customerService.UpdateCustomerAsync(request.Customer);
 
             return result;

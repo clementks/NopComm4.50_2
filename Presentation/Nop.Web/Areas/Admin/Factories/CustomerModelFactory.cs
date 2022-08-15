@@ -640,19 +640,34 @@ namespace Nop.Web.Areas.Admin.Factories
                     customerModel.Company = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.CompanyAttribute);
                     customerModel.Phone = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.PhoneAttribute);
                     customerModel.ZipPostalCode = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.ZipPostalCodeAttribute);
-                    customerModel.NatureOfBusiness = await _genericAttributeService.GetAttributeAsync<string>(customer, NopCustomerDefaults.NatureOfBusinessAttribute);
                     customerModel.CreatedOn = await _dateTimeHelper.ConvertToUserTimeAsync(customer.CreatedOnUtc, DateTimeKind.Utc);
                     customerModel.LastActivityDate = await _dateTimeHelper.ConvertToUserTimeAsync(customer.LastActivityDateUtc, DateTimeKind.Utc);
 
-                    //fill in additional values (not existing in the entity)
+                    // fill in additional values (not existing in te entity)
                     customerModel.CustomerRoleNames = string.Join(", ",
-                        (await _customerService.GetCustomerRolesAsync(customer)).Select(role => role.Name));
+                                                    (await _customerService.GetCustomerRolesAsync(customer)).Select(role => role.Name));
+
                     if (_customerSettings.AllowCustomersToUploadAvatars)
                     {
                         var avatarPictureId = await _genericAttributeService.GetAttributeAsync<int>(customer, NopCustomerDefaults.AvatarPictureIdAttribute);
                         customerModel.AvatarUrl = await _pictureService
                             .GetPictureUrlAsync(avatarPictureId, _mediaSettings.AvatarPictureSize, _customerSettings.DefaultAvatarEnabled, defaultPictureType: PictureType.Avatar);
                     }
+
+                    customerModel.ContactPersonAttention = string.Join(", ",
+                         (await _customerService.GetAllCustomersAsync(username: customer.Username)).Select(contact => contact.ContactPersonAttention));
+                    customerModel.ContactPersonforPayment = string.Join(", ",
+                        (await _customerService.GetAllCustomersAsync(username: customer.Username)).Select(contact => contact.ContactPersonforPayment));
+                    customerModel.CreditLimit = double.Parse(string.Join(", ",
+                        (await _customerService.GetAllCustomersAsync(username: customer.Username)).Select(credit => credit.CreditLimit)));
+
+                    //customerModel.NatureOfBusiness = await _customerService.GetNatureOfBusinessAsync(customer); - working code
+                    customerModel.NatureOfBusiness = string.Join(", ",
+                       (await _customerService.GetAllCustomersAsync(username: customer.Username)).Select(nob => nob.NatureOfBusiness));
+                    customerModel.ExpectedSalesVolume = double.Parse(string.Join(", ",
+                       (await _customerService.GetAllCustomersAsync(username: customer.Username)).Select(esv => esv.ExpectedSalesVolume)));
+
+
 
                     return customerModel;
                 });
@@ -688,7 +703,7 @@ namespace Nop.Web.Areas.Admin.Factories
                 model.AllowReSendingOfActivationMessage = await _customerService.IsRegisteredAsync(customer) && !customer.Active &&
                     _customerSettings.UserRegistrationType == UserRegistrationType.EmailValidation;
                 model.GdprEnabled = _gdprSettings.GdprEnabled;
-                model.NatureOfBusiness = (await _customerService.GetCustomerNatureOfBusinessByCustomerIdAsync(customer.Id))?.NatureOfBusinessName;
+                //model.NatureOfBusiness = (await _customerService.GetCustomerNatureOfBusinessByCustomerIdAsync(customer.Id))?.NatureOfBusinessName;
                 model.MultiFactorAuthenticationProvider = await _genericAttributeService
                     .GetAttributeAsync<string>(customer, NopCustomerDefaults.SelectedMultiFactorAuthenticationProviderAttribute);
 
@@ -745,6 +760,18 @@ namespace Nop.Web.Areas.Admin.Factories
                             .WhereAwait(async store => await _newsLetterSubscriptionService.GetNewsLetterSubscriptionByEmailAndStoreIdAsync(customer.Email, store.Id) != null)
                             .Select(store => store.Id).ToListAsync();
                     }
+                    model.ContactPersonAttention = string.Join(", ",
+                             (await _customerService.GetAllCustomersAsync(username: customer.Username)).Select(contact => contact.ContactPersonAttention));
+                    model.ContactPersonforPayment = string.Join(", ",
+                             (await _customerService.GetAllCustomersAsync(username: customer.Username)).Select(contact => contact.ContactPersonforPayment));
+                    model.CreditLimit = double.Parse(string.Join(", ",
+                             (await _customerService.GetAllCustomersAsync(username: customer.Username)).Select(credit => credit.CreditLimit)));
+
+                    model.NatureOfBusiness = string.Join(", ",
+                            (await _customerService.GetAllCustomersAsync(username: customer.Username)).Select(nob => nob.NatureOfBusiness));
+                    model.ExpectedSalesVolume = double.Parse(string.Join(", ",
+                             (await _customerService.GetAllCustomersAsync(username: customer.Username)).Select(esv => esv.ExpectedSalesVolume)));
+
                 }
                 //prepare reward points model
                 model.DisplayRewardPointsHistory = _rewardPointsSettings.Enabled;
@@ -914,8 +941,8 @@ namespace Nop.Web.Areas.Admin.Factories
         /// </returns>
         public virtual async Task<NatureOfBusinessModel> PrepareNatureOfBusinessModelAsync(NatureOfBusinessModel model, Natureofbusiness natureofbusiness, bool excludeProperties = false)
         {
-            if (natureofbusiness == null)
-                throw new ArgumentNullException(nameof(natureofbusiness));
+            //if (natureofbusiness == null)
+            //    throw new ArgumentNullException(nameof(natureofbusiness));
 
             if (natureofbusiness != null)
             {

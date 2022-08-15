@@ -245,140 +245,144 @@ namespace Nop.Web.Factories
                 model.Email = customer.Email;
                 model.Username = customer.Username;
                 model.ContactPersonforPayment = customer.ContactPersonforPayment;
-                model.NatureOfBusinessList = new List<SelectListItem>
-                                            {
-                                                new SelectListItem { Text = "Education/Training Provider", Value = "Education/Training Provider" },
-                                                new SelectListItem { Text = "Manufacturing", Value = "Manufacturing" },
-                                                new SelectListItem { Text = "Information Technology", Value = "Information Technology" },
+                model.NatureOfBusiness = customer.NatureOfBusiness;
 
-                                            };
-            }
-            else
-            {
+
+                //prepare to list out all the nature of business as a SelectListItem 
+
+                model.NatureOfBusinessList = (await _customerService.GetAllNatureOfBusinessAsync()).Select(nob => new SelectListItem
+                {
+                    Value = nob.Name,
+                    Text = nob.Name
+                    //Selected = model.NatureOfBusiness.Contains(nob.Name)
+                }).ToList();
+
+
                 if (_customerSettings.UsernamesEnabled && !_customerSettings.AllowUsersToChangeUsernames)
                     model.Username = customer.Username;
-            }
 
-            if (_customerSettings.UserRegistrationType == UserRegistrationType.EmailValidation)
-                model.EmailToRevalidate = customer.EmailToRevalidate;
 
-            var currentLanguage = await _workContext.GetWorkingLanguageAsync();
-            //countries and states
-            if (_customerSettings.CountryEnabled)
-            {
-                model.AvailableCountries.Add(new SelectListItem { Text = await _localizationService.GetResourceAsync("Address.SelectCountry"), Value = "0" });
-                foreach (var c in await _countryService.GetAllCountriesAsync(currentLanguage.Id))
+                if (_customerSettings.UserRegistrationType == UserRegistrationType.EmailValidation)
+                    model.EmailToRevalidate = customer.EmailToRevalidate;
+
+                var currentLanguage = await _workContext.GetWorkingLanguageAsync();
+                //countries and states
+                if (_customerSettings.CountryEnabled)
                 {
-                    model.AvailableCountries.Add(new SelectListItem
+                    model.AvailableCountries.Add(new SelectListItem { Text = await _localizationService.GetResourceAsync("Address.SelectCountry"), Value = "0" });
+                    foreach (var c in await _countryService.GetAllCountriesAsync(currentLanguage.Id))
                     {
-                        Text = await _localizationService.GetLocalizedAsync(c, x => x.Name),
-                        Value = c.Id.ToString(),
-                        Selected = c.Id == model.CountryId
-                    });
-                }
-
-                if (_customerSettings.StateProvinceEnabled)
-                {
-                    //states
-                    var states = (await _stateProvinceService.GetStateProvincesByCountryIdAsync(model.CountryId, currentLanguage.Id)).ToList();
-                    if (states.Any())
-                    {
-                        model.AvailableStates.Add(new SelectListItem { Text = await _localizationService.GetResourceAsync("Address.SelectState"), Value = "0" });
-
-                        foreach (var s in states)
+                        model.AvailableCountries.Add(new SelectListItem
                         {
-                            model.AvailableStates.Add(new SelectListItem { Text = await _localizationService.GetLocalizedAsync(s, x => x.Name), Value = s.Id.ToString(), Selected = (s.Id == model.StateProvinceId) });
-                        }
-                    }
-                    else
-                    {
-                        var anyCountrySelected = model.AvailableCountries.Any(x => x.Selected);
-
-                        model.AvailableStates.Add(new SelectListItem
-                        {
-                            Text = await _localizationService.GetResourceAsync(anyCountrySelected ? "Address.Other" : "Address.SelectState"),
-                            Value = "0"
+                            Text = await _localizationService.GetLocalizedAsync(c, x => x.Name),
+                            Value = c.Id.ToString(),
+                            Selected = c.Id == model.CountryId
                         });
                     }
 
+                    if (_customerSettings.StateProvinceEnabled)
+                    {
+                        //states
+                        var states = (await _stateProvinceService.GetStateProvincesByCountryIdAsync(model.CountryId, currentLanguage.Id)).ToList();
+                        if (states.Any())
+                        {
+                            model.AvailableStates.Add(new SelectListItem { Text = await _localizationService.GetResourceAsync("Address.SelectState"), Value = "0" });
+
+                            foreach (var s in states)
+                            {
+                                model.AvailableStates.Add(new SelectListItem { Text = await _localizationService.GetLocalizedAsync(s, x => x.Name), Value = s.Id.ToString(), Selected = (s.Id == model.StateProvinceId) });
+                            }
+                        }
+                        else
+                        {
+                            var anyCountrySelected = model.AvailableCountries.Any(x => x.Selected);
+
+                            model.AvailableStates.Add(new SelectListItem
+                            {
+                                Text = await _localizationService.GetResourceAsync(anyCountrySelected ? "Address.Other" : "Address.SelectState"),
+                                Value = "0"
+                            });
+                        }
+
+                    }
+                }
+
+
+                model.DisplayVatNumber = _taxSettings.EuVatEnabled;
+                model.VatNumberStatusNote = await _localizationService.GetLocalizedEnumAsync((VatNumberStatus)await _genericAttributeService
+                    .GetAttributeAsync<int>(customer, NopCustomerDefaults.VatNumberStatusIdAttribute));
+                model.FirstNameEnabled = _customerSettings.FirstNameEnabled;
+                model.LastNameEnabled = _customerSettings.LastNameEnabled;
+                model.FirstNameRequired = _customerSettings.FirstNameRequired;
+                model.LastNameRequired = _customerSettings.LastNameRequired;
+                model.GenderEnabled = _customerSettings.GenderEnabled;
+                model.DateOfBirthEnabled = _customerSettings.DateOfBirthEnabled;
+                model.DateOfBirthRequired = _customerSettings.DateOfBirthRequired;
+                model.CompanyEnabled = _customerSettings.CompanyEnabled;
+                model.CompanyRequired = _customerSettings.CompanyRequired;
+                model.StreetAddressEnabled = _customerSettings.StreetAddressEnabled;
+                model.StreetAddressRequired = _customerSettings.StreetAddressRequired;
+                model.StreetAddress2Enabled = _customerSettings.StreetAddress2Enabled;
+                model.StreetAddress2Required = _customerSettings.StreetAddress2Required;
+                model.ZipPostalCodeEnabled = _customerSettings.ZipPostalCodeEnabled;
+                model.ZipPostalCodeRequired = _customerSettings.ZipPostalCodeRequired;
+                model.CityEnabled = _customerSettings.CityEnabled;
+                model.CityRequired = _customerSettings.CityRequired;
+                model.CountyEnabled = _customerSettings.CountyEnabled;
+                model.CountyRequired = _customerSettings.CountyRequired;
+                model.CountryEnabled = _customerSettings.CountryEnabled;
+                model.CountryRequired = _customerSettings.CountryRequired;
+                model.StateProvinceEnabled = _customerSettings.StateProvinceEnabled;
+                model.StateProvinceRequired = _customerSettings.StateProvinceRequired;
+                model.PhoneEnabled = _customerSettings.PhoneEnabled;
+                model.PhoneRequired = _customerSettings.PhoneRequired;
+                model.FaxEnabled = _customerSettings.FaxEnabled;
+                model.FaxRequired = _customerSettings.FaxRequired;
+                model.NewsletterEnabled = _customerSettings.NewsletterEnabled;
+                model.UsernamesEnabled = _customerSettings.UsernamesEnabled;
+                model.AllowUsersToChangeUsernames = _customerSettings.AllowUsersToChangeUsernames;
+                model.CheckUsernameAvailabilityEnabled = _customerSettings.CheckUsernameAvailabilityEnabled;
+                model.SignatureEnabled = _forumSettings.ForumsEnabled && _forumSettings.SignaturesEnabled;
+
+                //external authentication
+                var currentCustomer = await _workContext.GetCurrentCustomerAsync();
+                model.AllowCustomersToRemoveAssociations = _externalAuthenticationSettings.AllowCustomersToRemoveAssociations;
+                model.NumberOfExternalAuthenticationProviders = (await _authenticationPluginManager
+                    .LoadActivePluginsAsync(currentCustomer, store.Id))
+                    .Count;
+                foreach (var record in await _externalAuthenticationService.GetCustomerExternalAuthenticationRecordsAsync(customer))
+                {
+                    var authMethod = await _authenticationPluginManager
+                        .LoadPluginBySystemNameAsync(record.ProviderSystemName, currentCustomer, store.Id);
+                    if (!_authenticationPluginManager.IsPluginActive(authMethod))
+                        continue;
+
+                    model.AssociatedExternalAuthRecords.Add(new CustomerInfoModel.AssociatedExternalAuthModel
+                    {
+                        Id = record.Id,
+                        Email = record.Email,
+                        ExternalIdentifier = !string.IsNullOrEmpty(record.ExternalDisplayIdentifier)
+                            ? record.ExternalDisplayIdentifier : record.ExternalIdentifier,
+                        AuthMethodName = await _localizationService.GetLocalizedFriendlyNameAsync(authMethod, currentLanguage.Id)
+                    });
+                }
+
+                //custom customer attributes
+                var customAttributes = await PrepareCustomCustomerAttributesAsync(customer, overrideCustomCustomerAttributesXml);
+                foreach (var attribute in customAttributes)
+                    model.CustomerAttributes.Add(attribute);
+
+                //GDPR
+                if (_gdprSettings.GdprEnabled)
+                {
+                    var consents = (await _gdprService.GetAllConsentsAsync()).Where(consent => consent.DisplayOnCustomerInfoPage).ToList();
+                    foreach (var consent in consents)
+                    {
+                        var accepted = await _gdprService.IsConsentAcceptedAsync(consent.Id, currentCustomer.Id);
+                        model.GdprConsents.Add(await PrepareGdprConsentModelAsync(consent, accepted.HasValue && accepted.Value));
+                    }
                 }
             }
-
-            model.DisplayVatNumber = _taxSettings.EuVatEnabled;
-            model.VatNumberStatusNote = await _localizationService.GetLocalizedEnumAsync((VatNumberStatus)await _genericAttributeService
-                .GetAttributeAsync<int>(customer, NopCustomerDefaults.VatNumberStatusIdAttribute));
-            model.FirstNameEnabled = _customerSettings.FirstNameEnabled;
-            model.LastNameEnabled = _customerSettings.LastNameEnabled;
-            model.FirstNameRequired = _customerSettings.FirstNameRequired;
-            model.LastNameRequired = _customerSettings.LastNameRequired;
-            model.GenderEnabled = _customerSettings.GenderEnabled;
-            model.DateOfBirthEnabled = _customerSettings.DateOfBirthEnabled;
-            model.DateOfBirthRequired = _customerSettings.DateOfBirthRequired;
-            model.CompanyEnabled = _customerSettings.CompanyEnabled;
-            model.CompanyRequired = _customerSettings.CompanyRequired;
-            model.StreetAddressEnabled = _customerSettings.StreetAddressEnabled;
-            model.StreetAddressRequired = _customerSettings.StreetAddressRequired;
-            model.StreetAddress2Enabled = _customerSettings.StreetAddress2Enabled;
-            model.StreetAddress2Required = _customerSettings.StreetAddress2Required;
-            model.ZipPostalCodeEnabled = _customerSettings.ZipPostalCodeEnabled;
-            model.ZipPostalCodeRequired = _customerSettings.ZipPostalCodeRequired;
-            model.CityEnabled = _customerSettings.CityEnabled;
-            model.CityRequired = _customerSettings.CityRequired;
-            model.CountyEnabled = _customerSettings.CountyEnabled;
-            model.CountyRequired = _customerSettings.CountyRequired;
-            model.CountryEnabled = _customerSettings.CountryEnabled;
-            model.CountryRequired = _customerSettings.CountryRequired;
-            model.StateProvinceEnabled = _customerSettings.StateProvinceEnabled;
-            model.StateProvinceRequired = _customerSettings.StateProvinceRequired;
-            model.PhoneEnabled = _customerSettings.PhoneEnabled;
-            model.PhoneRequired = _customerSettings.PhoneRequired;
-            model.FaxEnabled = _customerSettings.FaxEnabled;
-            model.FaxRequired = _customerSettings.FaxRequired;
-            model.NewsletterEnabled = _customerSettings.NewsletterEnabled;
-            model.UsernamesEnabled = _customerSettings.UsernamesEnabled;
-            model.AllowUsersToChangeUsernames = _customerSettings.AllowUsersToChangeUsernames;
-            model.CheckUsernameAvailabilityEnabled = _customerSettings.CheckUsernameAvailabilityEnabled;
-            model.SignatureEnabled = _forumSettings.ForumsEnabled && _forumSettings.SignaturesEnabled;
-
-            //external authentication
-            var currentCustomer = await _workContext.GetCurrentCustomerAsync();
-            model.AllowCustomersToRemoveAssociations = _externalAuthenticationSettings.AllowCustomersToRemoveAssociations;
-            model.NumberOfExternalAuthenticationProviders = (await _authenticationPluginManager
-                .LoadActivePluginsAsync(currentCustomer, store.Id))
-                .Count;
-            foreach (var record in await _externalAuthenticationService.GetCustomerExternalAuthenticationRecordsAsync(customer))
-            {
-                var authMethod = await _authenticationPluginManager
-                    .LoadPluginBySystemNameAsync(record.ProviderSystemName, currentCustomer, store.Id);
-                if (!_authenticationPluginManager.IsPluginActive(authMethod))
-                    continue;
-
-                model.AssociatedExternalAuthRecords.Add(new CustomerInfoModel.AssociatedExternalAuthModel
-                {
-                    Id = record.Id,
-                    Email = record.Email,
-                    ExternalIdentifier = !string.IsNullOrEmpty(record.ExternalDisplayIdentifier)
-                        ? record.ExternalDisplayIdentifier : record.ExternalIdentifier,
-                    AuthMethodName = await _localizationService.GetLocalizedFriendlyNameAsync(authMethod, currentLanguage.Id)
-                });
-            }
-
-            //custom customer attributes
-            var customAttributes = await PrepareCustomCustomerAttributesAsync(customer, overrideCustomCustomerAttributesXml);
-            foreach (var attribute in customAttributes)
-                model.CustomerAttributes.Add(attribute);
-
-            //GDPR
-            if (_gdprSettings.GdprEnabled)
-            {
-                var consents = (await _gdprService.GetAllConsentsAsync()).Where(consent => consent.DisplayOnCustomerInfoPage).ToList();
-                foreach (var consent in consents)
-                {
-                    var accepted = await _gdprService.IsConsentAcceptedAsync(consent.Id, currentCustomer.Id);
-                    model.GdprConsents.Add(await PrepareGdprConsentModelAsync(consent, accepted.HasValue && accepted.Value));
-                }
-            }
-
             return model;
         }
 
@@ -502,6 +506,14 @@ namespace Nop.Web.Factories
                     model.GdprConsents.Add(await PrepareGdprConsentModelAsync(consent, false));
                 }
             }
+
+            // nature of business
+            model.NatureOfBusinessList = (await _customerService.GetAllNatureOfBusinessAsync()).Select(nob => new SelectListItem
+            {
+                Value = nob.Name,
+                Text = nob.Name
+                //Selected = model.NatureOfBusiness.Contains(nob.Name)
+            }).ToList();
 
             return model;
         }

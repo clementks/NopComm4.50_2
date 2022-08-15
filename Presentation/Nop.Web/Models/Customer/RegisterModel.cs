@@ -17,6 +17,7 @@ namespace Nop.Web.Models.Customer
             AvailableStates = new List<SelectListItem>();
             CustomerAttributes = new List<CustomerAttributeModel>();
             GdprConsents = new List<GdprConsentModel>();
+            NatureOfBusinessList = new List<SelectListItem>();
         }
         
         [DataType(DataType.EmailAddress)]
@@ -147,5 +148,26 @@ namespace Nop.Web.Models.Customer
         public IList<CustomerAttributeModel> CustomerAttributes { get; set; }
 
         public IList<GdprConsentModel> GdprConsents { get; set; }
+
+        // added NatureOfBusiness and ContactPersonforPayment
+
+        public IList<SelectListItem> NatureOfBusinessList { get; set; }
+
+        [NopResourceDisplayName("Account.Fields.NatureOfBusiness")]
+        public string NatureOfBusiness { get; set; }
+
+        [NopResourceDisplayName("Account.Fields.ContactPersonAttention")]
+        public string ContactPersonAttention { get; set; }
+
+        [NopResourceDisplayName("Account.Fields.Einvoiceaddress")]
+        public string Einvoiceaddress { get; set; }
+
+        [NopResourceDisplayName("Account.Fields.PaymentContactPerson")]
+        public string ContactPersonforPayment { get; set; }
+
+
+
+
+
     }
 }

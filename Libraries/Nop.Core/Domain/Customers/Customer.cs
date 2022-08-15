@@ -142,5 +142,19 @@ namespace Nop.Core.Domain.Customers
         /// Gets or sets the shipping address identifier
         /// </summary>
         public int? ShippingAddressId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Credit Limit
+        /// </summary>
+        public double CreditLimit { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Expected sales volume
+        /// </summary>
+        public double ExpectedSalesVolume { get; set; }
+
+        public string ContactPersonAttention { get; set; }
+
+        public string Einvoiceaddress { get; set; }
     }
 }

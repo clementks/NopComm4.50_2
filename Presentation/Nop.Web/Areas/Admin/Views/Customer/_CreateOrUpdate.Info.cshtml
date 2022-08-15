@@ -76,24 +76,27 @@
             <span asp-validation-for="Password"></span>
         </div>
     </div>
-    <div class="form-group row">
-        <div class="col-md-3">
-            <nop-label asp-for="FirstName" />
+    @if (Model.LastNameEnabled && Model.FirstNameEnabled)
+    {
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="FirstName" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="FirstName" />
+                <span asp-validation-for="FirstName"></span>
+            </div>
         </div>
-        <div class="col-md-9">
-            <nop-editor asp-for="FirstName" />
-            <span asp-validation-for="FirstName"></span>
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="LastName" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="LastName" />
+                <span asp-validation-for="LastName"></span>
+            </div>
         </div>
-    </div>
-    <div class="form-group row">
-        <div class="col-md-3">
-            <nop-label asp-for="LastName" />
-        </div>
-        <div class="col-md-9">
-            <nop-editor asp-for="LastName" />
-            <span asp-validation-for="LastName"></span>
-        </div>
-    </div>
+    }
     @if (Model.GenderEnabled)
     {
         <div class="form-group row">
@@ -142,6 +145,15 @@
             </div>
         </div>
     }
+        <div class="form-group row">
+            <div class="col-md-3">
+                <nop-label asp-for="NatureOfBusiness" />
+            </div>
+            <div class="col-md-9">
+                <nop-editor asp-for="NatureOfBusiness" />
+                <span asp-validation-for="NatureOfBusiness"></span>
+            </div>
+        </div>
     @if (Model.StreetAddressEnabled)
     {
         <div class="form-group row">
@@ -214,6 +226,15 @@
             </div>
         </div>
     }
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="Einvoiceaddress" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="Einvoiceaddress" />
+            <span asp-validation-for="Einvoiceaddress"></span>
+        </div>
+    </div>
     @if (Model.CountryEnabled && Model.StateProvinceEnabled)
     {
         <div class="form-group row">
@@ -226,6 +247,15 @@
             </div>
         </div>
     }
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="ContactPersonAttention" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ContactPersonAttention" />
+            <span asp-validation-for="ContactPersonAttention"></span>
+        </div>
+    </div>
     @if (Model.PhoneEnabled)
     {
         <div class="form-group row">
@@ -238,6 +268,15 @@
             </div>
         </div>
     }
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="ContactPersonforPayment" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ContactPersonforPayment" />
+            <span asp-validation-for="ContactPersonforPayment"></span>
+        </div>
+    </div>
     @if (Model.FaxEnabled)
     {
         <div class="form-group row">
@@ -254,6 +293,24 @@
     {
         @await Html.PartialAsync("_CustomerAttributes", Model.CustomerAttributes)
     }
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="CreditLimit" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="CreditLimit" />
+            <span asp-validation-for="CreditLimit"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="ExpectedSalesVolume" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ExpectedSalesVolume" />
+            <span asp-validation-for="ExpectedSalesVolume"></span>
+        </div>
+    </div>
     <div class="form-group row">
         <div class="col-md-3">
             <nop-label asp-for="IsTaxExempt" />

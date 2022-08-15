@@ -150,7 +150,7 @@
                 <nop-label asp-for="NatureOfBusiness" />
             </div>
             <div class="col-md-9">
-                <nop-editor asp-for="NatureOfBusiness" />
+                <nop-select asp-for="NatureOfBusiness" asp-items="Model.NatureOfBusinessList" />
                 <span asp-validation-for="NatureOfBusiness"></span>
             </div>
         </div>

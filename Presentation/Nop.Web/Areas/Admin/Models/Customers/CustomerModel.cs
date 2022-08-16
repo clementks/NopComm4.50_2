@@ -39,6 +39,7 @@ namespace Nop.Web.Areas.Admin.Models.Customers
             CustomerActivityLogSearchModel = new CustomerActivityLogSearchModel();
             CustomerBackInStockSubscriptionSearchModel = new CustomerBackInStockSubscriptionSearchModel();
             CustomerAssociatedExternalAuthRecordsSearchModel = new CustomerAssociatedExternalAuthRecordsSearchModel();
+            BillingType = new List<SelectListItem>();
         }
 
         #endregion
@@ -209,6 +210,10 @@ namespace Nop.Web.Areas.Admin.Models.Customers
         public string MultiFactorAuthenticationProvider { get; set; }
 
         public IList<SelectListItem> AvailableCustomerRoles { get; set; }
+
+        public IList<SelectListItem> BillingTypeList { get; set; }
+
+        public string BillingType { get; set; }
 
         [NopResourceDisplayName("Admin.Customers.Customers.Fields.CustomerRoles")]
         public IList<int> SelectedCustomerRoleIds { get; set; }

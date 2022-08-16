@@ -775,6 +775,14 @@ namespace Nop.Web.Areas.Admin.Factories
                     model.ExpectedSalesVolume = decimal.Parse(string.Join(", ",
                              (await _customerService.GetAllCustomersAsync(username: customer.Username)).Select(esv => esv.ExpectedSalesVolume)), NumberStyles.AllowCurrencySymbol, CultureInfo.InvariantCulture);
 
+                    model.BillingType = string.Join(", ",
+                            (await _customerService.GetAllCustomersAsync(username: customer.Username)).Select(billing => billing.BillingType));
+                    model.BillingTypeList = new List<SelectListItem>
+                                            {
+                                                new SelectListItem { Text = "Billing Milestones", Value = "Billing Milestones" },
+                                                new SelectListItem { Text = "Progressive Claim", Value = "Progressive Claim" }
+
+                                            };
 
                     model.NatureOfBusinessList = (await _customerService.GetAllNatureOfBusinessAsync()).Select(nob => new SelectListItem
                     {

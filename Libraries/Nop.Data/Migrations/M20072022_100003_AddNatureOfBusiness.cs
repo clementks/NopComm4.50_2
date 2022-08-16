@@ -63,7 +63,8 @@ namespace Nop.Data.Migrations
             Alter.Table("Customer")
                 .AlterColumn(nameof(Customer.ExpectedSalesVolume)).AsDecimal(16,2).Nullable()
             //   .AddColumn(nameof(Customer.ContactPersonAttention)).AsString(400).Nullable()
-                .AlterColumn(nameof(Customer.CreditLimit)).AsDecimal(12,2).Nullable();
+                .AlterColumn(nameof(Customer.CreditLimit)).AsDecimal(12,2).Nullable()
+                .AddColumn(nameof(Customer.BillingType)).AsString(400).Nullable();
 
 
             //Alter.Table("CustomerNatureOfBusiness")

@@ -302,15 +302,6 @@
             <span asp-validation-for="CreditLimit"></span>
         </div>
     </div>
-    <div class="form-group row">
-        <div class="col-md-3">
-            <nop-label asp-for="ExpectedSalesVolume" />
-        </div>
-        <div class="col-md-9">
-            <nop-editor asp-for="ExpectedSalesVolume" />
-            <span asp-validation-for="ExpectedSalesVolume"></span>
-        </div>
-    </div>
     @*<div class="form-group row">
         <div class="col-md-3">
             <nop-label asp-for="IsTaxExempt" />
@@ -353,7 +344,7 @@
             </div>
         </div>
     }
-    @if (Model.AvailableNewsletterSubscriptionStores != null && Model.AvailableNewsletterSubscriptionStores.Count > 0)
+    @*@if (Model.AvailableNewsletterSubscriptionStores != null && Model.AvailableNewsletterSubscriptionStores.Count > 0)
     {
         <div class="form-group row">
             <div class="col-md-3">
@@ -377,7 +368,7 @@
                 </script>
             </div>
         </div>
-    }
+    }*@
     <div class="form-group row">
         <div class="col-md-3">
             <nop-label asp-for="SelectedCustomerRoleIds" />
@@ -523,7 +514,28 @@
             <span asp-validation-for="AdminComment"></span>
         </div>
     </div>
-    @if (Model.DisplayRegisteredInStore)
+
+        <p style="text-align:left;">JUSTIFICATION FOR CREDIT REQUIRED - Mandatory</p>
+
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="BillingType" />
+        </div>
+        <div class="col-md-9">
+            <nop-select asp-for="BillingType" asp-items="Model.BillingTypeList" />
+            <span asp-validation-for="BillingType"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-3">
+            <nop-label asp-for="ExpectedSalesVolume" />
+        </div>
+        <div class="col-md-9">
+            <nop-editor asp-for="ExpectedSalesVolume" />
+            <span asp-validation-for="ExpectedSalesVolume"></span>
+        </div>
+    </div>
+    @*@if (Model.DisplayRegisteredInStore)
     {
         <div class="form-group row">
             <div class="col-md-3">
@@ -578,6 +590,6 @@
             </div>
         </div>
     }
-</div>
+</div>*@
 
 <nop-alert asp-alert-id="statesAlert" asp-alert-message="@T("Admin.Common.Alert.States.Failed")" />

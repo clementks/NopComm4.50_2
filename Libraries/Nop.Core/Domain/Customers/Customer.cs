@@ -156,5 +156,7 @@ namespace Nop.Core.Domain.Customers
         public string ContactPersonAttention { get; set; }
 
         public string Einvoiceaddress { get; set; }
+
+        public string BillingType { get; set; }
     }
 }

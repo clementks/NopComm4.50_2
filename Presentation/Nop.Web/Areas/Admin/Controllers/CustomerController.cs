@@ -604,6 +604,7 @@ namespace Nop.Web.Areas.Admin.Controllers
                     customer.Einvoiceaddress = model.Einvoiceaddress;
                     customer.CreditLimit = model.CreditLimit;
                     customer.ExpectedSalesVolume = model.ExpectedSalesVolume;
+                    customer.BillingType = model.BillingType;
                     await _customerService.UpdateCustomerAsync(customer);
 
                     //VAT number

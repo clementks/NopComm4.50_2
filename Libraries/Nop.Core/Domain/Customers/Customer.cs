@@ -146,12 +146,12 @@ namespace Nop.Core.Domain.Customers
         /// <summary>
         /// Gets or sets the Credit Limit
         /// </summary>
-        public double CreditLimit { get; set; }
+        public decimal CreditLimit { get; set; }
 
         /// <summary>
         /// Gets or sets the Expected sales volume
         /// </summary>
-        public double ExpectedSalesVolume { get; set; }
+        public decimal ExpectedSalesVolume { get; set; }
 
         public string ContactPersonAttention { get; set; }
 

@@ -598,18 +598,12 @@ namespace Nop.Web.Areas.Admin.Controllers
                     // required fields should not be empty or null as configured in the view settings(cshtml). Einvoiceaddress is optional field
                     //customer.NatureOfBusiness = model.NatureOfBusiness;
 
-
-                    model.NatureOfBusinessList = (await _customerService.GetAllNatureOfBusinessAsync()).Select(nob => new SelectListItem
-                    {
-                        Value = nob.Name,
-                        Text = nob.Name
-                        
-                    }).ToList();
+                    customer.NatureOfBusiness = model.NatureOfBusiness;
                     customer.ContactPersonforPayment = model.ContactPersonforPayment;
                     customer.ContactPersonAttention = model.ContactPersonAttention;
                     customer.Einvoiceaddress = model.Einvoiceaddress;
-                    //customer.CreditLimit = model.CreditLimit;
-                    //customer.ExpectedSalesVolume = model.ExpectedSalesVolume;
+                    customer.CreditLimit = model.CreditLimit;
+                    customer.ExpectedSalesVolume = model.ExpectedSalesVolume;
                     await _customerService.UpdateCustomerAsync(customer);
 
                     //VAT number

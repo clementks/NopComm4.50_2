@@ -299,7 +299,8 @@
                                 {
                                     gridModel.ColumnCollection.Add(new ColumnProperty(nameof(CustomerModel.Username))
                                     {
-                                        Title = T("Admin.Customers.Customers.Fields.Username").Text
+                                        Title = T("Admin.Customers.Customers.Fields.Username").Text,
+                                        Width = "70"
                                     });
                                 }
                                 gridModel.ColumnCollection.Add(new ColumnProperty(nameof(CustomerModel.CustomerRoleNames))
@@ -334,7 +335,7 @@
                                     Title = T("Admin.Customers.Customers.Fields.CreditLimit").Text,
                                     Width = "70",
                                     ClassName = NopColumnClassDefaults.CenterAll
-                     
+                                    
                                 });
                                 gridModel.ColumnCollection.Add(new ColumnProperty(nameof(CustomerModel.NatureOfBusiness))
                                 {

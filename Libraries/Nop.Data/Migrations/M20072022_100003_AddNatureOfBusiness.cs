@@ -60,10 +60,10 @@ namespace Nop.Data.Migrations
                 .AlterColumn(nameof(Natureofbusiness.CreatedOnUtc)).AsDateTime2().Nullable()
                 .AlterColumn(nameof(Natureofbusiness.UpdatedOnUtc)).AsDateTime2().Nullable();
 
-            //Alter.Table("Customer")
-            //    .AddColumn(nameof(Customer.ExpectedSalesVolume)).AsDouble().Nullable();
+            Alter.Table("Customer")
+                .AlterColumn(nameof(Customer.ExpectedSalesVolume)).AsDecimal(16,2).Nullable()
             //   .AddColumn(nameof(Customer.ContactPersonAttention)).AsString(400).Nullable()
-            //    .AddColumn(nameof(Customer.Einvoiceaddress)).AsString(400).Nullable();
+                .AlterColumn(nameof(Customer.CreditLimit)).AsDecimal(12,2).Nullable();
 
 
             //Alter.Table("CustomerNatureOfBusiness")

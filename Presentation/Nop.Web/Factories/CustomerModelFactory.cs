@@ -245,11 +245,11 @@ namespace Nop.Web.Factories
                 model.Email = customer.Email;
                 model.Username = customer.Username;
                 model.ContactPersonforPayment = customer.ContactPersonforPayment;
-                model.NatureOfBusiness = customer.NatureOfBusiness;
+                model.NatureOfBusiness = string.Join(", ",
+                       (await _customerService.GetAllCustomersAsync(username: customer.Username)).Select(nob => nob.NatureOfBusiness));
 
 
                 //prepare to list out all the nature of business as a SelectListItem 
-
                 model.NatureOfBusinessList = (await _customerService.GetAllNatureOfBusinessAsync()).Select(nob => new SelectListItem
                 {
                     Value = nob.Name,

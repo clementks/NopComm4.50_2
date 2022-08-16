@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -658,17 +659,18 @@ namespace Nop.Web.Areas.Admin.Factories
                          (await _customerService.GetAllCustomersAsync(username: customer.Username)).Select(contact => contact.ContactPersonAttention));
                     customerModel.ContactPersonforPayment = string.Join(", ",
                         (await _customerService.GetAllCustomersAsync(username: customer.Username)).Select(contact => contact.ContactPersonforPayment));
-                    customerModel.CreditLimit = double.Parse(string.Join(", ",
-                        (await _customerService.GetAllCustomersAsync(username: customer.Username)).Select(credit => credit.CreditLimit)));
+                    customerModel.CreditLimit = decimal.Parse(string.Join(", ",
+                        (await _customerService.GetAllCustomersAsync(username: customer.Username)).Select(credit => credit.CreditLimit)), NumberStyles.AllowCurrencySymbol, CultureInfo.CurrentCulture);
+                                        
+
+                  
 
                     //customerModel.NatureOfBusiness = await _customerService.GetNatureOfBusinessAsync(customer); - working code
                     customerModel.NatureOfBusiness = string.Join(", ",
                        (await _customerService.GetAllCustomersAsync(username: customer.Username)).Select(nob => nob.NatureOfBusiness));
-                    customerModel.ExpectedSalesVolume = double.Parse(string.Join(", ",
-                       (await _customerService.GetAllCustomersAsync(username: customer.Username)).Select(esv => esv.ExpectedSalesVolume)));
-
-
-
+                    customerModel.ExpectedSalesVolume = decimal.Parse(string.Join(", ",
+                       (await _customerService.GetAllCustomersAsync(username: customer.Username)).Select(esv => esv.ExpectedSalesVolume)), NumberStyles.AllowCurrencySymbol, CultureInfo.InvariantCulture);
+                       
                     return customerModel;
                 });
             });
@@ -764,13 +766,22 @@ namespace Nop.Web.Areas.Admin.Factories
                              (await _customerService.GetAllCustomersAsync(username: customer.Username)).Select(contact => contact.ContactPersonAttention));
                     model.ContactPersonforPayment = string.Join(", ",
                              (await _customerService.GetAllCustomersAsync(username: customer.Username)).Select(contact => contact.ContactPersonforPayment));
-                    model.CreditLimit = double.Parse(string.Join(", ",
-                             (await _customerService.GetAllCustomersAsync(username: customer.Username)).Select(credit => credit.CreditLimit)));
-
+                    model.CreditLimit = decimal.Parse(string.Join(", ",
+                             (await _customerService.GetAllCustomersAsync(username: customer.Username)).Select(credit => credit.CreditLimit)),  NumberStyles.AllowCurrencySymbol, CultureInfo.InvariantCulture);
+                    model.Einvoiceaddress = string.Join(", ",
+                             (await _customerService.GetAllCustomersAsync(username: customer.Username)).Select(EIA => EIA.Einvoiceaddress));
                     model.NatureOfBusiness = string.Join(", ",
                             (await _customerService.GetAllCustomersAsync(username: customer.Username)).Select(nob => nob.NatureOfBusiness));
-                    model.ExpectedSalesVolume = double.Parse(string.Join(", ",
-                             (await _customerService.GetAllCustomersAsync(username: customer.Username)).Select(esv => esv.ExpectedSalesVolume)));
+                    model.ExpectedSalesVolume = decimal.Parse(string.Join(", ",
+                             (await _customerService.GetAllCustomersAsync(username: customer.Username)).Select(esv => esv.ExpectedSalesVolume)), NumberStyles.AllowCurrencySymbol, CultureInfo.InvariantCulture);
+
+
+                    model.NatureOfBusinessList = (await _customerService.GetAllNatureOfBusinessAsync()).Select(nob => new SelectListItem
+                    {
+                        Value = nob.Name,
+                        Text = nob.Name
+                        //Selected = model.NatureOfBusiness.Contains(nob.Name)
+                    }).ToList();
 
                 }
                 //prepare reward points model

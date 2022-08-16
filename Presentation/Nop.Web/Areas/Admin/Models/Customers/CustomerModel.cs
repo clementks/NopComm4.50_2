@@ -259,7 +259,7 @@ namespace Nop.Web.Areas.Admin.Models.Customers
 
         public CustomerAssociatedExternalAuthRecordsSearchModel CustomerAssociatedExternalAuthRecordsSearchModel { get; set; }
 
-        public double CreditLimit { get; set; }
+        public decimal CreditLimit { get; set; }
 
         [NopResourceDisplayName("Admin.Customers.Customers.Fields.ContactPersonAttention")]
         public string ContactPersonAttention { get; set; }
@@ -272,7 +272,7 @@ namespace Nop.Web.Areas.Admin.Models.Customers
         public string Einvoiceaddress { get; set; }
 
         [NopResourceDisplayName("Admin.Customers.Customers.Fields.ExpectedSalesVolume")]
-        public double ExpectedSalesVolume { get; set; }
+        public decimal ExpectedSalesVolume { get; set; }
 
 
         #endregion
